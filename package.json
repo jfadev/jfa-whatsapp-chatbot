@@ -1,7 +1,7 @@
 {
-  "name": "node-cli-starter",
-  "version": "1.0.17",
-  "description": "Starter repo for Node.js based CLI program",
+  "name": "jfa-whatsapp-chatbot",
+  "version": "1.0.0",
+  "description": "Whatsapp Chatbot",
   "bin": "./dist/index.js",
   "files": [
     "dist"
@@ -10,15 +10,12 @@
     "lint": "eslint ./src/",
     "build": "ncc build src/index.js -o dist"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BetaHuhn/node-cli-starter.git"
-  },
+  "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
   "bugs": {
-    "url": "https://github.com/BetaHuhn/node-cli-starter/issues"
+    "url": "https://github.com/jfadev/jfa-whatsapp-chatbot/issues"
   },
-  "homepage": "https://github.com/BetaHuhn/node-cli-starter#readme",
-  "author": "Maximilian Schiller <schiller@mxis.ch>",
+  "homepage": "https://github.com/jfadev/jfa-whatsapp-chatbot#readme",
+  "author": "Jordi Fernandes Alves <jfadev@gmail.com>",
   "license": "MIT",
   "keywords": [
     "nodejs"
@@ -34,5 +31,6 @@
     "@betahuhn/config": "^1.2.0",
     "@vercel/ncc": "^0.31.1",
     "eslint": "^7.32.0"
-  }
+  },
+  "main": "index.js"
 }
