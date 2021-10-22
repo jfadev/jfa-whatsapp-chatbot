@@ -24,7 +24,7 @@
     "nodejs"
   ],
   "dependencies": {
-    "commander": "^7.1.0",
+    "commander": "^8.3.0",
     "configstore": "^5.0.1",
     "dotenv": "^8.5.1",
     "ora": "^5.4.1",
