@@ -1,0 +1,38 @@
+{
+  "name": "node-cli-starter",
+  "version": "1.0.17",
+  "description": "Starter repo for Node.js based CLI program",
+  "bin": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint ./src/",
+    "build": "ncc build src/index.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BetaHuhn/node-cli-starter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BetaHuhn/node-cli-starter/issues"
+  },
+  "homepage": "https://github.com/BetaHuhn/node-cli-starter#readme",
+  "author": "Maximilian Schiller <schiller@mxis.ch>",
+  "license": "MIT",
+  "keywords": [
+    "nodejs"
+  ],
+  "dependencies": {
+    "commander": "^7.1.0",
+    "configstore": "^5.0.1",
+    "dotenv": "^8.5.1",
+    "ora": "^5.4.1",
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "@betahuhn/config": "^1.2.0",
+    "@vercel/ncc": "^0.31.1",
+    "eslint": "^7.32.0"
+  }
+}
