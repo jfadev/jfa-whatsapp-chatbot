@@ -25,7 +25,8 @@
     "configstore": "^5.0.1",
     "dotenv": "^8.5.1",
     "ora": "^5.4.1",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "venom-bot": "^3.1.8"
   },
   "devDependencies": {
     "@betahuhn/config": "^1.2.0",

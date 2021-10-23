@@ -1,74 +1,111 @@
-const prompt = require('prompt-sync')({ sigint: true })
-
-const Config = require('./Config')
-const Helpers = require('./Helpers')
+const prompt = require("prompt-sync")({ sigint: true });
+const venom = require("venom-bot");
+const Config = require("./Config");
+const Helpers = require("./Helpers");
 
 // const Interface = require('./Interface')
 
 class Runner {
-	constructor(args, options) {
-		this.options = options || {}
-		this.args = args || []
-		this.log = Helpers.logger(options.debug)
-	}
+  constructor(args, options) {
+    this.options = options || {};
+    this.args = args || [];
+    this.log = Helpers.logger(options.debug);
+  }
 
-	async welcome() {
-		try {
-			this.log.load('Generating welcome message')
+  async start() {
+    try {
+      this.log.load("Init Chatbot...");
 
-			const name = this.args
-			this.log.debug(name)
+      venom
+        .create()
+        .then((client) => start(client))
+        .catch((erro) => {
+          console.log(erro);
+        });
 
-			const message = `Hello ${ name }!`
-			this.log.succeed(message)
-		} catch (err) {
-			this.log.fail(err.message)
-			this.log.debug(err)
-		}
-	}
+      function start(client) {
+        client.onMessage((message) => {
+          if (message.body === "Hi" && message.isGroupMsg === false) {
+            client
+              .sendText(message.from, "Welcome Venom 🕷")
+              .then((result) => {
+                console.log("Result: ", result); //return object success
+              })
+              .catch((erro) => {
+                console.error("Error when sending: ", erro); //return object error
+              });
+          }
+        });
+      }
 
-	async ask() {
-		try {
-			this.log.debug('Asking user for input')
+      // const name = this.args
+      // this.log.debug(name)
 
-			const answer = prompt(`Yes? (y/n): `)
+      // const message = `Hello ${ name }!`
+      // this.log.succeed(message)
+    } catch (err) {
+      this.log.fail(err.message);
+      this.log.debug(err);
+    }
+  }
 
-			if (answer === 'y') {
-				this.log.succeed('YES!')
-			} else {
-				this.log.fail('no...')
-			}
-		} catch (err) {
-			this.log.fail(err.message)
-			this.log.debug(err)
-		}
-	}
+  async welcome() {
+    try {
+      this.log.load("Generating welcome message");
 
-	async api() {
-		try {
-			this.log.load('Querying API')
+      const name = this.args;
+      this.log.debug(name);
 
-			const config = await Config.load(this.options)
-			this.log.debug(config)
+      const message = `Hello ${name}!`;
+      this.log.succeed(message);
+    } catch (err) {
+      this.log.fail(err.message);
+      this.log.debug(err);
+    }
+  }
 
-			// const API = new Interface(config.apiKey)
+  async ask() {
+    try {
+      this.log.debug("Asking user for input");
 
-			const data = '' // await API.getData()
+      const answer = prompt(`Yes? (y/n): `);
 
-			this.log.succeed(data)
-		} catch (err) {
-			this.log.fail(err.message)
-			this.log.debug(err)
-		}
-	}
+      if (answer === "y") {
+        this.log.succeed("YES!");
+      } else {
+        this.log.fail("no...");
+      }
+    } catch (err) {
+      this.log.fail(err.message);
+      this.log.debug(err);
+    }
+  }
 
-	outputConfig() {
-		this.log.load('Loading config')
-		const config = Config.load(this.options)
+  async api() {
+    try {
+      this.log.load("Querying API");
 
-		this.log.info(`Config stored at: ${ config.configPath }`)
-		this.log.text(config)
-	}
+      const config = await Config.load(this.options);
+      this.log.debug(config);
+
+      // const API = new Interface(config.apiKey)
+
+      const data = ""; // await API.getData()
+
+      this.log.succeed(data);
+    } catch (err) {
+      this.log.fail(err.message);
+      this.log.debug(err);
+    }
+  }
+
+  outputConfig() {
+    this.log.load("Loading config");
+    const config = Config.load(this.options);
+
+    this.log.info(`Config stored at: ${config.configPath}`);
+    this.log.text(config);
+  }
 }
 
-module.exports = Runner
+module.exports = Runner;
