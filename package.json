@@ -2,13 +2,7 @@
   "name": "jfa-whatsapp-chatbot",
   "version": "1.0.0",
   "description": "Whatsapp Chatbot",
-  "bin": "./dist/index.js",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "lint": "eslint ./src/",
-    "build": "ncc build src/index.js -o dist"
   },
   "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
   "bugs": {
@@ -18,20 +12,15 @@
   "author": "Jordi Fernandes Alves <jfadev@gmail.com>",
   "license": "MIT",
   "keywords": [
-    "nodejs"
+    "nodejs",
+    "whatsapp",
+    "chatbot",
+    "venom"
   ],
   "dependencies": {
-    "commander": "^7.1.0",
-    "configstore": "^5.0.1",
-    "dotenv": "^8.5.1",
-    "ora": "^5.4.1",
-    "prompt-sync": "^4.2.0",
     "venom-bot": "^3.1.8"
   },
   "devDependencies": {
-    "@betahuhn/config": "^1.2.0",
-    "@vercel/ncc": "^0.31.1",
-    "eslint": "^7.32.0"
   },
   "main": "index.js"
 }
