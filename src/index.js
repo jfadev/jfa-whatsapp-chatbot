@@ -56,8 +56,8 @@ function start(client) {
 
 function watch(client, pattern, reply, callback) {
   console.log("init watch");
-  client.onMessage((message) => {
-    console.log("onMessage");
+  client.onAnyMessage((message) => {
+    console.log("onAnyMessage");
     let body = message.body.toLowerCase();
     pattern = pattern.toLowerCase();
     if (body.includes(pattern) && message.isGroupMsg === false) {
