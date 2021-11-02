@@ -38,17 +38,58 @@ venom
       createPathFileToken: true, //creates a folder when inserting an object in the client's browser, to work it is necessary to pass the parameters in the function create browserSessionToken
     }
   )
-  .then((client) => {
-    console.log("start");
-    start(client);
-  })
+  .then((client) => start(client))
   .catch((err) => {
     console.log(err);
   });
 
+const replies = [
+  {
+    id: 1,
+    pattern: "oi",
+    message: "Bemvindo ao Chatbot!"
+  },
+  {
+    id: 2,
+    pattern: "2",
+    message: "Muito bem!"
+  },
+];
+
 async function start(client) {
-  await welcome(client, "oi", null);
-  await watch(client, "1", "Voce escolheu a opção Bem!", null);
+  console.log("Chatbot started...");
+  let lastReply = 0;
+  client.onAnyMessage(async (message) => {
+    const body = message.body.toLowerCase();
+    const reply = replies.find(o => body.includes(o.pattern));
+    if (reply && message.isGroupMsg === false) {
+      if (reply.id === lastReply + 1 ) {
+        console.log(`-> Watch pattern (${reply.pattern})`);
+        await client
+          .sendText(message.from, reply.message)
+          .then((result) => {
+            console.log("Result: ", result);
+          })
+          .catch((err) => {
+            console.error("Error: ", err);
+          });
+      }
+    }    
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+  // await welcome(client, "oi", null);
+  // await watch(client, "1", "Voce escolheu a opção Bem!", null);
 
   // welcome(client, "oi", () => {
   //   watch(client, "1", "Voce escolheu a opção Bem!", () => {
@@ -77,80 +118,80 @@ async function start(client) {
   //     });
   //   });
   // });
-}
+// }
 
-async function watch(client, pattern, reply, callback) {
-  console.log("init watch");
-  await client.onAnyMessage(async (message) => {
-    console.log("onAnyMessage");
-    let body = message.body.toLowerCase();
-    pattern = pattern.toLowerCase();
-    if (body.includes(pattern) && message.isGroupMsg === false) {
-      console.log("if", pattern, body);
-      await client
-        .sendText(message.from, reply)
-        .then((result) => {
-          console.log("Result: ", result);
-          callback();
-        })
-        .catch((err) => {
-          console.error("Error when sending: ", err);
-        });
-    }
-  });
-}
+// async function watch(client, message, pattern, reply, callback) {
+//   console.log("init watch");
+//   await client.onAnyMessage(async (message) => {
+//     console.log("onAnyMessage");
+//     let body = message.body.toLowerCase();
+//     pattern = pattern.toLowerCase();
+//     if (body.includes(pattern) && message.isGroupMsg === false) {
+//       console.log("if", pattern, body);
+//       await client
+//         .sendText(message.from, reply)
+//         .then((result) => {
+//           console.log("Result: ", result);
+//           callback();
+//         })
+//         .catch((err) => {
+//           console.error("Error when sending: ", err);
+//         });
+//     }
+//   });
+// }
 
-async function welcome(client, pattern, callback) {
-  console.log("Init welcome");
-  await client.onAnyMessage(async (message) => {
-    console.log("onAnyMessage");
-    let body = message.body.toLowerCase();
-    pattern = pattern.toLowerCase();
-    if (body.includes(pattern) && message.isGroupMsg === false) {
-      console.log("if", pattern, body);
-      console.log("Welcome to chatbot");
-      // Send List menu
-      //This function does not work for Bussines contacts
-      const list = [
-        {
-          title: "Pasta",
-          rows: [
-            {
-              title: "Ravioli Lasagna",
-              description: "Made with layers of frozen cheese",
-            },
-          ],
-        },
-        {
-          title: "Dessert",
-          rows: [
-            {
-              title: "Baked Ricotta Cake",
-              description: "Sweets pecan baklava rolls",
-            },
-            {
-              title: "Lemon Meringue Pie",
-              description: "Pastry filled with lemonand meringue.",
-            },
-          ],
-        },
-      ];
-      await client
-        .sendListMenu(
-          message.from,
-          "Title",
-          "subTitle",
-          "Description",
-          "menu",
-          list
-        )
-        .then((result) => {
-          console.log("Result: ", result); //return object success
-          callback();
-        })
-        .catch((erro) => {
-          console.error("Error when sending: ", erro); //return object error
-        });
-    }
-  });
-}
+// async function welcome(client, pattern, callback) {
+//   console.log("Init welcome");
+//   await client.onAnyMessage(async (message) => {
+//     console.log("onAnyMessage");
+//     let body = message.body.toLowerCase();
+//     pattern = pattern.toLowerCase();
+//     if (body.includes(pattern) && message.isGroupMsg === false) {
+//       console.log("if", pattern, body);
+//       console.log("Welcome to chatbot");
+//       // Send List menu
+//       //This function does not work for Bussines contacts
+//       const list = [
+//         {
+//           title: "Pasta",
+//           rows: [
+//             {
+//               title: "Ravioli Lasagna",
+//               description: "Made with layers of frozen cheese",
+//             },
+//           ],
+//         },
+//         {
+//           title: "Dessert",
+//           rows: [
+//             {
+//               title: "Baked Ricotta Cake",
+//               description: "Sweets pecan baklava rolls",
+//             },
+//             {
+//               title: "Lemon Meringue Pie",
+//               description: "Pastry filled with lemonand meringue.",
+//             },
+//           ],
+//         },
+//       ];
+//       await client
+//         .sendListMenu(
+//           message.from,
+//           "Title",
+//           "subTitle",
+//           "Description",
+//           "menu",
+//           list
+//         )
+//         .then((result) => {
+//           console.log("Result: ", result); //return object success
+//           callback();
+//         })
+//         .catch((erro) => {
+//           console.error("Error when sending: ", erro); //return object error
+//         });
+//     }
+//   });
+// }
