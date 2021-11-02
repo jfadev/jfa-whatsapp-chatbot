@@ -46,12 +46,12 @@ venom
 const replies = [
   {
     id: 1,
-    pattern: "oi",
+    pattern: /oi|olá|ola|bom dia|boa tarde|boa noite/,
     message: "Bemvindo ao Chatbot!"
   },
   {
     id: 2,
-    pattern: "2",
+    pattern: /2/,
     message: "Muito bem!"
   },
 ];
@@ -61,7 +61,7 @@ async function start(client) {
   let lastReply = 0;
   client.onAnyMessage(async (message) => {
     const body = message.body.toLowerCase();
-    const reply = replies.find(o => body.includes(o.pattern));
+    const reply = replies.find(o => o.pattern.test(body));
     if (reply && message.isGroupMsg === false) {
       if (reply.id === lastReply + 1 ) {
         console.log(`-> Watch pattern (${reply.pattern})`);
