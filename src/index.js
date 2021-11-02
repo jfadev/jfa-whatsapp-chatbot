@@ -46,26 +46,40 @@ venom
 const replies = [
   {
     id: 1,
+    parent: 0,
     pattern: /oi|olá|ola|bom dia|boa tarde|boa noite/,
-    message: "Bemvindo ao Chatbot!"
+    message: "Bemvindo ao Chatbot! Escreva SIM se quer mais informação."
   },
   {
     id: 2,
+    parent: 1,
+    pattern: /sim/,
+    message: "Ok! Escreva opçao 1 ou 2"
+  },
+  {
+    id: 3,
+    parent: 2,
+    pattern: /1/,
+    message: "Voce escolheu a opcao 1!"
+  },
+  {
+    id: 4,
+    parent: 2,
     pattern: /2/,
-    message: "Muito bem!"
+    message: "Voce escolheu a opcao 2!"
   },
 ];
 
 async function start(client) {
   console.log("Chatbot started...");
-  let lastReply = 0;
+  let parentReply = 0;
   client.onAnyMessage(async (message) => {
     const body = message.body.toLowerCase();
     const reply = replies.find(o => o.pattern.test(body));
     if (reply && message.isGroupMsg === false) {
-      if (reply.id === lastReply + 1 ) {
-        console.log(`-> Watch pattern (${reply.pattern})`);
-        lastReply = reply.id;
+      if (reply.parrent === parentReply) {
+        console.log('Watch pattern: ', reply.pattern);
+        parentReply = reply.id;
         await client
           .sendText(message.from, reply.message)
           .then((result) => {
