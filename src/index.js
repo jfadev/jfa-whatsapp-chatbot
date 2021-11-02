@@ -87,7 +87,7 @@ async function watch(client, pattern, reply, callback) {
     pattern = pattern.toLowerCase();
     if (body.includes(pattern) && message.isGroupMsg === false) {
       console.log("if", pattern, body);
-      await client
+      client
         .sendText(message.from, reply)
         .then((result) => {
           console.log("Result: ", result);
