@@ -48,9 +48,28 @@ venom
 
 function start(client) {
   welcome(client, "oi", () => {
-    watch(client, "1", "Voce escolheu a opção 1!", () => {
+    watch(client, "1", "Voce escolheu a opção Bem!", () => {
       watch(client, "2", "Ok!", () => {
-
+        // Send Messages with Buttons Reply
+        const buttons = [
+          {
+            "buttonText": {
+              "displayText": "Text of Button 1"
+              }
+            },
+          {
+            "buttonText": {
+              "displayText": "Text of Button 2"
+              }
+            }
+          ]
+        await client.sendButtons(message.from, 'Title', buttons, 'Description')
+          .then((result) => {
+            console.log('Result: ', result); //return object success
+          })
+          .catch((erro) => {
+            console.error('Error when sending: ', erro); //return object error
+          });
       });
     });
   });
