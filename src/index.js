@@ -47,9 +47,11 @@ venom
   });
 
 function start(client) {
-  watch(client, "oi", "Bemvindo ao Chatbot!", () => {
-    watch(client, "oi", "Bemvindo ao Chatbot!", () => {
+  welcome(client, "oi", () => {
+    watch(client, "1", "Voce escolheu a opção 1!", () => {
+      watch(client, "2", "Ok!", () => {
 
+      });
     });
   });
 }
@@ -71,6 +73,54 @@ function watch(client, pattern, reply, callback) {
         .catch((err) => {
           console.error("Error when sending: ", err);
         });
+    }
+  });
+}
+
+function welcome(client, pattern, callback) {
+  console.log("Init welcome");
+  client.onAnyMessage((message) => {
+    console.log("onAnyMessage");
+    let body = message.body.toLowerCase();
+    pattern = pattern.toLowerCase();
+    if (body.includes(pattern) && message.isGroupMsg === false) {
+      console.log("if", pattern, body);
+      console.log("Welcome to chatbot");
+      // Send List menu
+      //This function does not work for Bussines contacts
+      const list = [
+        {
+          title: "Pasta",
+          rows: [
+            {
+              title: "Ravioli Lasagna",
+              description: "Made with layers of frozen cheese",
+            }
+          ]
+        },
+        {
+          title: "Dessert",
+          rows: [
+            {
+              title: "Baked Ricotta Cake",
+              description: "Sweets pecan baklava rolls",
+            },
+            {
+              title: "Lemon Meringue Pie",
+              description: "Pastry filled with lemonand meringue.",
+            }
+          ]
+        }
+      ];
+
+      client.sendListMenu('000000000000@c.us', 'Title', 'subTitle', 'Description', 'menu', list)
+      .then((result) => {
+        console.log('Result: ', result); //return object success
+        callback();
+      })
+      .catch((erro) => {
+        console.error('Error when sending: ', erro); //return object error
+      });
     }
   });
 }
