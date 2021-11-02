@@ -49,29 +49,30 @@ venom
 function start(client) {
   // welcome(client, "oi", null);
   // watch(client, "1", "Voce escolheu a opção Bem!", null);
-  
+
   welcome(client, "oi", () => {
     watch(client, "1", "Voce escolheu a opção Bem!", () => {
       watch(client, "2", "Ok!", () => {
         // Send Messages with Buttons Reply
         const buttons = [
           {
-            "buttonText": {
-              "displayText": "Text of Button 1"
-              }
+            buttonText: {
+              displayText: "Text of Button 1",
             },
+          },
           {
-            "buttonText": {
-              "displayText": "Text of Button 2"
-              }
-            }
-          ]
-        await client.sendButtons(message.from, 'Title', buttons, 'Description')
+            buttonText: {
+              displayText: "Text of Button 2",
+            },
+          },
+        ];
+        client
+          .sendButtons(message.from, "Title", buttons, "Description")
           .then((result) => {
-            console.log('Result: ', result); //return object success
+            console.log("Result: ", result); //return object success
           })
           .catch((erro) => {
-            console.error('Error when sending: ', erro); //return object error
+            console.error("Error when sending: ", erro); //return object error
           });
       });
     });
@@ -117,8 +118,8 @@ function welcome(client, pattern, callback) {
             {
               title: "Ravioli Lasagna",
               description: "Made with layers of frozen cheese",
-            }
-          ]
+            },
+          ],
         },
         {
           title: "Dessert",
@@ -130,18 +131,26 @@ function welcome(client, pattern, callback) {
             {
               title: "Lemon Meringue Pie",
               description: "Pastry filled with lemonand meringue.",
-            }
-          ]
-        }
+            },
+          ],
+        },
       ];
-      client.sendListMenu(message.from, 'Title', 'subTitle', 'Description', 'menu', list)
-      .then((result) => {
-        console.log('Result: ', result); //return object success
-        callback();
-      })
-      .catch((erro) => {
-        console.error('Error when sending: ', erro); //return object error
-      });
+      client
+        .sendListMenu(
+          message.from,
+          "Title",
+          "subTitle",
+          "Description",
+          "menu",
+          list
+        )
+        .then((result) => {
+          console.log("Result: ", result); //return object success
+          callback();
+        })
+        .catch((erro) => {
+          console.error("Error when sending: ", erro); //return object error
+        });
     }
   });
 }
