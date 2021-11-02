@@ -134,8 +134,7 @@ async function welcome(client, pattern, callback) {
           ]
         }
       ];
-
-      await client.sendListMenu(message.from, 'Title', 'subTitle', 'Description', 'menu', list)
+      client.sendListMenu(message.from, 'Title', 'subTitle', 'Description', 'menu', list)
       .then((result) => {
         console.log('Result: ', result); //return object success
         callback();
