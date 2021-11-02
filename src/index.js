@@ -77,7 +77,7 @@ async function start(client) {
     const body = message.body.toLowerCase();
     const reply = replies.find(o => o.pattern.test(body));
     if (reply && message.isGroupMsg === false) {
-      if (reply.parrent === parentReply) {
+      if (reply.parent === parentReply) {
         console.log('Watch pattern: ', reply.pattern);
         parentReply = reply.id;
         await client
