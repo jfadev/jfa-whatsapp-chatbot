@@ -113,7 +113,7 @@ function welcome(client, pattern, callback) {
         }
       ];
 
-      client.sendListMenu('000000000000@c.us', 'Title', 'subTitle', 'Description', 'menu', list)
+      client.sendListMenu(message.from, 'Title', 'subTitle', 'Description', 'menu', list)
       .then((result) => {
         console.log('Result: ', result); //return object success
         callback();
