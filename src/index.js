@@ -135,7 +135,7 @@ async function welcome(client, pattern, callback) {
           ],
         },
       ];
-      await client
+      client
         .sendListMenu(
           message.from,
           "Title",
