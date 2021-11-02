@@ -29,7 +29,7 @@ venom
       debug: false, // Opens a debug session
       logQR: true, // Logs QR automatically in terminal
       browserWS: "", // If u want to use browserWSEndpoint
-      browserArgs: [""], //Original parameters  ---Parameters to be added into the chrome browser instance
+      browserArgs: ["'--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'"], //Original parameters  ---Parameters to be added into the chrome browser instance
       puppeteerOptions: {}, // Will be passed to puppeteer.launch
       disableSpins: true, // Will disable Spinnies animation, useful for containers (docker) for a better log
       disableWelcome: true, // Will disable the welcoming message which appears in the beginning
