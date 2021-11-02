@@ -46,36 +46,39 @@ venom
     console.log(err);
   });
 
-function start(client) {
-  welcome(client, "oi", () => {
-    watch(client, "1", "Voce escolheu a opção Bem!", () => {
-      watch(client, "2", "Ok!", () => {
-        // Send Messages with Buttons Reply
-        const buttons = [
-          {
-            "buttonText": {
-              "displayText": "Text of Button 1"
-              }
-            },
-          {
-            "buttonText": {
-              "displayText": "Text of Button 2"
-              }
-            }
-          ]
-        await client.sendButtons(message.from, 'Title', buttons, 'Description')
-          .then((result) => {
-            console.log('Result: ', result); //return object success
-          })
-          .catch((erro) => {
-            console.error('Error when sending: ', erro); //return object error
-          });
-      });
-    });
-  });
+async function start(client) {
+  await welcome(client, "oi", null);
+  await watch(client, "1", "Voce escolheu a opção Bem!", null);
+  
+  // welcome(client, "oi", () => {
+  //   watch(client, "1", "Voce escolheu a opção Bem!", () => {
+  //     watch(client, "2", "Ok!", () => {
+  //       // Send Messages with Buttons Reply
+  //       const buttons = [
+  //         {
+  //           "buttonText": {
+  //             "displayText": "Text of Button 1"
+  //             }
+  //           },
+  //         {
+  //           "buttonText": {
+  //             "displayText": "Text of Button 2"
+  //             }
+  //           }
+  //         ]
+  //       await client.sendButtons(message.from, 'Title', buttons, 'Description')
+  //         .then((result) => {
+  //           console.log('Result: ', result); //return object success
+  //         })
+  //         .catch((erro) => {
+  //           console.error('Error when sending: ', erro); //return object error
+  //         });
+  //     });
+  //   });
+  // });
 }
 
-function watch(client, pattern, reply, callback) {
+async function watch(client, pattern, reply, callback) {
   console.log("init watch");
   client.onAnyMessage((message) => {
     console.log("onAnyMessage");
@@ -96,7 +99,7 @@ function watch(client, pattern, reply, callback) {
   });
 }
 
-function welcome(client, pattern, callback) {
+async function welcome(client, pattern, callback) {
   console.log("Init welcome");
   client.onAnyMessage((message) => {
     console.log("onAnyMessage");
