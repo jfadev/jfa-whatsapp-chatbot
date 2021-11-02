@@ -65,6 +65,7 @@ async function start(client) {
     if (reply && message.isGroupMsg === false) {
       if (reply.id === lastReply + 1 ) {
         console.log(`-> Watch pattern (${reply.pattern})`);
+        lastReply = reply.id;
         await client
           .sendText(message.from, reply.message)
           .then((result) => {
