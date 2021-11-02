@@ -81,13 +81,13 @@ async function start(client) {
 
 async function watch(client, pattern, reply, callback) {
   console.log("init watch");
-  await client.onAnyMessage((message) => {
+  await client.onAnyMessage(async (message) => {
     console.log("onAnyMessage");
     let body = message.body.toLowerCase();
     pattern = pattern.toLowerCase();
     if (body.includes(pattern) && message.isGroupMsg === false) {
       console.log("if", pattern, body);
-      client
+      await client
         .sendText(message.from, reply)
         .then((result) => {
           console.log("Result: ", result);
@@ -102,7 +102,7 @@ async function watch(client, pattern, reply, callback) {
 
 async function welcome(client, pattern, callback) {
   console.log("Init welcome");
-  await client.onAnyMessage((message) => {
+  await client.onAnyMessage(async (message) => {
     console.log("onAnyMessage");
     let body = message.body.toLowerCase();
     pattern = pattern.toLowerCase();
@@ -135,7 +135,7 @@ async function welcome(client, pattern, callback) {
           ],
         },
       ];
-      client
+      await client
         .sendListMenu(
           message.from,
           "Title",
