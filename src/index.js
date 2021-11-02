@@ -47,7 +47,7 @@ venom
   });
 
 async function start(client) {
-  await welcome(client, "oi", null);
+  welcome(client, "oi", null);
   await watch(client, "1", "Voce escolheu a opção Bem!", null);
   
   // welcome(client, "oi", () => {
