@@ -80,7 +80,7 @@ async function start(client) {
 
 async function watch(client, pattern, reply, callback) {
   console.log("init watch");
-  await client.onAnyMessage((message) => {
+  client.onAnyMessage((message) => {
     console.log("onAnyMessage");
     let body = message.body.toLowerCase();
     pattern = pattern.toLowerCase();
@@ -101,7 +101,7 @@ async function watch(client, pattern, reply, callback) {
 
 async function welcome(client, pattern, callback) {
   console.log("Init welcome");
-  await client.onAnyMessage((message) => {
+  client.onAnyMessage((message) => {
     console.log("onAnyMessage");
     let body = message.body.toLowerCase();
     pattern = pattern.toLowerCase();
