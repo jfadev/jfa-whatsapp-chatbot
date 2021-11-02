@@ -46,9 +46,9 @@ venom
     console.log(err);
   });
 
-async function start(client) {
+function start(client) {
   welcome(client, "oi", null);
-  await watch(client, "1", "Voce escolheu a opção Bem!", null);
+  watch(client, "1", "Voce escolheu a opção Bem!", null);
   
   // welcome(client, "oi", () => {
   //   watch(client, "1", "Voce escolheu a opção Bem!", () => {
@@ -78,7 +78,7 @@ async function start(client) {
   // });
 }
 
-async function watch(client, pattern, reply, callback) {
+function watch(client, pattern, reply, callback) {
   console.log("init watch");
   client.onAnyMessage((message) => {
     console.log("onAnyMessage");
@@ -99,7 +99,7 @@ async function watch(client, pattern, reply, callback) {
   });
 }
 
-async function welcome(client, pattern, callback) {
+function welcome(client, pattern, callback) {
   console.log("Init welcome");
   client.onAnyMessage((message) => {
     console.log("onAnyMessage");
