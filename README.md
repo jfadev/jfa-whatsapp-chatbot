@@ -30,7 +30,7 @@ A reply necessarily needs the following properties:
 |----------|---------|------------------------------------------------------------------|
 | id       | Integer | Reply `id` is used to link with `parent`                         |
 | parent   | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| pattern  | RegExp  | Regular expression to match in lower case ex: `/hi|hello|howdy/` |
+| pattern  | RegExp  | Regular expression to match in lower case                        |
 | message  | String  | Reply text message                                               |
 
 ### Send Buttons
@@ -39,10 +39,10 @@ A reply necessarily needs the following properties:
 |-------------|---------|------------------------------------------------------------------|
 | id          | Integer | Reply `id` is used to link with `parent`                         |
 | parent      | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| pattern     | RegExp  | Regular expression to match in lower case ex: `/hi|hello|howdy/` |
+| pattern     | RegExp  | Regular expression to match in lower case                        |
 | message     | String  | Reply text message                                               |
-| description | String  | Reply text message                                               |
-| buttons     | Array   | Look at the example                                              |
+| description | String  | Reply text subtitle                                              |
+| buttons     | Array   | Button object, look at the example                               |
 
 ### Send Link
 
@@ -50,7 +50,7 @@ A reply necessarily needs the following properties:
 |----------|---------|------------------------------------------------------------------|
 | id       | Integer | Reply `id` is used to link with `parent`                         |
 | parent   | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| pattern  | RegExp  | Regular expression to match in lower case ex: `/hi|hello|howdy/` |
+| pattern  | RegExp  | Regular expression to match in lower case                        |
 | message  | String  | Reply text message                                               |
 | link     | String  | URL of generated link preview                                    |
 
