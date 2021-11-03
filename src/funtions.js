@@ -9,10 +9,17 @@ export async function start(client, replies) {
       if (reply.parent === parentReply) {
         console.log("Watch pattern: ", reply.pattern);
         parentReply = reply.id;
-        await client
-          .sendText(message.from, reply.message)
-          .then(result => console.log("Result: ", result))
-          .catch(err => console.error("Error: ", err));
+        if (reply.hasOwnProperty('link')) {
+          await client
+            .sendLinkPreview(message.from, reply.link, reply.message)
+            .then(result => console.log("Result: ", result))
+            .catch(err => console.error("Error: ", err));
+        } else {
+          await client
+            .sendText(message.from, reply.message)
+            .then(result => console.log("Result: ", result))
+            .catch(err => console.error("Error: ", err));
+        }
       }
     }
   });

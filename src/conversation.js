@@ -23,5 +23,6 @@ export default [
     parent: 2,
     pattern: /2/,
     message: "Voce escolheu a opcao 2!",
+    link: "https://www.puracomunicacao.com.br/"
   },
 ];
