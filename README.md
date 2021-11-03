@@ -9,13 +9,15 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 
 `yarn install`
 
-## Run
+## Start
 
-`./src/main.js >> chatbot.log 2>&1 &`
+`yarn start` or `start dev` for development
 
 ## Log
 
-`tail -f chatbot.log`
+Log is write in `./chatbot.log` file.
+
+`yarn log`
 
 ## Conversation Flow
 

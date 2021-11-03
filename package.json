@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Whatsapp Chatbot",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "dev": "node src/main.js",
+    "start": "node src/main.js >> chatbot.log 2>&1 &",
+    "log": "tail -f chatbot.log"
+  },
   "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
   "bugs": {
     "url": "https://github.com/jfadev/jfa-whatsapp-chatbot/issues"
