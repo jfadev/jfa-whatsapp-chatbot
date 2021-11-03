@@ -21,7 +21,42 @@ Log is write in `./chatbot.log` file.
 
 ## Conversation Flow
 
-Edit file `./src/conversation.js`
+the conversation flow is an array of ordered reply objects.
+A reply necessarily needs the following properties:
+
+### Send Simple Text
+
+| Property | Type    | Description                                                      |
+|----------|---------|------------------------------------------------------------------|
+| id       | Integer | Reply `id` is used to link with `parent`                         |
+| parent   | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| pattern  | RegExp  | Regular expression to match in lower case ex: `/hi|hello|howdy/` |
+| message  | String  | Reply text message                                               |
+
+### Send Buttons
+
+| Property    | Type    | Description                                                      |
+|-------------|---------|------------------------------------------------------------------|
+| id          | Integer | Reply `id` is used to link with `parent`                         |
+| parent      | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| pattern     | RegExp  | Regular expression to match in lower case ex: `/hi|hello|howdy/` |
+| message     | String  | Reply text message                                               |
+| description | String  | Reply text message                                               |
+| buttons     | Array   | Look at the example                                              |
+
+### Send Link
+
+| Property | Type    | Description                                                      |
+|----------|---------|------------------------------------------------------------------|
+| id       | Integer | Reply `id` is used to link with `parent`                         |
+| parent   | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| pattern  | RegExp  | Regular expression to match in lower case ex: `/hi|hello|howdy/` |
+| message  | String  | Reply text message                                               |
+| link     | String  | URL of generated link preview                                    |
+
+### Example:
+
+Edit your file `./src/conversation.js`
 
 ```
 export default [
