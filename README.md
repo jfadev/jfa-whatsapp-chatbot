@@ -1,6 +1,7 @@
 # Jfa Whatsapp Chatbot 💬 (Starter)
 
-With this [node.js](https://nodejs.org/) starter integrated whith [Venom Bot](https://github.com/orkestral/venom) library, you can easily create a WhatsApp Chatbot 💬. 
+With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) 
+under the hood, you can easily create a WhatsApp Chatbot 💬. 
 You will only need to edit your conversation flow in a single file.
 
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
