@@ -59,7 +59,7 @@ A reply necessarily needs the following properties:
 
 Edit your file `./src/conversation.js`
 
-```
+```javascript
 export default [
   {
     id: 1,
