@@ -14,9 +14,9 @@ export async function start(client, replies) {
             .sendLinkPreview(message.from, reply.link, reply.message)
             .then(result => console.log("Result (sendLinkPreview): ", message.from, '>', result.to.remote._serialized, ':', reply.message))
             .catch(err => console.error("Error (sendLinkPreview): ", err));
-        } else if (reply.hasOwnProperty('buttons')) {
+        } else if (reply.hasOwnProperty('buttons') && reply.hasOwnProperty('description')) {
           await client
-            .sendButtons(message.from, reply.message, reply.buttons, '')
+            .sendButtons(message.from, reply.message, reply.buttons, reply.description)
             .then(result => console.log("Result (sendButtons): ", message.from, '>', result.to.remote._serialized, ':', reply.message))
             .catch(err => console.error("Error (sendButtons): ", err));
         } else {  

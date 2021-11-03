@@ -11,6 +11,7 @@ export default [
     parent: 1,
     pattern: /sim/,
     message: "Ok! Escreva opçao 1 ou 2",
+    description: "Escolha",
     buttons: [
       {
         buttonText: {
