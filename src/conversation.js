@@ -11,6 +11,18 @@ export default [
     parent: 1,
     pattern: /sim/,
     message: "Ok! Escreva opçao 1 ou 2",
+    buttons: [
+      {
+        buttonText: {
+          displayText: "1",
+        },
+      },
+      {
+        buttonText: {
+          displayText: "2",
+        },
+      },
+    ],
   },
   {
     id: 3,
@@ -23,6 +35,6 @@ export default [
     parent: 2,
     pattern: /2/,
     message: "Voce escolheu a opcao 2!",
-    link: "https://www.puracomunicacao.com.br/"
+    link: "https://www.puracomunicacao.com.br/",
   },
 ];
