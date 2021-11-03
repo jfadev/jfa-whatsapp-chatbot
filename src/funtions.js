@@ -12,17 +12,17 @@ export async function start(client, replies) {
         if (reply.hasOwnProperty('link')) {
           await client
             .sendLinkPreview(message.from, reply.link, reply.message)
-            .then(result => console.log("Result (sendLinkPreview): ", result.to.remote.user))
+            .then(result => console.log("Result (sendLinkPreview): ", message.from, result.to.remote.user, reply.message))
             .catch(err => console.error("Error (sendLinkPreview): ", err));
         } else if (reply.hasOwnProperty('buttons')) {
           await client
-            .sendButtons(message.from, '', reply.buttons, reply.message)
-            .then(result => console.log("Result (sendButtons): ", result.to.remote.user))
+            .sendButtons(message.from, 'Escolha', reply.buttons, reply.message)
+            .then(result => console.log("Result (sendButtons): ", message.from, result.to.remote.user, reply.message))
             .catch(err => console.error("Error (sendButtons): ", err));
         } else {  
           await client
             .sendText(message.from, reply.message)
-            .then(result => console.log("Result (sendText): ", result.to.remote.user))
+            .then(result => console.log("Result (sendText): ", message.from, result.to.remote.user, reply.message))
             .catch(err => console.error("Error (sendText): ", err));
         }
       }
