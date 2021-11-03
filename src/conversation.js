@@ -4,23 +4,23 @@ export default [
     id: 1,
     parent: 0,
     pattern: /oi|olá|ola|bom dia|boa tarde|boa noite/,
-    message: "Bemvindo ao Chatbot! Escreva SIM se quer mais informação.",
+    message: "Bemvindo ao Chatbot da Pura Comunicação! Escreva QUERO se quer mais informação.",
   },
   {
     id: 2,
     parent: 1,
-    pattern: /sim/,
-    message: "Ok! Escreva opçao 1 ou 2",
+    pattern: /quero/,
+    message: "Que tipo de informação esta procurando?",
     description: "Escolha",
     buttons: [
       {
         buttonText: {
-          displayText: "1",
+          displayText: "Website",
         },
       },
       {
         buttonText: {
-          displayText: "2",
+          displayText: "Contato",
         },
       },
     ],
@@ -28,14 +28,15 @@ export default [
   {
     id: 3,
     parent: 2,
-    pattern: /1/,
-    message: "Voce escolheu a opcao 1!",
+    pattern: /website/,
+    message: "Accesse nosso website para conhecer melhor o nosso trabalho.",
+    link: "https://www.puracomunicacao.com.br/",
   },
   {
     id: 4,
     parent: 2,
-    pattern: /2/,
-    message: "Voce escolheu a opcao 2!",
-    link: "https://www.puracomunicacao.com.br/",
+    pattern: /contato/,
+    message: "Entre em contato, preenchendo o formulario. Em breve entraremos em contato com você.",
+    link: "https://www.puracomunicacao.com.br/pt_BR/contato/",
   },
 ];
