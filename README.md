@@ -9,6 +9,14 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 
 `yarn install`
 
+## Run
+
+`./src/main.js >> chatbot.log 2>&1 &`
+
+## Log
+
+`tail -f chatbot.log`
+
 ## Conversation Flow
 
 Edit file `./src/conversation.js`
