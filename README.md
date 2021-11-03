@@ -11,7 +11,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 
 ## Start
 
-`yarn start` or `start dev` for development
+`yarn start` or `yarn dev` for development
 
 ## Log
 
