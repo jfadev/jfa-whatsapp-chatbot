@@ -71,7 +71,7 @@ A reply necessarily needs the following properties:
 
 ### Example:
 
-Edit your file `./src/conversation.js` and create your custom conversation wokrflow.
+Edit your file `./src/conversation.js` and create your custom conversation workflow.
 
 ```javascript
 export default [
