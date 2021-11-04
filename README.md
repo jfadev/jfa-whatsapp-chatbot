@@ -1,4 +1,4 @@
-# Jfa Whatsapp Chatbot 💬 (Starter)
+# Jfa Whatsapp Chatbot 💬 
 
 With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
 you can easily create a WhatsApp Chatbot 💬. 
@@ -36,7 +36,7 @@ $ yarn log
 
 ## Conversation Flow
 
-the conversation flow is an array of ordered reply objects.
+The conversation flow is an array of ordered reply objects.
 A reply necessarily needs the following properties:
 
 ### Send Simple Text
