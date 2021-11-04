@@ -71,7 +71,7 @@ A reply necessarily needs the following properties:
 
 ### Example:
 
-Edit your file `./src/conversation.js`
+Edit your file `./src/conversation.js` and create your custom conversation wokrflow.
 
 ```javascript
 export default [
@@ -80,7 +80,7 @@ export default [
     parent: 0,
     pattern: /hello|hi|howdy|welcome|bonjour|buenas noches|buenos dias|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do|shalom|what\'s happening|what\'s up/,
     message: "Hello! Thank you for contacting me, I am a Chatbot 🤖 , we will gladly assist you.",
-    description: "can I help with something?",
+    description: "Can I help with something?",
     buttons: [
       {
         buttonText: {
@@ -151,6 +151,10 @@ export default [
   },
 ];
 ```
+
+### More Examples:
+
+[https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
 ## Donate
 
