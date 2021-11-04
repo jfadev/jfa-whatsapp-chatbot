@@ -8,17 +8,31 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 
 ## Install
 
-`yarn install`
+```bash
+$ yarn install
+```
 
 ## Start
 
-`yarn start` or `yarn dev` for development
+For production:
+
+```bash
+$ yarn start
+```
+
+For development:
+
+```bash
+$ yarn dev
+```
 
 ## Log
 
 Log is write in `./chatbot.log` file.
 
-`yarn log`
+```bash
+$ yarn log
+```
 
 ## Conversation Flow
 
