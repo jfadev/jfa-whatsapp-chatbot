@@ -78,15 +78,9 @@ export default [
   {
     id: 1,
     parent: 0,
-    pattern: /oi|olá|ola|bom dia|boa tarde|boa noite/,
-    message: "Bemvindo ao Chatbot da Pura Comunicação! Escreva QUERO se quer mais informação.",
-  },
-  {
-    id: 2,
-    parent: 1,
-    pattern: /quero/,
-    message: "Que tipo de informação esta procurando?",
-    description: "Escolha",
+    pattern: /hello|hi|howdy|welcome|bonjour|buenas noches|buenos dias|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do|shalom|what\'s happening|what\'s up/,
+    message: "Hello! Thank you for contacting me, I am a Chatbot 🤖 , we will gladly assist you.",
+    description: "can I help with something?",
     buttons: [
       {
         buttonText: {
@@ -95,24 +89,65 @@ export default [
       },
       {
         buttonText: {
-          displayText: "Contato",
+          displayText: "Linkedin",
+        },
+      },
+      {
+        buttonText: {
+          displayText: "Github",
+        },
+      },
+      {
+        buttonText: {
+          displayText: "Donate",
+        },
+      },
+      {
+        buttonText: {
+          displayText: "Leave a Message",
         },
       },
     ],
   },
   {
-    id: 3,
-    parent: 2,
+    id: 2,
+    parent: 1,
     pattern: /website/,
-    message: "Accesse nosso website para conhecer melhor o nosso trabalho.",
-    link: "https://www.puracomunicacao.com.br/",
+    message: "Visit my website and learn more about me!",
+    link: "https://jordifernandes.com/",
+  },
+  {
+    id: 3,
+    parent: 1,
+    pattern: /linkedin/,
+    message: "Visit my LinkedIn profile!",
+    link: "https://www.linkedin.com/in/jfadev",
   },
   {
     id: 4,
-    parent: 2,
-    pattern: /contato/,
-    message: "Entre em contato, preenchendo o formulario. Em breve entraremos em contato com você.",
-    link: "https://www.puracomunicacao.com.br/pt_BR/contato/",
+    parent: 1,
+    pattern: /github/,
+    message: "Check my Github repositories!",
+    link: "https://github.com/jfadev",
+  },
+  {
+    id: 5,
+    parent: 1,
+    pattern: /donate/,
+    message: "a tip is always good!",
+    link: "https://jordifernandes.com/donate/",
+  },
+  {
+    id: 6,
+    parent: 1,
+    pattern: /leave a message/,
+    message: "Write your message, I will contact you as soon as possible!",
+  },
+  {
+    id: 7,
+    parent: 6,
+    pattern: /.*/,
+    message: "Thank you very much, your message will be sent to Jordi! Sincerely the Chatbot 🤖 !",
   },
 ];
 ```
