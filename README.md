@@ -51,26 +51,22 @@ A reply necessarily needs the following properties:
 
 ### Send Buttons
 
+The properties of [Send Simple Text] plus the following:
+
 | Property     | Type    | Description                                                      |
 |--------------|---------|------------------------------------------------------------------|
-| `id`         | Integer | Reply `id` is used to link with `parent`                         |
-| `parent`     | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`    | RegExp  | Regular expression to match in lower case                        |
-| `message`    | String  | Reply text message                                               |
 | `description`| String  | Reply text subtitle                                              |
 | `buttons`    | Array   | Button object, look at the example                               |
 
 ### Send Link
 
+The properties of [Send Simple Text] plus the following:
+
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
-| `id`     | Integer | Reply `id` is used to link with `parent`                         |
-| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`| RegExp  | Regular expression to match in lower case                        |
-| `message`| String  | Reply text message                                               |
 | `link`   | String  | URL of generated link preview                                    |
 
-### Example:
+### Example
 
 Edit your file `./src/conversation.js` and create your custom conversation workflow.
 
@@ -153,7 +149,7 @@ export default [
 ];
 ```
 
-### More Examples:
+### More Examples
 
 [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
