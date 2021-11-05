@@ -37,7 +37,7 @@ $ yarn log
 ## Conversation Flow
 
 The conversation flow is an array of ordered reply objects. 
-A reply is only triggered if its parent is equal to the id of the previous reply. 
+A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
 A reply necessarily needs the following properties:
 
 ### Send Simple Text
