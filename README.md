@@ -44,31 +44,31 @@ A reply necessarily needs the following properties:
 
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
-| id       | Integer | Reply `id` is used to link with `parent`                         |
-| parent   | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| pattern  | RegExp  | Regular expression to match in lower case                        |
-| message  | String  | Reply text message                                               |
+| `id`     | Integer | Reply `id` is used to link with `parent`                         |
+| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                        |
+| `message`| String  | Reply text message                                               |
 
 ### Send Buttons
 
-| Property    | Type    | Description                                                      |
-|-------------|---------|------------------------------------------------------------------|
-| id          | Integer | Reply `id` is used to link with `parent`                         |
-| parent      | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| pattern     | RegExp  | Regular expression to match in lower case                        |
-| message     | String  | Reply text message                                               |
-| description | String  | Reply text subtitle                                              |
-| buttons     | Array   | Button object, look at the example                               |
+| Property     | Type    | Description                                                      |
+|--------------|---------|------------------------------------------------------------------|
+| `id`         | Integer | Reply `id` is used to link with `parent`                         |
+| `parent`     | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`    | RegExp  | Regular expression to match in lower case                        |
+| `message`    | String  | Reply text message                                               |
+| `description`| String  | Reply text subtitle                                              |
+| `buttons`    | Array   | Button object, look at the example                               |
 
 ### Send Link
 
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
-| id       | Integer | Reply `id` is used to link with `parent`                         |
-| parent   | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| pattern  | RegExp  | Regular expression to match in lower case                        |
-| message  | String  | Reply text message                                               |
-| link     | String  | URL of generated link preview                                    |
+| `id`     | Integer | Reply `id` is used to link with `parent`                         |
+| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                        |
+| `message`| String  | Reply text message                                               |
+| `link`   | String  | URL of generated link preview                                    |
 
 ### Example:
 
