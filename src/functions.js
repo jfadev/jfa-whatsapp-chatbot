@@ -1,4 +1,8 @@
-// Start listen whatsapp messages
+/**
+ * Start listen whatsapp messages
+ * @param {Object} client 
+ * @param {Array} replies 
+ */
 export async function start(client, replies) {  
   console.log("Chatbot started...");
   try {
@@ -34,3 +38,21 @@ export async function start(client, replies) {
     console.error("Error: ", err);
   }  
 }
+
+/**
+ * Create buttons
+ * @param {Array} buttonTexts 
+ */
+export function buttons(buttonTexts) {
+  let buttons = [];
+  buttonTexts.forEach(text => {
+    buttons.push(
+      {
+        buttonText: {
+          displayText: text
+        },
+      }
+    );
+    return buttons;  
+  });
+}  

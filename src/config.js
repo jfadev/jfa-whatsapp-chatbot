@@ -1,4 +1,7 @@
-// Venom Bot options
+/**
+ * Venom Bot options
+ * @link https://github.com/orkestral/venom
+ */
 export default {
   folderNameToken: "tokens", //folder name when saving tokens
   mkdirFolderToken: "", //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory

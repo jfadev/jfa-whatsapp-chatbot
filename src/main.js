@@ -15,7 +15,7 @@ venom
   .create("chatbotSession", null, null, venomOptions)
   .then(client => start(client, conversation))
   .catch(err => console.log(err));
-
+/* ------------------------*/
 
 /* Multiple whatsapp accounts */
 /* ---------------------------*/
@@ -31,3 +31,4 @@ venom
 //   .create("account2ChatbotSession", null, null, venomOptions)
 //   .then(client => start(client, conversation2))
 //   .catch(err => console.log(err));
+/* ---------------------------*/

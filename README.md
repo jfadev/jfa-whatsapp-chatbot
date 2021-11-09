@@ -1,6 +1,6 @@
 # Jfa Whatsapp Chatbot 💬 
 
-With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) under the hood. 
+With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
 you can easily create a WhatsApp Chatbot 🤖 . 
 You will only need to edit your conversation flow in a single file.
 
@@ -71,6 +71,11 @@ The properties of [Send Simple Text] plus the following:
 Edit your file `./src/conversation.js` and create your custom conversation workflow.
 
 ```javascript
+import { buttons } from "./functions.js";
+
+/**
+ * Chatbot conversation flow
+ */
 export default [
   {
     id: 1,
@@ -78,72 +83,52 @@ export default [
     pattern: /hello|hi|howdy|welcome|bonjour|buenas noches|buenos dias|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do|shalom|what\'s happening|what\'s up/,
     message: "Hello! Thank you for contacting me, I am a Chatbot 🤖 , we will gladly assist you.",
     description: "Can I help with something?",
-    buttons: [
-      {
-        buttonText: {
-          displayText: "Website",
-        },
-      },
-      {
-        buttonText: {
-          displayText: "Linkedin",
-        },
-      },
-      {
-        buttonText: {
-          displayText: "Github",
-        },
-      },
-      {
-        buttonText: {
-          displayText: "Donate",
-        },
-      },
-      {
-        buttonText: {
-          displayText: "Leave a Message",
-        },
-      },
-    ],
+    buttons: buttons([
+      "Website",
+      "Linkedin",
+      "Github",
+      "Donate",
+      "Leave a Message",
+    ]),
   },
   {
     id: 2,
-    parent: 1,
+    parent: 1, // Relation with id: 1
     pattern: /website/,
     message: "Visit my website and learn more about me!",
     link: "https://jordifernandes.com/",
   },
   {
     id: 3,
-    parent: 1,
+    parent: 1, // Relation with id: 1
     pattern: /linkedin/,
     message: "Visit my LinkedIn profile!",
     link: "https://www.linkedin.com/in/jfadev",
   },
   {
     id: 4,
-    parent: 1,
+    parent: 1, // Relation with id: 1
     pattern: /github/,
     message: "Check my Github repositories!",
     link: "https://github.com/jfadev",
   },
   {
     id: 5,
-    parent: 1,
+    parent: 1, // Relation with id: 1
     pattern: /donate/,
-    message: "a tip is always good!",
+    message: "A tip is always good!",
     link: "https://jordifernandes.com/donate/",
   },
   {
     id: 6,
-    parent: 1,
+    parent: 1, // Relation with id: 1
     pattern: /leave a message/,
     message: "Write your message, I will contact you as soon as possible!",
   },
   {
     id: 7,
-    parent: 6,
-    pattern: /.*/,
+    parent: 6, // Relation with id: 6
+    pattern: /.*/, // Match with all text
     message: "Thank you very much, your message will be sent to Jordi! Sincerely the Chatbot 🤖 !",
   },
 ];

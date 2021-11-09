@@ -1,4 +1,6 @@
-// Chatbot conversation flow
+/**
+ * Chatbot conversation flow
+ */
 export default [
   {
     id: 1,
