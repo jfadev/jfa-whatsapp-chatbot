@@ -1,5 +1,6 @@
 /**
  * Chatbot conversation flow
+ * Your custom conversation
  */
 export default [
   {
