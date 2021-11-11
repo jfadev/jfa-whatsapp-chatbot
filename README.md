@@ -92,9 +92,9 @@ A reply necessarily needs the following properties:
 
 ## Eamples
 
-### Example 1
-
 Edit your file `./src/conversation.js` and create your custom conversation workflow.
+
+### Example 1
 
 ```javascript
 import { buttons } from "./functions.js";
