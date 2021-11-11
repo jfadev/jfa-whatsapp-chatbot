@@ -84,7 +84,7 @@ The properties of [Send Simple Text] plus the following:
 | `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
 | `remoteImg(url, cacheDelay = null)` | Base64 | Return  a remote Image file            |
 
-### Example
+### Example 1
 
 Edit your file `./src/conversation.js` and create your custom conversation workflow.
 
@@ -148,6 +148,95 @@ export default [
     parent: 6, // Relation with id: 6
     pattern: /.*/, // Match with all text
     message: "Thank you very much, your message will be sent to Jordi! Sincerely the Chatbot 🤖 !",
+  },
+];
+```
+### Example 2
+
+```javascript
+import { buttons, remoteTxt, remoteImg } from "./functions.js";
+
+/**
+ * Chatbot conversation flow
+ * Example 2
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/,
+    message: "Hello! I am a Delivery Chatbot.",
+    description: "Choice one option!",
+    buttons: buttons([
+      "See today's menu?",
+      "Order directly!",
+      "Talk to a human!",
+    ]),
+  },
+  {
+    id: 2,
+    parent: 1, // Relation with id: 1
+    pattern: /menu/,
+    message: remoteTxt("https://jordifernandes.com/examples/chatbot/menu.txt"),
+    // message: remoteImg("https://jordifernandes.com/examples/chatbot/menu.jpg"),
+    // message: remoteJson(
+    //   "https://jordifernandes.com/examples/chatbot/menu.json"
+    // )[0].message,
+  },
+  {
+    id: 3,
+    parent: 1, // Relation with id: 1
+    pattern: /order/,
+    message: "Make a order!",
+    link: "https://jordifernandes.com/examples/chatbot/delivery-order.php",
+  },
+  {
+    id: 4,
+    parent: 1, // Relation with id: 1
+    pattern: /human/,
+    message: "Please call the following whatsapp number: +1 206 555 0100",
+  },
+];
+```
+### Example 3
+
+```javascript
+import { remoteImg, sendData } from "./functions.js";
+
+/**
+ * Chatbot conversation flow
+ * Example 3
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/,
+    message: "Hello! I am a Delivery Chatbot. Send a number!",
+    image: remoteImg("https://jordifernandes.com/examples/chatbot/menu.jpg"),
+  },
+  {
+    id: 2,
+    parent: 1, // Relation with id: 1
+    pattern: /\d+/,
+    message: "You are choise item number $input. How many units do you want?",
+    // beforeReply(from, input) {},
+  },
+  {
+    id: 3,
+    parent: 2, // Relation with id: 2
+    pattern: /\d+/,
+    message: "You are choise $input units. How many units do you want?",
+    afterReply(from, input) {
+      sendData("https://jordifernandes.com/examples/chatbot/delivery-order.php", {
+        units: input,
+      });
+      saveData("./orders.json", {
+        date: Date.now(),
+        from: from,
+        units: input,
+      });
+    },
   },
 ];
 ```
