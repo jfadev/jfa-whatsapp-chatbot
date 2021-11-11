@@ -42,7 +42,9 @@ The conversation flow is an array of ordered reply objects.
 A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
 A reply necessarily needs the following properties:
 
-### Send Simple Text
+### Relpies types
+
+#### Send Simple Text
 
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
@@ -51,21 +53,27 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `message`| String  | Reply text message                                               |
 
-### Send Buttons
+#### Send Buttons
 
-The properties of [Send Simple Text] plus the following:
+| Property     | Type    | Description                                                      |
+|--------------|---------|------------------------------------------------------------------|
+| `id`         | Integer | Reply `id` is used to link with `parent`                         |
+| `parent`     | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`    | RegExp  | Regular expression to match in lower case                        |
+| `message`    | String  | Reply text message                                               |
+| `description`| String  | Reply text subtitle                                              |
+| `buttons`    | Array   | Button object, look at the example                               |
 
-| Property     | Type    | Description                                                  |
-|--------------|---------|--------------------------------------------------------------|
-| `description`| String  | Reply text subtitle                                          |
-| `buttons`    | Array   | Button object, look at the example                           |
-
-### Send Link
+#### Send Link
 
 The properties of [Send Simple Text] plus the following:
 
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                         |
+| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                        |
+| `message`| String  | Reply text message                                               |
 | `link`   | String  | URL of generated link preview                                    |
 
 ### Hooks
@@ -83,6 +91,8 @@ The properties of [Send Simple Text] plus the following:
 | `remoteTxt(url, cacheDelay = null)` | String | Return a remote TXT file               |
 | `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
 | `remoteImg(url, cacheDelay = null)` | Base64 | Return  a remote Image file            |
+
+## Eamples
 
 ### Example 1
 
