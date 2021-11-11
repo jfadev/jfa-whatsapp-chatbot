@@ -55,10 +55,10 @@ A reply necessarily needs the following properties:
 
 The properties of [Send Simple Text] plus the following:
 
-| Property     | Type    | Description                                                      |
-|--------------|---------|------------------------------------------------------------------|
-| `description`| String  | Reply text subtitle                                              |
-| `buttons`    | Array   | Button object, look at the example                               |
+| Property     | Type    | Description                                                  |
+|--------------|---------|--------------------------------------------------------------|
+| `description`| String  | Reply text subtitle                                          |
+| `buttons`    | Array   | Button object, look at the example                           |
 
 ### Send Link
 
@@ -67,6 +67,22 @@ The properties of [Send Simple Text] plus the following:
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
 | `link`   | String  | URL of generated link preview                                    |
+
+### Hooks
+
+| Property                   | Type     | Description                                   |
+|----------------------------|----------|-----------------------------------------------|
+| `beforeReply(from, input)` | Function | Inject custom code before a reply             |
+| `afterReply(from, input)`  | Function | Inject custom code after a reply              |
+
+### Functions
+
+| Function                            | Return | Description                            |
+|-------------------------------------|--------|----------------------------------------|
+| `buttons(buttonTexts)`              | Array  | Generate buttons                       |
+| `remoteTxt(url, cacheDelay = null)` | String | Return a remote TXT file               |
+| `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
+| `remoteImg(url, cacheDelay = null)` | Base64 | Return  a remote Image file            |
 
 ### Example
 
