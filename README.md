@@ -76,10 +76,10 @@ A reply necessarily needs the following properties:
 
 ### Hooks
 
-| Property                   | Type     | Description                                   |
-|----------------------------|----------|-----------------------------------------------|
-| `beforeReply(from, input)` | Function | Inject custom code before a reply             |
-| `afterReply(from, input)`  | Function | Inject custom code after a reply              |
+| Property                           | Type     | Description                           |
+|------------------------------------|----------|---------------------------------------|
+| `beforeReply(from, input, output)` | Function | Inject custom code before a reply     |
+| `afterReply(from, input)`          | Function | Inject custom code after a reply      |
 
 ### Functions
 
@@ -223,7 +223,7 @@ export default [
     id: 1,
     parent: 0,
     pattern: /.*/,
-    message: "Hello! I am a Delivery Chatbot. Send a number!",
+    message: "Hello! I am a Delivery Chatbot. Send a menu item number!",
     image: remoteImg(`${customEndpoint}/menu.jpg`),
   },
   {
@@ -231,7 +231,16 @@ export default [
     parent: 1, // Relation with id: 1
     pattern: /\d+/,
     message: "You are choise item number $input. How many units do you want?",
-    // beforeReply(from, input) {},
+    beforeReply(from, input, output) {
+      // Inject custom code or overwrite 'message' property
+      const response = await fetch(
+        `${customEndpoint}/delivery-check-items.php/?item=${input}`
+      ).then((res) => res.json());
+      if (response.stock === 0) {
+        output = "Item number $input is not avilable in this moment!";
+      }
+      return output;
+    },
   },
   {
     id: 3,
@@ -239,14 +248,16 @@ export default [
     pattern: /\d+/,
     message: "You are choise $input units. How many units do you want?",
     afterReply(from, input) {
-      remoteData(`${customEndpoint}/delivery-order.php`, {
-        units: input,
-      });
-      localData("./orders.json", {
-        date: Date.now(),
-        from: from,
-        units: input,
-      });
+      // saveRemote(`${customEndpoint}/delivery-order.php`, {
+      //   date: Date.now(),
+      //   from: from,
+      //   units: input,
+      // });
+      // saveLocal("./orders.json", {
+      //   date: Date.now(),
+      //   from: from,
+      //   units: input,
+      // });
     },
   },
 ];
