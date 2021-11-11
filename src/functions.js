@@ -9,14 +9,15 @@ export async function start(client, replies) {
     let parentReply = 0;
     client.onMessage(async (message) => {
       const body = message.body.toLowerCase();
-      const reply = replies.find((o) => o.pattern.test(body));
+      let reply = replies.find((o) => o.pattern.test(body));
       if (reply && message.isGroupMsg === false) {
         if (reply.parent === parentReply) {
           console.log("Read: ", reply.pattern);
           parentReply = reply.id;
           if (reply.hasOwnProperty("beforeReply")) {
-            reply.beforeReply(message.from, body);
+            reply.message = reply.beforeReply(message.from, body, reply.message);
           }
+          reply.message = reply.message.replaceAll('$input', body);
           await watchSendLinkPreview(client, message, reply);
           await watchSendButtons(client, message, reply);
           await watchSendText(client, message, reply);
