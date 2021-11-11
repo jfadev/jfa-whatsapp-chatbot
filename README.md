@@ -90,7 +90,7 @@ A reply necessarily needs the following properties:
 | `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
 | `remoteImg(url, cacheDelay = null)` | Base64 | Return  a remote Image file            |
 
-## Eamples
+## Examples
 
 Edit your file `./src/conversation.js` and create your custom conversation workflow.
 
