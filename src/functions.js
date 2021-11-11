@@ -13,61 +13,13 @@ export async function start(client, replies) {
       if (reply && message.isGroupMsg === false) {
         if (reply.parent === parentReply) {
           console.log("Read: ", reply.pattern);
+          parentReply = reply.id;
           if (reply.hasOwnProperty("beforeReply")) {
             reply.beforeReply(message.from, body);
           }
-          parentReply = reply.id;
-          if (reply.hasOwnProperty("link")) {
-            await client
-              .sendLinkPreview(message.from, reply.link, reply.message)
-              .then((result) =>
-                console.log(
-                  "Write (sendLinkPreview): ",
-                  message.from,
-                  ">",
-                  result.to.remote._serialized,
-                  ":",
-                  reply.message
-                )
-              )
-              .catch((err) => console.error("Error (sendLinkPreview): ", err));
-          } else if (
-            reply.hasOwnProperty("buttons") &&
-            reply.hasOwnProperty("description")
-          ) {
-            await client
-              .sendButtons(
-                message.from,
-                reply.message,
-                reply.buttons,
-                reply.description
-              )
-              .then((result) =>
-                console.log(
-                  "Write (sendButtons): ",
-                  message.from,
-                  ">",
-                  result.to.remote._serialized,
-                  ":",
-                  reply.message
-                )
-              )
-              .catch((err) => console.error("Error (sendButtons): ", err));
-          } else {
-            await client
-              .sendText(message.from, reply.message)
-              .then((result) =>
-                console.log(
-                  "Write (sendText): ",
-                  message.from,
-                  ">",
-                  result.to.remote._serialized,
-                  ":",
-                  reply.message
-                )
-              )
-              .catch((err) => console.error("Error (sendText): ", err));
-          }
+          await watchSendLinkPreview(client, message, reply);
+          await watchSendButtons(client, message, reply);
+          await watchSendText(client, message, reply);
           if (reply.hasOwnProperty("afterReply")) {
             reply.afterReply(message.from, body);
           }
@@ -77,6 +29,92 @@ export async function start(client, replies) {
   } catch (err) {
     client.close();
     console.error("Error: ", err);
+  }
+}
+
+/**
+ *
+ * @param {Object} client
+ * @param {Object} message
+ * @param {Object} reply
+ */
+async function watchSendLinkPreview(client, message, reply) {
+  if (reply.hasOwnProperty("link") && reply.hasOwnProperty("message")) {
+    await client
+      .sendLinkPreview(message.from, reply.link, reply.message)
+      .then((result) =>
+        console.log(
+          "Write (sendLinkPreview): ",
+          message.from,
+          ">",
+          result.to.remote._serialized,
+          ":",
+          reply.message
+        )
+      )
+      .catch((err) => console.error("Error (sendLinkPreview): ", err));
+  }
+}
+
+/**
+ *
+ * @param {Object} client
+ * @param {Object} message
+ * @param {Object} reply
+ */
+async function watchSendButtons(client, message, reply) {
+  if (
+    reply.hasOwnProperty("buttons") &&
+    reply.hasOwnProperty("description") &&
+    reply.hasOwnProperty("message")
+  ) {
+    await client
+      .sendButtons(
+        message.from,
+        reply.message,
+        reply.buttons,
+        reply.description
+      )
+      .then((result) =>
+        console.log(
+          "Write (sendButtons): ",
+          message.from,
+          ">",
+          result.to.remote._serialized,
+          ":",
+          reply.message
+        )
+      )
+      .catch((err) => console.error("Error (sendButtons): ", err));
+  }
+}
+
+/**
+ *
+ * @param {Object} client
+ * @param {Object} message
+ * @param {Object} reply
+ */
+async function watchSendText(client, message, reply) {
+  if (
+    !reply.hasOwnProperty("link") &&
+    !reply.hasOwnProperty("buttons") &&
+    !reply.hasOwnProperty("description") &&
+    reply.hasOwnProperty("message")
+  ) {
+    await client
+      .sendText(message.from, reply.message)
+      .then((result) =>
+        console.log(
+          "Write (sendText): ",
+          message.from,
+          ">",
+          result.to.remote._serialized,
+          ":",
+          reply.message
+        )
+      )
+      .catch((err) => console.error("Error (sendText): ", err));
   }
 }
 
