@@ -1,5 +1,7 @@
 import { remoteImg, sendData } from "./functions.js";
 
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
 /**
  * Chatbot conversation flow
  * Example 3
@@ -10,7 +12,7 @@ export default [
     parent: 0,
     pattern: /.*/,
     message: "Hello! I am a Delivery Chatbot. Send a number!",
-    image: remoteImg("https://jordifernandes.com/examples/chatbot/menu.jpg"),
+    image: remoteImg(`${customEndpoint}/menu.jpg`),
   },
   {
     id: 2,
@@ -25,10 +27,10 @@ export default [
     pattern: /\d+/,
     message: "You are choise $input units. How many units do you want?",
     afterReply(from, input) {
-      sendData("https://jordifernandes.com/examples/chatbot/delivery-order.php", {
+      remoteData(`${customEndpoint}/delivery-order.php`, {
         units: input,
       });
-      saveData("./orders.json", {
+      localData("./orders.json", {
         date: Date.now(),
         from: from,
         units: input,

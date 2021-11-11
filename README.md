@@ -164,6 +164,8 @@ export default [
 ```javascript
 import { buttons, remoteTxt, remoteImg } from "./functions.js";
 
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
 /**
  * Chatbot conversation flow
  * Example 2
@@ -185,18 +187,16 @@ export default [
     id: 2,
     parent: 1, // Relation with id: 1
     pattern: /menu/,
-    message: remoteTxt("https://jordifernandes.com/examples/chatbot/menu.txt"),
-    // message: remoteImg("https://jordifernandes.com/examples/chatbot/menu.jpg"),
-    // message: remoteJson(
-    //   "https://jordifernandes.com/examples/chatbot/menu.json"
-    // )[0].message,
+    message: remoteTxt(`${customEndpoint}/menu.txt`),
+    // message: remoteImg(`${customEndpoint}/menu.jpg`),
+    // message: remoteJson(`${customEndpoint}/menu.json`)[0].message,
   },
   {
     id: 3,
     parent: 1, // Relation with id: 1
     pattern: /order/,
     message: "Make a order!",
-    link: "https://jordifernandes.com/examples/chatbot/delivery-order.php",
+    link: `${customEndpoint}/delivery-order.php`,
   },
   {
     id: 4,
@@ -206,10 +206,13 @@ export default [
   },
 ];
 ```
+
 ### Example 3
 
 ```javascript
 import { remoteImg, sendData } from "./functions.js";
+
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
 /**
  * Chatbot conversation flow
@@ -221,7 +224,7 @@ export default [
     parent: 0,
     pattern: /.*/,
     message: "Hello! I am a Delivery Chatbot. Send a number!",
-    image: remoteImg("https://jordifernandes.com/examples/chatbot/menu.jpg"),
+    image: remoteImg(`${customEndpoint}/menu.jpg`),
   },
   {
     id: 2,
@@ -236,10 +239,10 @@ export default [
     pattern: /\d+/,
     message: "You are choise $input units. How many units do you want?",
     afterReply(from, input) {
-      sendData("https://jordifernandes.com/examples/chatbot/delivery-order.php", {
+      remoteData(`${customEndpoint}/delivery-order.php`, {
         units: input,
       });
-      saveData("./orders.json", {
+      localData("./orders.json", {
         date: Date.now(),
         from: from,
         units: input,

@@ -7,7 +7,7 @@ export default [
   {
     id: 1,
     parent: 0,
-    pattern: /hello|hi|howdy|welcome|bonjour|buenas noches|buenos dias|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do|shalom|what\'s happening|what\'s up/,
+    pattern: /hello|hi|howdy|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do/,
     message: "Hello! Thank you for contacting me, I am a Chatbot 🤖 , we will gladly assist you.",
     description: "Can I help with something?",
     buttons: buttons([
