@@ -1,5 +1,7 @@
 ![Jfa Whatsapp Chatbot](whatsapp-chatbot.jpg?raw=true "Jfa Whatsapp Chatbot")
 
+>**Attention:** This version is not stable yet!!!
+
 # Jfa Whatsapp Chatbot 💬 
 
 With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
