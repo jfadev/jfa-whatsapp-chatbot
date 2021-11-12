@@ -74,12 +74,15 @@ A reply necessarily needs the following properties:
 | `message`| String  | Reply text message                                               |
 | `link`   | String  | URL of generated link preview                                    |
 
-### Hooks
+#### Send Image
 
-| Property                           | Type     | Description                           |
-|------------------------------------|----------|---------------------------------------|
-| `beforeReply(from, input, output)` | Function | Inject custom code before a reply     |
-| `afterReply(from, input)`          | Function | Inject custom code after a reply      |
+| Property | Type    | Description                                                      |
+|----------|---------|------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                         |
+| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                        |
+| `message`| String  | Reply text message                                               |
+| `image`  | Base64  | Base64 of image use `remoteImg()` funtion.                       |
 
 ### Functions
 
@@ -89,6 +92,13 @@ A reply necessarily needs the following properties:
 | `remoteTxt(url, cacheDelay = null)` | String | Return a remote TXT file               |
 | `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
 | `remoteImg(url, cacheDelay = null)` | Base64 | Return  a remote Image file            |
+
+### Hooks
+
+| Property                           | Type     | Description                           |
+|------------------------------------|----------|---------------------------------------|
+| `beforeReply(from, input, output)` | Function | Inject custom code before a reply     |
+| `afterReply(from, input)`          | Function | Inject custom code after a reply      |
 
 ## Examples
 
@@ -159,10 +169,11 @@ export default [
   },
 ];
 ```
+
 ### Example 2
 
 ```javascript
-import { buttons, remoteTxt, remoteImg } from "./functions.js";
+import { buttons, remoteTxt, remoteJson } from "./functions.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -188,7 +199,6 @@ export default [
     parent: 1, // Relation with id: 1
     pattern: /menu/,
     message: remoteTxt(`${customEndpoint}/menu.txt`),
-    // message: remoteImg(`${customEndpoint}/menu.jpg`),
     // message: remoteJson(`${customEndpoint}/menu.json`)[0].message,
   },
   {
@@ -210,7 +220,7 @@ export default [
 ### Example 3
 
 ```javascript
-import { remoteImg, sendData } from "./functions.js";
+import { remoteImg } from "./functions.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -231,15 +241,14 @@ export default [
     parent: 1, // Relation with id: 1
     pattern: /\d+/,
     message: "You are choise item number $input. How many units do you want?",
+    // Inject custom code or overwrite 'message' property before repy
     beforeReply(from, input, output) {
-      // Inject custom code or overwrite 'message' property
       const response = await fetch(
         `${customEndpoint}/delivery-check-items.php/?item=${input}`
       ).then((res) => res.json());
-      if (response.stock === 0) {
-        output = "Item number $input is not avilable in this moment!";
-      }
-      return output;
+      return response.stock === 0
+        ? "Item number $input is not avilable in this moment!"
+        : output;
     },
   },
   {
@@ -247,6 +256,7 @@ export default [
     parent: 2, // Relation with id: 2
     pattern: /\d+/,
     message: "You are choise $input units. How many units do you want?",
+    // Inject custom code after reply
     afterReply(from, input) {
       // saveRemote(`${customEndpoint}/delivery-order.php`, {
       //   date: Date.now(),

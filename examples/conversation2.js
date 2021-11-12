@@ -1,4 +1,4 @@
-import { buttons, remoteTxt, remoteImg } from "./functions.js";
+import { buttons, remoteTxt, remoteJson } from "./functions.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -24,7 +24,6 @@ export default [
     parent: 1, // Relation with id: 1
     pattern: /menu/,
     message: remoteTxt(`${customEndpoint}/menu.txt`),
-    // message: remoteImg(`${customEndpoint}/menu.jpg`),
     // message: remoteJson(`${customEndpoint}/menu.json`)[0].message,
   },
   {
