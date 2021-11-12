@@ -1,4 +1,4 @@
-import { remoteImg, sendData } from "./functions.js";
+import { remoteImg } from "./functions.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -19,15 +19,14 @@ export default [
     parent: 1, // Relation with id: 1
     pattern: /\d+/,
     message: "You are choise item number $input. How many units do you want?",
+    // Inject custom code or overwrite 'message' property before repy
     beforeReply(from, input, output) {
-      // Inject custom code or overwrite 'message' property
       const response = await fetch(
         `${customEndpoint}/delivery-check-items.php/?item=${input}`
       ).then((res) => res.json());
-      if (response.stock === 0) {
-        output = "Item number $input is not avilable in this moment!";
-      }
-      return output;
+      return response.stock === 0
+        ? "Item number $input is not avilable in this moment!"
+        : output;
     },
   },
   {
@@ -35,6 +34,7 @@ export default [
     parent: 2, // Relation with id: 2
     pattern: /\d+/,
     message: "You are choise $input units. How many units do you want?",
+    // Inject custom code after reply
     afterReply(from, input) {
       // saveRemote(`${customEndpoint}/delivery-order.php`, {
       //   date: Date.now(),
