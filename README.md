@@ -8,27 +8,27 @@ You will only need to edit your conversation flow in a single file.
 
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
-- [Init](#init)
-- [Install](#install)
-- [Run](#run)
-- [Log](#log)
-- [Conversation Flow](#conversation-flow)
-  - [Replies Types](#replies-types)
-    - [Send Text](#send-text)
-    - [Send Buttons](#send-buttons)
-    - [Send Link](#send-lin)
-    - [Send Image](#send-image)
-  - [Functions](#functions)
-  - [Hooks](#hooks)
-- [Examples](#examples)
-  - [Example 1](#example-1)
-  - [Example 2](#example-2)
-  - [Example 3](#example-3)
-
-- [More Examples](#more-examples)
-- [Donate](#donate)
-- [License](#license)
-- [Contributors](#contributors)
+1. [Init](#init)
+2. [Install](#install)
+3. [Run](#run)
+4. [Log](#log)
+5. [Conversation Flow](#conversation-flow)
+5.1. [Replies Types](#replies-types)
+5.1.1. [Send Text](#send-text)
+5.1.2. [Send Buttons](#send-buttons)
+5.1.3. [Send Link](#send-lin)
+5.1.4. [Send Image](#send-image)
+5.2. [Functions](#functions)
+5.3. [Hooks](#hooks)
+6. [Examples](#examples)
+6.1. [Example 1](#example-1)
+6.2. [Example 2](#example-2)
+6.3. [Example 3](#example-3)
+6.4. [More Examples](#more-examples)
+7. [Troobleshoting](#troobleshoting)
+8. [Donate](#donate)
+9. [License](#license)
+10. [Contributors](#contributors)
 
 ## Init
 
@@ -249,6 +249,7 @@ export default [
 import { remoteImg } from "./functions.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+var inputs = [];
 
 /**
  * Chatbot conversation flow
@@ -258,42 +259,35 @@ export default [
   {
     id: 1,
     parent: 0,
-    pattern: /.*/,
+    pattern: /.*/, // Match all
     message: "Hello! I am a Delivery Chatbot. Send a menu item number!",
     image: remoteImg(`${customEndpoint}/menu.jpg`),
   },
   {
     id: 2,
     parent: 1, // Relation with id: 1
-    pattern: /\d+/,
+    pattern: /\d+/, // Match any number
     message: "You are choise item number $input. How many units do you want?",
-    // Inject custom code or overwrite 'message' property before repy
+  },  
+  {
+    id: 3,
+    parent: 2, // Relation with id: 2
+    pattern: /\d+/, // Match any number
+    message: "You are choise $input units. How many units do you want?",
+    // Inject custom code or overwrite output 'message' property before reply
     beforeReply(from, input, output) {
+      // Example check external api and overwrite output 'message'
       const response = await fetch(
-        `${customEndpoint}/delivery-check-items.php/?item=${input}`
+        `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=`
       ).then((res) => res.json());
       return response.stock === 0
         ? "Item number $input is not avilable in this moment!"
         : output;
     },
-  },
-  {
-    id: 3,
-    parent: 2, // Relation with id: 2
-    pattern: /\d+/,
-    message: "You are choise $input units. How many units do you want?",
+
     // Inject custom code after reply
     afterReply(from, input) {
-      // saveRemote(`${customEndpoint}/delivery-order.php`, {
-      //   date: Date.now(),
-      //   from: from,
-      //   units: input,
-      // });
-      // saveLocal("./orders.json", {
-      //   date: Date.now(),
-      //   from: from,
-      //   units: input,
-      // });
+      
     },
   },
 ];
@@ -302,6 +296,10 @@ export default [
 ### More Examples
 
 [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
+
+## Troobleshoting
+
+>**Attention:** Do not log in to whatsapp web with the same account that the chatbot uses. This will make the chatbot unable to hear the messages.
 
 ## Donate
 
