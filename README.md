@@ -79,6 +79,17 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `message`| String  | Reply text message                                               |
 
+```javascript
+[
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match with all text
+    message: "Hi I am a Chatbot!",
+  }
+]
+```
+
 #### Send Buttons
 
 | Property     | Type    | Description                                                      |
@@ -90,6 +101,23 @@ A reply necessarily needs the following properties:
 | `description`| String  | Reply text subtitle                                              |
 | `buttons`    | Array   | Button object, look at the example                               |
 
+```javascript
+[
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/,
+    message: "Hello!",
+    description: "Can I help with something?",
+    buttons: buttons([
+      "Website",
+      "Linkedin",
+      "Github",
+    ]),
+  }
+]
+```
+
 #### Send Link
 
 | Property | Type    | Description                                                      |
@@ -100,6 +128,18 @@ A reply necessarily needs the following properties:
 | `message`| String  | Reply text message                                               |
 | `link`   | String  | URL of generated link preview                                    |
 
+```javascript
+[
+  {
+    id: 2,
+    parent: 1, // Relation with id: 1
+    pattern: /github/,
+    message: "Check my Github repositories!",
+    link: "https://github.com/jfadev",
+  }
+]
+```
+
 #### Send Image
 
 | Property | Type    | Description                                                      |
@@ -109,6 +149,18 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `message`| String  | Reply text message                                               |
 | `image`  | Base64  | Base64 of image use `remoteImg()` funtion.                       |
+
+```javascript
+[
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    message: "Hello! I am a Delivery Chatbot",
+    image: remoteImg("https://remote-server.com/menu.jpg"),
+  }
+]
+```
 
 ### Functions
 
