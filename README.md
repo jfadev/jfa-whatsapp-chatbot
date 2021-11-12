@@ -79,6 +79,8 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `message`| String  | Reply text message                                               |
 
+##### Example
+
 ```javascript
 [
   {
@@ -100,6 +102,8 @@ A reply necessarily needs the following properties:
 | `message`    | String  | Reply text message                                               |
 | `description`| String  | Reply text subtitle                                              |
 | `buttons`    | Array   | Button object, look at the example                               |
+
+##### Example
 
 ```javascript
 [
@@ -128,6 +132,8 @@ A reply necessarily needs the following properties:
 | `message`| String  | Reply text message                                               |
 | `link`   | String  | URL of generated link preview                                    |
 
+##### Example
+
 ```javascript
 [
   {
@@ -149,6 +155,8 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `message`| String  | Reply text message                                               |
 | `image`  | Base64  | Base64 of image use `remoteImg()` funtion.                       |
+
+##### Example
 
 ```javascript
 [
