@@ -8,6 +8,28 @@ You will only need to edit your conversation flow in a single file.
 
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
+- [Init](#init)
+- [Install](#install)
+- [Run](#run)
+- [Log](#log)
+- [Conversation Flow](#conversation-flow)
+  - [Replies Types](#replies-types)
+    - [Send Text](#send-text)
+    - [Send Buttons](#send-buttons)
+    - [Send Link](#send-lin)
+    - [Send Image](#send-image)
+  - [Functions](#functions)
+  - [Hooks](#hooks)
+- [Examples](#examples)
+  - [Example 1](#example-1)
+  - [Example 2](#example-2)
+  - [Example 3](#example-3)
+
+- [More Examples](#more-examples)
+- [Donate](#donate)
+- [License](#license)
+- [Contributors](#contributors)
+
 ## Init
 
 Create a new repository from [this template](https://github.com/jfadev/jfa-whatsapp-chatbot/generate).
@@ -18,7 +40,7 @@ Create a new repository from [this template](https://github.com/jfadev/jfa-whats
 $ yarn install
 ```
 
-## Start
+## Run
 
 For production:
 
@@ -46,9 +68,9 @@ The conversation flow is an array of ordered reply objects.
 A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
 A reply necessarily needs the following properties:
 
-### Replies types
+### Replies Types
 
-#### Send Simple Text
+#### Send Text
 
 | Property | Type    | Description                                                      |
 |----------|---------|------------------------------------------------------------------|
