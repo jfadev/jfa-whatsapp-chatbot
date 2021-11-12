@@ -8,6 +8,10 @@ You will only need to edit your conversation flow in a single file.
 
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
+## Init
+
+Create a new repository from [this template](https://github.com/jfadev/jfa-whatsapp-chatbot/generate).
+
 ## Install
 
 ```bash
@@ -42,7 +46,7 @@ The conversation flow is an array of ordered reply objects.
 A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
 A reply necessarily needs the following properties:
 
-### Relpies types
+### Replies types
 
 #### Send Simple Text
 
