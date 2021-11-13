@@ -7,8 +7,8 @@ export async function start(client, replies) {
   console.log("[Chatbot] started...");
   try {
     let parentReply = 0;
-    client.onAnyMessage(async (message) => {
-    // client.onMessage(async (message) => {
+    // client.onAnyMessage(async (message) => {
+    client.onMessage(async (message) => {
       const body = message.body.toLowerCase();
       let reply = replies.find((o) => o.pattern.test(body));
       if (reply && message.isGroupMsg === false) {
