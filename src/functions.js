@@ -7,7 +7,8 @@ export async function start(client, replies) {
   console.log("[Chatbot] started...");
   try {
     let parentReply = 0;
-    client.onMessage(async (message) => {
+    client.onAnyMessage(async (message) => {
+    // client.onMessage(async (message) => {
       const body = message.body.toLowerCase();
       let reply = replies.find((o) => o.pattern.test(body));
       if (reply && message.isGroupMsg === false) {
@@ -17,7 +18,7 @@ export async function start(client, replies) {
           if (reply.hasOwnProperty("beforeReply")) {
             reply.message = reply.beforeReply(message.from, body, reply.message);
           }
-          reply.message = reply.message.replaceAll('$input', body);
+          reply.message = reply.message.replace(/\$input/g, body);
           await watchSendLinkPreview(client, message, reply);
           await watchSendButtons(client, message, reply);
           await watchSendText(client, message, reply);
