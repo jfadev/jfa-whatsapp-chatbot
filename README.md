@@ -20,12 +20,15 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
       - [Send Buttons](#send-buttons)
       - [Send Link](#send-lin)
       - [Send Image](#send-image)
-    - [Functions](#functions)
+      - [Send Audio](#send-audio)
+    - [Helpers](#helpers)
     - [Hooks](#hooks)
 6. [Examples](#examples)
     - [Example 1](#example-1)
     - [Example 2](#example-2)
     - [Example 3](#example-3)
+    - [Example 4](#example-4)
+    - [Example 5](#example-5)
     - [More Examples](#more-examples)
 7. [Troobleshoting](#troobleshoting)
 8. [Donate](#donate)
@@ -108,6 +111,8 @@ A reply necessarily needs the following properties:
 ##### Example
 
 ```javascript
+import { buttons } from "./helpers.js";
+
 [
   {
     id: 1,
@@ -155,31 +160,58 @@ A reply necessarily needs the following properties:
 | `id`     | Integer | Reply `id` is used to link with `parent`                         |
 | `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
-| `message`| String  | Reply text message                                               |
-| `image`  | Base64  | Base64 of image use `remoteImg()` funtion.                       |
+| `image`  | Path / Object  | Path or Object returned by `remoteImg()` funtion.                       |
 
 ##### Example
 
 ```javascript
+import { remoteImg } from "./helpers.js";
+
 [
   {
     id: 1,
     parent: 0,
     pattern: /.*/, // Match all
-    message: "Hello! I am a Delivery Chatbot",
     image: remoteImg("https://remote-server.com/menu.jpg"),
+    // image: "./images/menu.jpg",
   }
 ]
 ```
 
-### Functions
+#### Send Audio
 
-| Function                            | Return | Description                            |
+| Property | Type    | Description                                                      |
+|----------|---------|------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                         |
+| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                        |
+| `audio`  | Path / Object  | Path or Object returned by `remoteAudio()` funtion.                       |
+
+##### Example
+
+```javascript
+import { remoteAudio } from "./helpers.js";
+
+[
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    audio: remoteAudio("https://remote-server.com/audio.mp3"),
+    // audio: "./audios/audio.mp3",
+  }
+]
+```
+
+### Helpers
+
+| Helper                            | Return | Description                            |
 |-------------------------------------|--------|----------------------------------------|
 | `buttons(buttonTexts)`              | Array  | Generate buttons                       |
 | `remoteTxt(url, cacheDelay = null)` | String | Return a remote TXT file               |
 | `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
-| `remoteImg(url, cacheDelay = null)` | Base64 | Return  a remote Image file            |
+| `remoteImg(url, cacheDelay = null)` | Object | Return  a remote Image file            |
+| `remoteAudio(url, cacheDelay = null)` | Object | Return  a remote Audio file            |
 
 ### Hooks
 
@@ -195,16 +227,17 @@ Edit your file `./src/conversation.js` and create your custom conversation workf
 ### Example 1
 
 ```javascript
-import { buttons } from "./functions.js";
+import { buttons } from "./helpers.js";
 
 /**
  * Chatbot conversation flow
+ * Example 1
  */
 export default [
   {
     id: 1,
     parent: 0,
-    pattern: /hello|hi|howdy|welcome|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do/,
+    pattern: /hello|hi|howdy|good day|good morning|hey|hi-ya|how are you|how goes it|howdy\-do/,
     message: "Hello! Thank you for contacting me, I am a Chatbot 🤖 , we will gladly assist you.",
     description: "Can I help with something?",
     buttons: buttons([
@@ -261,7 +294,7 @@ export default [
 ### Example 2
 
 ```javascript
-import { buttons, remoteTxt, remoteJson } from "./functions.js";
+import { buttons, remoteTxt, remoteJson } from "./helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -308,7 +341,7 @@ export default [
 ### Example 3
 
 ```javascript
-import { remoteImg } from "./functions.js";
+import { remoteImg } from "./helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 var inputs = [];
@@ -351,6 +384,117 @@ export default [
     afterReply(from, input) {
       
     },
+  },
+];
+```
+
+```javascript
+import { buttons, remoteTxt, remoteJson } from "./helpers.js";
+
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
+/**
+ * Chatbot conversation flow
+ * Example 2
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/,
+    message: "Hello! I am a Delivery Chatbot.",
+    description: "Choice one option!",
+    buttons: buttons([
+      "See today's menu?",
+      "Order directly!",
+      "Talk to a human!",
+    ]),
+  },
+  {
+    id: 2,
+    parent: 1, // Relation with id: 1
+    pattern: /menu/,
+    message: remoteTxt(`${customEndpoint}/menu.txt`),
+    // message: remoteJson(`${customEndpoint}/menu.json`)[0].message,
+  },
+  {
+    id: 3,
+    parent: 1, // Relation with id: 1
+    pattern: /order/,
+    message: "Make a order!",
+    link: `${customEndpoint}/delivery-order.php`,
+  },
+  {
+    id: 4,
+    parent: 1, // Relation with id: 1
+    pattern: /human/,
+    message: "Please call the following whatsapp number: +1 206 555 0100",
+  },
+];
+```
+
+### Example 4
+
+```javascript
+import { remoteImg } from "./helpers.js";
+
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
+/**
+ * Chatbot conversation flow
+ * Example 4
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    message: "Image local and remote! Send [local] or [remote]",
+  },
+  {
+    id: 2,
+    parent: 1,
+    pattern: /local/, 
+    image: "./images/image1.jpg",
+  },
+  {
+    id: 3,
+    parent: 1,
+    pattern: /remote/, 
+    image: remoteImg(`${customEndpoint}/image1.jpg`),
+  },
+];
+```
+
+### Example 4
+
+```javascript
+import { remoteImg } from "./helpers.js";
+
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
+/**
+ * Chatbot conversation flow
+ * Example 5
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    message: "Audio local and remote! Send [local] or [remote]",
+  },
+  {
+    id: 2,
+    parent: 1,
+    pattern: /local/, 
+    voice: "./audios/audio1.mp3",
+  },
+  {
+    id: 3,
+    parent: 1,
+    pattern: /remote/, 
+    voice: remoteAudio(`${customEndpoint}/audio1.mp3`),
   },
 ];
 ```

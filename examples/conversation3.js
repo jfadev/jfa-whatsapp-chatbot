@@ -1,4 +1,4 @@
-import { remoteImg } from "./functions.js";
+import { remoteImg } from "./helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 var inputs = [];
