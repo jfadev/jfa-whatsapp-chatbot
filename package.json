@@ -22,7 +22,7 @@
     "venom"
   ],
   "dependencies": {
-    "venom-bot": "^3.1.8"
+    "venom-bot": "^4.0.2"
   },
   "devDependencies": {},
   "main": "main.js"
