@@ -1,7 +1,8 @@
-import { buttons } from "./functions.js";
+import { buttons } from "./helpers.js";
 
 /**
  * Chatbot conversation flow
+ * Example 1
  */
 export default [
   {

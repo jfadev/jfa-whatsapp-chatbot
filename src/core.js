@@ -16,11 +16,17 @@ export async function start(client, replies) {
           console.log("Read: ", reply.pattern);
           parentReply = reply.id;
           if (reply.hasOwnProperty("beforeReply")) {
-            reply.message = reply.beforeReply(message.from, body, reply.message);
+            reply.message = reply.beforeReply(
+              message.from,
+              body,
+              reply.message
+            );
           }
           reply.message = reply.message.replace(/\$input/g, body);
           await watchSendLinkPreview(client, message, reply);
           await watchSendButtons(client, message, reply);
+          await watchSendImage(client, message, reply);
+          await watchSendAudio(client, message, reply);
           await watchSendText(client, message, reply);
           if (reply.hasOwnProperty("afterReply")) {
             reply.afterReply(message.from, body);
@@ -92,6 +98,96 @@ async function watchSendButtons(client, message, reply) {
 }
 
 /**
+ * Send image file (jpg, png, gif)
+ * @param {Object} client
+ * @param {Object} message
+ * @param {Object} reply
+ */
+async function watchSendImage(client, message, reply) {
+  if (reply.hasOwnProperty("image")) {
+    if (
+      reply.image.hasOwnProperty("base64") &&
+      reply.image.hasOwnProperty("filename")
+    ) {
+      await client
+        .sendImageFromBase64(
+          message.from,
+          message.image.base64,
+          message.filename
+        )
+        .then((result) =>
+          console.log(
+            "Write (sendImage b64): ",
+            message.from,
+            ">",
+            result.to.remote._serialized,
+            ":",
+            reply.voice
+          )
+        )
+        .catch((err) => console.error("Error (sendImage b64): ", err));
+    } else {
+      await client
+        .sendImage(message.from, message.image, message.filename, "")
+        .then((result) =>
+          console.log(
+            "Write (sendImage): ",
+            message.from,
+            ">",
+            result.to.remote._serialized,
+            ":",
+            reply.voice
+          )
+        )
+        .catch((err) => console.error("Error (sendImage): ", err));
+    }
+  }
+}
+
+/**
+ * Send audio file MP3
+ * @param {Object} client
+ * @param {Object} message
+ * @param {Object} reply
+ */
+async function watchSendAudio(client, message, reply) {
+  if (reply.hasOwnProperty("audio")) {
+    if (
+      reply.image.hasOwnProperty("base64") &&
+      reply.image.hasOwnProperty("filename")
+    ) {
+      await client
+        .sendVoiceBase64(message.from, message.audio.base64)
+        .then((result) =>
+          console.log(
+            "Write (sendAudio b64): ",
+            message.from,
+            ">",
+            result.to.remote._serialized,
+            ":",
+            reply.audio.filename
+          )
+        )
+        .catch((err) => console.error("Error (sendAudio b64): ", err));
+    } else {
+      await client
+        .sendVoice(message.from, message.audio)
+        .then((result) =>
+          console.log(
+            "Write (sendAudio): ",
+            message.from,
+            ">",
+            result.to.remote._serialized,
+            ":",
+            reply.audio
+          )
+        )
+        .catch((err) => console.error("Error (sendAudio): ", err));
+    }
+  }
+}
+
+/**
  *
  * @param {Object} client
  * @param {Object} message
@@ -118,69 +214,4 @@ async function watchSendText(client, message, reply) {
       )
       .catch((err) => console.error("Error (sendText): ", err));
   }
-}
-
-/**
- * Create buttons
- * @param {Array} buttonTexts
- */
-export function buttons(buttonTexts) {
-  let buttons = [];
-  buttonTexts.forEach((text) => {
-    buttons.push({
-      buttonText: {
-        displayText: text,
-      },
-    });
-    return buttons;
-  });
-}
-
-/**
- * Get remote TXT file
- * @param {String} url
- * @param {Number|null} cacheDelay
- * @returns
- */
-export async function remoteTxt(url, cacheDelay = null) {
-  const response = await fetch(url)
-    .then((res) => res.text())
-    .catch((err) => console.error("Error (remoteTxt): ", err));
-  return response;
-}
-
-/**
- * Get remote JSON file
- * @param {String} url
- * @param {Number|null} cacheDelay
- * @returns
- */
-export async function remoteJson(url, cacheDelay = null) {
-  const response = await fetch(url)
-    .then((res) => res.json())
-    .catch((err) => console.error("Error (remoteJson): ", err));
-  return response;
-}
-
-/**
- * Get remote Image (jpg, png, gif) file
- * @param {String} url
- * @param {Number|null} cacheDelay
- * @returns
- */
-export async function remoteImg(url, cacheDelay = null) {
-  const blobToBase64 = (blob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    return new Promise((resolve) => {
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-    });
-  };
-  const response = await fetch(url)
-    .then((res) => res.blob())
-    .then(blobToBase64)
-    .catch((err) => console.error("Error (remoteImg): ", err));
-  return response;
 }
