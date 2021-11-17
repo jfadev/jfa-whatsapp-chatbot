@@ -17,12 +17,12 @@ export default [
     id: 2,
     parent: 1,
     pattern: /local/, 
-    voice: "./audios/audio1.mp3",
+    audio: "./audios/audio1.mp3",
   },
   {
     id: 3,
     parent: 1,
     pattern: /remote/, 
-    voice: remoteAudio(`${customEndpoint}/audio1.mp3`),
+    audio: remoteAudio(`${customEndpoint}/audio1.mp3`),
   },
 ];
