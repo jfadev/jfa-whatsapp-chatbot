@@ -421,7 +421,7 @@ export default [
 ];
 ```
 
-### Example 4
+### Example 5
 
 ```javascript
 import { remoteImg } from "./helpers.js";
