@@ -29,6 +29,8 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 3](#example-3)
     - [Example 4](#example-4)
     - [Example 5](#example-5)
+    - [Example 6](#example-6)
+    - [Example 7](#example-7)
     - [More Examples](#more-examples)
 7. [Troobleshoting](#troobleshoting)
 8. [Donate](#donate)
@@ -356,16 +358,21 @@ export default [
     parent: 0,
     pattern: /.*/, // Match all
     message: "Hello! I am a Delivery Chatbot. Send a menu item number!",
-    image: remoteImg(`${customEndpoint}/menu.jpg`),
   },
   {
     id: 2,
+    parent: 0, // Same parent (send reply id=1 and id=2)
+    pattern: /.*/, // Match all
+    image: remoteImg(`${customEndpoint}/menu.jpg`),
+  },
+  {
+    id: 3,
     parent: 1, // Relation with id: 1
     pattern: /\d+/, // Match any number
     message: "You are choise item number $input. How many units do you want?",
   },  
   {
-    id: 3,
+    id: 4,
     parent: 2, // Relation with id: 2
     pattern: /\d+/, // Match any number
     message: "You are choise $input units. How many units do you want?",
@@ -378,11 +385,6 @@ export default [
       return response.stock === 0
         ? "Item number $input is not avilable in this moment!"
         : output;
-    },
-
-    // Inject custom code after reply
-    afterReply(from, input) {
-      
     },
   },
 ];
@@ -450,6 +452,63 @@ export default [
     parent: 1,
     pattern: /remote/, 
     voice: remoteAudio(`${customEndpoint}/audio1.mp3`),
+  },
+];
+```
+
+### Example 6
+
+```javascript
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
+/**
+ * Chatbot conversation flow
+ * Example 6
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    message: "",
+    // Inject custom code or overwrite output 'message' property before reply
+    beforeReply(from, input, output) {
+      // Get reply from external api and overwrite output 'message'
+      const response = await fetch(
+        `${customEndpoint}/ai-reply.php/?input=${input}`
+      ).then((res) => res.json());
+      return response.message;
+    },
+  },
+];
+```
+
+### Example 7
+
+```javascript
+const customEndpoint = "https://jordifernandes.com/examples/chatbot";
+
+/**
+ * Chatbot conversation flow
+ * Example 7
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    message: "Hello!",
+    // Inject custom code after reply
+    afterReply(from, input) {
+      // Send whatsapp number to external api
+      await fetch(`${customEndpoint}/number-lead.php/`, {
+        method: "POST",
+        body: JSON.stringify({ number: from }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+    },
   },
 ];
 ```
