@@ -13,8 +13,9 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 1. [Init](#init)
 2. [Install](#install)
 3. [Run](#run)
-4. [Log](#log)
-5. [Conversation Flow](#conversation-flow)
+4. [Sessions](#sessions)
+5. [Log](#log)
+6. [Conversation Flow](#conversation-flow)
     - [Replies Types](#replies-types)
       - [Send Text](#send-text)
       - [Send Buttons](#send-buttons)
@@ -23,7 +24,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
       - [Send Audio](#send-audio)
     - [Helpers](#helpers)
     - [Hooks](#hooks)
-6. [Examples](#examples)
+7. [Examples](#examples)
     - [Example 1](#example-1)
     - [Example 2](#example-2)
     - [Example 3](#example-3)
@@ -32,10 +33,10 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 6](#example-6)
     - [Example 7](#example-7)
     - [More Examples](#more-examples)
-7. [Troobleshoting](#troobleshoting)
-8. [Donate](#donate)
-9. [License](#license)
-10. [Contributors](#contributors)
+8. [Troubleshooting](#troubleshooting)
+9. [Donate](#donate)
+10. [License](#license)
+11. [Contributors](#contributors)
 
 ## Init
 
@@ -60,6 +61,8 @@ For development:
 ```bash
 $ yarn dev
 ```
+
+## Sessions
 
 ## Log
 
@@ -517,7 +520,7 @@ export default [
 
 [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
-## Troobleshoting
+## Troubleshooting
 
 >**Attention:** Do not log in to whatsapp web with the same account that the chatbot uses. This will make the chatbot unable to hear the messages.
 
