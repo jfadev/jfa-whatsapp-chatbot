@@ -1,7 +1,6 @@
 import { remoteImg } from "./helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
-var inputs = [];
 
 /**
  * Chatbot conversation flow
@@ -32,10 +31,10 @@ export default [
     pattern: /\d+/, // Match any number
     message: "You are choise $input units. How many units do you want?",
     // Inject custom code or overwrite output 'message' property before reply
-    beforeReply(from, input, output) {
+    beforeReply(from, input, output, parents) {
       // Example check external api and overwrite output 'message'
       const response = await fetch(
-        `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=`
+        `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=${parents.pop()}`
       ).then((res) => res.json());
       return response.stock === 0
         ? "Item number $input is not avilable in this moment!"

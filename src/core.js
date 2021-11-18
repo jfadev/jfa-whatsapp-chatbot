@@ -1,36 +1,39 @@
 /**
  * Start run listener of whatsapp messages
  * @param {Object} client
- * @param {Array} replies
+ * @param {Array} conversation
  */
-export async function start(client, replies) {
+export async function start(client, conversation) {
   console.log("[Chatbot] started...");
   try {
-    let parentReply = 0;
+    let parent = 0;
+    let parents = [];
     // client.onAnyMessage(async (message) => {
     client.onMessage(async (message) => {
-      const body = message.body.toLowerCase();
-      let reply = replies.find((o) => o.pattern.test(body));
+      const input = message.body.toLowerCase();
+      let reply = conversation.find((o) => o.pattern.test(input));
       if (reply && message.isGroupMsg === false) {
-        if (reply.parent === parentReply) {
+        if (reply.parent === parent) {
           console.log("Read: ", reply.pattern);
-          parentReply = reply.id;
+          parent = reply.id;
           if (reply.hasOwnProperty("beforeReply")) {
             reply.message = reply.beforeReply(
               message.from,
-              body,
-              reply.message
+              input,
+              reply.message,
+              parents
             );
           }
-          reply.message = reply.message.replace(/\$input/g, body);
+          reply.message = reply.message.replace(/\$input/g, input);
           await watchSendLinkPreview(client, message, reply);
           await watchSendButtons(client, message, reply);
           await watchSendImage(client, message, reply);
           await watchSendAudio(client, message, reply);
           await watchSendText(client, message, reply);
           if (reply.hasOwnProperty("afterReply")) {
-            reply.afterReply(message.from, body);
+            reply.afterReply(message.from, input, parents);
           }
+          parents.push({ id: reply.id, input: input });
         }
       }
     });
