@@ -471,7 +471,7 @@ export default [
     pattern: /.*/, // Match all
     message: "",
     // Inject custom code or overwrite output 'message' property before reply
-    beforeReply(from, input, output) {
+    beforeReply(from, input, output, parents) {
       // Get reply from external api and overwrite output 'message'
       const response = await fetch(
         `${customEndpoint}/ai-reply.php/?input=${input}`
@@ -498,7 +498,7 @@ export default [
     pattern: /.*/, // Match all
     message: "Hello!",
     // Inject custom code after reply
-    afterReply(from, input) {
+    afterReply(from, input, parents) {
       // Send whatsapp number to external api
       await fetch(`${customEndpoint}/number-lead.php/`, {
         method: "POST",
