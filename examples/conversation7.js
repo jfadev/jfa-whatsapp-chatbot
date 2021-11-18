@@ -11,7 +11,7 @@ export default [
     pattern: /.*/, // Match all
     message: "Hello!",
     // Inject custom code after reply
-    afterReply(from, input) {
+    afterReply(from, input, parents) {
       // Send whatsapp number to external api
       await fetch(`${customEndpoint}/number-lead.php/`, {
         method: "POST",
