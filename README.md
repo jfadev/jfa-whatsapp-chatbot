@@ -117,8 +117,6 @@ A reply necessarily needs the following properties:
 ##### Example
 
 ```javascript
-import { buttons } from "./helpers.js";
-
 [
   {
     id: 1,
@@ -171,8 +169,6 @@ import { buttons } from "./helpers.js";
 ##### Example
 
 ```javascript
-import { remoteImg } from "./helpers.js";
-
 [
   {
     id: 1,
@@ -196,8 +192,6 @@ import { remoteImg } from "./helpers.js";
 ##### Example
 
 ```javascript
-import { remoteAudio } from "./helpers.js";
-
 [
   {
     id: 1,
