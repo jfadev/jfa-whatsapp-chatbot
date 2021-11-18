@@ -12,7 +12,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 
 1. [Init](#init)
 2. [Install](#install)
-3. [Config](#config)
+3. [Configuration](#configuration)
 4. [Run](#run)
 5. [Sessions](#sessions)
 6. [Log](#log)
@@ -50,7 +50,7 @@ Create a new repository from [this template](https://github.com/jfadev/jfa-whats
 $ yarn install
 ```
 
-## Config
+## Configuration
 
 Edit `./src/config.js` file
 
@@ -84,6 +84,9 @@ $ yarn log
 
 The conversation flow is an array of ordered reply objects. 
 A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
+
+![Replies Relations](replies-relations.jpg?raw=true "Replies Relations")
+
 A reply necessarily needs the following properties:
 
 ### Replies Types
