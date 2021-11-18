@@ -65,6 +65,8 @@ $ yarn dev
 
 ## Sessions
 
+Folder `./tokens`
+
 ## Log
 
 Log is write in `./chatbot.log` file.
@@ -215,10 +217,10 @@ A reply necessarily needs the following properties:
 
 ### Hooks
 
-| Property                           | Type     | Description                           |
-|------------------------------------|----------|---------------------------------------|
-| `beforeReply(from, input, output)` | Function | Inject custom code before a reply     |
-| `afterReply(from, input)`          | Function | Inject custom code after a reply      |
+| Property                                    | Type     | Description                           |
+|---------------------------------------------|----------|---------------------------------------|
+| `beforeReply(from, input, output, parents)` | Function | Inject custom code before a reply     |
+| `afterReply(from, input, parents)`          | Function | Inject custom code after a reply      |
 
 ## Examples
 
@@ -344,7 +346,6 @@ export default [
 import { remoteImg } from "./helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
-var inputs = [];
 
 /**
  * Chatbot conversation flow
@@ -375,10 +376,10 @@ export default [
     pattern: /\d+/, // Match any number
     message: "You are choise $input units. How many units do you want?",
     // Inject custom code or overwrite output 'message' property before reply
-    beforeReply(from, input, output) {
+    beforeReply(from, input, output, parents) {
       // Example check external api and overwrite output 'message'
       const response = await fetch(
-        `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=`
+        `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=${parents.pop()}`
       ).then((res) => res.json());
       return response.stock === 0
         ? "Item number $input is not avilable in this moment!"
