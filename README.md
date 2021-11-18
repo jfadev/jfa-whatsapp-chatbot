@@ -36,7 +36,8 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 8. [Troubleshooting](#troubleshooting)
 9. [Donate](#donate)
 10. [License](#license)
-11. [Contributors](#contributors)
+11. [Contributing](#contributing)
+12. [Contributors](#contributors)
 
 ## Init
 
@@ -524,6 +525,8 @@ export default [
 
 >**Attention:** Do not log in to whatsapp web with the same account that the chatbot uses. This will make the chatbot unable to hear the messages.
 
+>**Attention:** You need a whatsapp account for the chatbot and a different account to be able to talk to it.
+
 ## Donate
 
 [https://jordifernandes.com/donate/](https://jordifernandes.com/donate/)
@@ -531,6 +534,10 @@ export default [
 ## License
 
 [MIT License](LICENSE)
+
+## Contributing
+
+Pull requests are welcome :)
 
 ## Contributors
 
