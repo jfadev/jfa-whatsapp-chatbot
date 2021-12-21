@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 import venom from 'venom-bot';
-import venomOptions from './config.js';
+import { venomOptions } from './config.js';
 import { start } from './core.js';
-import conversation from './conversation.js';
+import conversation from './conversations/conversation.js';
 
 console.log('################################');
 console.log('#     Jfa Whatsapp Chatbot     #');
-console.log('##########################33####');
+console.log('################################');
 
 /* Single whatsapp account */
 /* ------------------------*/

@@ -1,12 +1,12 @@
 {
   "name": "jfa-whatsapp-chatbot",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Whatsapp Chatbot",
   "type": "module",
   "scripts": {
     "dev": "node src/main.js",
-    "start": "node src/main.js >> chatbot.log 2>&1 &",
-    "log": "tail -f chatbot.log"
+    "start": "node src/main.js >> logs/console.log 2>&1 &",
+    "log": "tail -f logs/console.log"
   },
   "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
   "bugs": {
@@ -22,6 +22,7 @@
     "venom"
   ],
   "dependencies": {
+    "ansi-regex": "^5.0.1",
     "venom-bot": "^4.0.2"
   },
   "devDependencies": {},
