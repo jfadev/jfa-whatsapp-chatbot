@@ -1,8 +1,8 @@
 ![Jfa Whatsapp Chatbot](whatsapp-chatbot.jpg?raw=true "Jfa Whatsapp Chatbot")
 
->**Attention:** This version is not stable yet!!!
-
 # Jfa Whatsapp Chatbot 💬 
+
+>**Attention:** This version is **NOT STABLE** yet!!!
 
 With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
 you can easily create a WhatsApp Chatbot 🤖 . 
@@ -74,7 +74,7 @@ Folder `./tokens`
 
 ## Log
 
-Log is write in `./chatbot.log` file.
+Log is write in `./logs/console.log` file.
 
 ```bash
 $ yarn log
