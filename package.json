@@ -22,8 +22,7 @@
     "venom"
   ],
   "dependencies": {
-    "ansi-regex": "^5.0.1",
-    "venom-bot": "^4.0.2"
+    "venom-bot": "^4.0.4"
   },
   "devDependencies": {},
   "main": "main.js"

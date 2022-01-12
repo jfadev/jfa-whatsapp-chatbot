@@ -1,31 +1,37 @@
-![Jfa Whatsapp Chatbot](whatsapp-chatbot.jpg?raw=true "Jfa Whatsapp Chatbot")
+![Jfa Whatsapp Chatbot](doc/whatsapp-chatbot.jpg?raw=true "Jfa Whatsapp Chatbot")
 
 # Jfa Whatsapp Chatbot 💬 
 
 >**Attention:** This version is **NOT STABLE** yet!!!
 
-With this [node.js](https://nodejs.org/) starter using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
+With this [node.js](https://nodejs.org/) micro framework using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
 you can easily create a WhatsApp Chatbot 🤖 . 
 You will only need to edit your conversation flow in a single file.
 
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
-1. [Init](#init)
-2. [Install](#install)
-3. [Configuration](#configuration)
-4. [Run](#run)
-5. [Sessions](#sessions)
-6. [Log](#log)
-7. [Conversation Flow](#conversation-flow)
+- [Jfa Whatsapp Chatbot 💬](#jfa-whatsapp-chatbot-)
+  - [Init](#init)
+  - [Install](#install)
+  - [Configuration](#configuration)
+  - [Run](#run)
+  - [Sessions](#sessions)
+  - [Log](#log)
+  - [Conversation Flow](#conversation-flow)
     - [Replies Types](#replies-types)
       - [Send Text](#send-text)
+        - [Example](#example)
       - [Send Buttons](#send-buttons)
-      - [Send Link](#send-lin)
+        - [Example](#example-1)
+      - [Send Link](#send-link)
+        - [Example](#example-2)
       - [Send Image](#send-image)
+        - [Example](#example-3)
       - [Send Audio](#send-audio)
+        - [Example](#example-4)
     - [Helpers](#helpers)
     - [Hooks](#hooks)
-8. [Examples](#examples)
+  - [Examples](#examples)
     - [Example 1](#example-1)
     - [Example 2](#example-2)
     - [Example 3](#example-3)
@@ -34,11 +40,11 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 6](#example-6)
     - [Example 7](#example-7)
     - [More Examples](#more-examples)
-9. [Troubleshooting](#troubleshooting)
-10. [Donate](#donate)
-11. [License](#license)
-12. [Contributing](#contributing)
-13. [Contributors](#contributors)
+  - [Troubleshooting](#troubleshooting)
+  - [Donate](#donate)
+  - [License](#license)
+  - [Contributing](#contributing)
+  - [Contributors](#contributors)
 
 ## Init
 
@@ -85,7 +91,7 @@ $ yarn log
 The conversation flow is an array of ordered reply objects. 
 A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
 
-![Replies Relations](replies-relations.jpg?raw=true "Replies Relations")
+![Replies Relations](doc/replies-relations.jpg?raw=true "Replies Relations")
 
 A reply necessarily needs the following properties:
 
@@ -232,12 +238,12 @@ A reply necessarily needs the following properties:
 
 ## Examples
 
-Edit your file `./src/conversation.js` and create your custom conversation workflow.
+Edit your file `./src/conversations/conversation.js` and create your custom conversation workflow.
 
 ### Example 1
 
 ```javascript
-import { buttons } from "./helpers.js";
+import { buttons } from "../helpers.js";
 
 /**
  * Chatbot conversation flow
@@ -304,7 +310,7 @@ export default [
 ### Example 2
 
 ```javascript
-import { buttons, remoteTxt, remoteJson } from "./helpers.js";
+import { buttons, remoteTxt, remoteJson } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -351,7 +357,7 @@ export default [
 ### Example 3
 
 ```javascript
-import { remoteImg } from "./helpers.js";
+import { remoteImg } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -376,13 +382,13 @@ export default [
     id: 3,
     parent: 1, // Relation with id: 1
     pattern: /\d+/, // Match any number
-    message: "You are choise item number $input. How many units do you want?",
+    message: "You are choice item number $input. How many units do you want?",
   },  
   {
     id: 4,
     parent: 2, // Relation with id: 2
     pattern: /\d+/, // Match any number
-    message: "You are choise $input units. How many units do you want?",
+    message: "You are choice $input units. How many units do you want?",
     // Inject custom code or overwrite output 'message' property before reply
     beforeReply(from, input, output, parents) {
       // Example check external api and overwrite output 'message'
@@ -390,7 +396,7 @@ export default [
         `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=${parents.pop()}`
       ).then((res) => res.json());
       return response.stock === 0
-        ? "Item number $input is not avilable in this moment!"
+        ? "Item number $input is not available in this moment!"
         : output;
     },
   },
@@ -400,7 +406,7 @@ export default [
 ### Example 4
 
 ```javascript
-import { remoteImg } from "./helpers.js";
+import { remoteImg } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -433,7 +439,7 @@ export default [
 ### Example 5
 
 ```javascript
-import { remoteImg } from "./helpers.js";
+import { remoteImg } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 

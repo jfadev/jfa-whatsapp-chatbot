@@ -1,28 +1,28 @@
-import { remoteImg } from "./helpers.js";
+import { remoteImg } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
 /**
  * Chatbot conversation flow
- * Example 5
+ * Example 4
  */
 export default [
   {
     id: 1,
     parent: 0,
     pattern: /.*/, // Match all
-    message: "Audio local and remote! Send [local] or [remote]",
+    message: "Image local and remote! Send [local] or [remote]",
   },
   {
     id: 2,
     parent: 1,
     pattern: /local/, 
-    audio: "./audios/audio1.mp3",
+    image: "./images/image1.jpg",
   },
   {
     id: 3,
     parent: 1,
     pattern: /remote/, 
-    audio: remoteAudio(`${customEndpoint}/audio1.mp3`),
+    image: remoteImg(`${customEndpoint}/image1.jpg`),
   },
 ];
