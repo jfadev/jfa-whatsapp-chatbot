@@ -1,34 +1,17 @@
 #!/usr/bin/env node
 
-import venom from 'venom-bot';
-import { venomOptions } from './config.js';
-import { start } from './core.js';
+import { session } from './core.js';
 import conversation from './conversations/conversation.js';
-
-console.log('################################');
-console.log('#     Jfa Whatsapp Chatbot     #');
-console.log('################################');
+// import conversation1 from './conversations/conversation1.js';
+// import conversation2 from './conversations/conversation2.js';
 
 /* Single whatsapp account */
 /* ------------------------*/
-venom
-  .create("chatbotSession", null, null, venomOptions)
-  .then(client => start(client, conversation))
-  .catch(err => console.log(err));
-/* ------------------------*/
+session("chatbotSession", conversation);
 
 /* Multiple whatsapp accounts */
 /* ---------------------------*/
-// import conversation1 from './conversation1.js';
-// import conversation2 from './conversation2.js';
-
-// venom
-//   .create("account1ChatbotSession", null, null, venomOptions)
-//   .then(client => start(client, conversation1))
-//   .catch(err => console.log(err));
-
-// venom
-//   .create("account2ChatbotSession", null, null, venomOptions)
-//   .then(client => start(client, conversation2))
-//   .catch(err => console.log(err));
+// session("chatbotSession", conversation1);
+// session("chatbotSession", conversation2);
+// ...
 /* ---------------------------*/

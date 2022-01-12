@@ -1,4 +1,4 @@
-// import { buttons, remoteTxt, remoteJson, remoteImg } from "./helpers.js";
+// import { buttons, remoteTxt, remoteJson, remoteImg } from "../helpers.js";
 
 /**
  * Chatbot conversation flow

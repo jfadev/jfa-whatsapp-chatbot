@@ -1,4 +1,4 @@
-import { buttons, remoteTxt, remoteJson } from "./helpers.js";
+import { buttons, remoteTxt, remoteJson } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 

@@ -1,4 +1,4 @@
-import { remoteImg } from "./helpers.js";
+import { remoteImg } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -23,13 +23,13 @@ export default [
     id: 3,
     parent: 1, // Relation with id: 1
     pattern: /\d+/, // Match any number
-    message: "You are choise item number $input. How many units do you want?",
+    message: "You are choice item number $input. How many units do you want?",
   },  
   {
     id: 4,
     parent: 2, // Relation with id: 2
     pattern: /\d+/, // Match any number
-    message: "You are choise $input units. How many units do you want?",
+    message: "You are choice $input units. How many units do you want?",
     // Inject custom code or overwrite output 'message' property before reply
     beforeReply(from, input, output, parents) {
       // Example check external api and overwrite output 'message'

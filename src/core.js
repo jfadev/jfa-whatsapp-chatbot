@@ -1,3 +1,22 @@
+import venom from "venom-bot";
+import { venomOptions } from "./config.js";
+
+console.log('################################');
+console.log('#     Jfa Whatsapp Chatbot     #');
+console.log('################################');
+
+/**
+ * Create a chatbot session
+ * @param {String} name 
+ * @param {Array} conversation 
+ */
+export async function session(name, conversation) {
+  venom
+    .create(name, null, null, venomOptions)
+    .then((client) => start(client, conversation))
+    .catch((err) => console.log(err));
+}
+
 /**
  * Start run listener of whatsapp messages
  * @param {Object} client
@@ -8,8 +27,8 @@ export async function start(client, conversation) {
   try {
     let parent = 0;
     let parents = [];
-    // client.onAnyMessage(async (message) => {
-    client.onMessage(async (message) => {
+    client.onAnyMessage(async (message) => {
+      //client.onMessage(async (message) => {
       const input = message.body.toLowerCase();
       let reply = conversation.find((o) => o.pattern.test(input));
       if (reply && message.isGroupMsg === false) {
