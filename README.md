@@ -2,7 +2,7 @@
 
 # Jfa Whatsapp Chatbot 💬 
 
->**Attention:** This version is **NOT STABLE** yet!!!
+>**Attention:** This version is **NOT STABLE** yet!!! NOT USE YET!!!
 
 With this [node.js](https://nodejs.org/) micro framework using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
 you can easily create a WhatsApp Chatbot 🤖 . 
