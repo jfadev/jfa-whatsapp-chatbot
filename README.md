@@ -20,15 +20,10 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
   - [Conversation Flow](#conversation-flow)
     - [Replies Types](#replies-types)
       - [Send Text](#send-text)
-        - [Example](#example)
       - [Send Buttons](#send-buttons)
-        - [Example](#example-1)
       - [Send Link](#send-link)
-        - [Example](#example-2)
       - [Send Image](#send-image)
-        - [Example](#example-3)
       - [Send Audio](#send-audio)
-        - [Example](#example-4)
     - [Helpers](#helpers)
     - [Hooks](#hooks)
   - [Examples](#examples)
@@ -106,7 +101,7 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `message`| String  | Reply text message                                               |
 
-##### Example
+Example
 
 ```javascript
 [
@@ -130,7 +125,7 @@ A reply necessarily needs the following properties:
 | `description`| String  | Reply text subtitle                                              |
 | `buttons`    | Array   | Button object, look at the example                               |
 
-##### Example
+Example
 
 ```javascript
 [
@@ -159,7 +154,7 @@ A reply necessarily needs the following properties:
 | `message`| String  | Reply text message                                               |
 | `link`   | String  | URL of generated link preview                                    |
 
-##### Example
+Example
 
 ```javascript
 [
@@ -182,7 +177,7 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `image`  | Path / Object  | Path or Object returned by `remoteImg()` funtion.                       |
 
-##### Example
+Example
 
 ```javascript
 [
@@ -205,7 +200,7 @@ A reply necessarily needs the following properties:
 | `pattern`| RegExp  | Regular expression to match in lower case                        |
 | `audio`  | Path / Object  | Path or Object returned by `remoteAudio()` funtion.                       |
 
-##### Example
+Example
 
 ```javascript
 [
@@ -221,13 +216,13 @@ A reply necessarily needs the following properties:
 
 ### Helpers
 
-| Helper                            | Return | Description                            |
-|-------------------------------------|--------|----------------------------------------|
-| `buttons(buttonTexts)`              | Array  | Generate buttons                       |
-| `remoteTxt(url, cacheDelay = null)` | String | Return a remote TXT file               |
-| `remoteJson(url, cacheDelay = null)`| JSON   | Return a remote JSON file              |
-| `remoteImg(url, cacheDelay = null)` | Object | Return  a remote Image file            |
-| `remoteAudio(url, cacheDelay = null)` | Object | Return  a remote Audio file            |
+| Helper                 | Return | Description                            |
+|------------------------|--------|----------------------------------------|
+| `buttons(buttonTexts)` | Array  | Generate buttons                       |
+| `remoteTxt(url)`       | String | Return a remote TXT file               |
+| `remoteJson(url)`      | JSON   | Return a remote JSON file              |
+| `remoteImg(url)`       | Object | Return a remote Image file            |
+| `remoteAudio(url)`     | Object | Return a remote Audio file            |
 
 ### Hooks
 
@@ -241,6 +236,8 @@ A reply necessarily needs the following properties:
 Edit your file `./src/conversations/conversation.js` and create your custom conversation workflow.
 
 ### Example 1
+
+[doc/examples/conversation1.js](doc/examples/conversation1.js)
 
 ```javascript
 import { buttons } from "../helpers.js";
@@ -309,6 +306,8 @@ export default [
 
 ### Example 2
 
+[doc/examples/conversation2.js](doc/examples/conversation2.js)
+
 ```javascript
 import { buttons, remoteTxt, remoteJson } from "../helpers.js";
 
@@ -355,6 +354,8 @@ export default [
 ```
 
 ### Example 3
+
+[doc/examples/conversation3.js](doc/examples/conversation3.js)
 
 ```javascript
 import { remoteImg } from "../helpers.js";
@@ -405,6 +406,8 @@ export default [
 
 ### Example 4
 
+[doc/examples/conversation4.js](doc/examples/conversation4.js)
+
 ```javascript
 import { remoteImg } from "../helpers.js";
 
@@ -437,6 +440,8 @@ export default [
 ```
 
 ### Example 5
+
+[doc/examples/conversation5.js](doc/examples/conversation5.js)
 
 ```javascript
 import { remoteImg } from "../helpers.js";
@@ -471,6 +476,8 @@ export default [
 
 ### Example 6
 
+[doc/examples/conversation6.js](doc/examples/conversation6.js)
+
 ```javascript
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -497,6 +504,8 @@ export default [
 ```
 
 ### Example 7
+
+[doc/examples/conversation7.js](doc/examples/conversation7.js)
 
 ```javascript
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";

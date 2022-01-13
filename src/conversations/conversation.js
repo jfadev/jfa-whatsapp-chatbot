@@ -5,10 +5,10 @@
  * Your custom conversation
  */
 export default [
-  // {
-  //   id: 1,
-  //   parent: 0,
-  //   pattern: /hi|hello/,
-  //   message: "Welcome to Jfa Whatsapp Chatbot!",
-  // },
+  {
+    id: 1,
+    parent: 0,
+    pattern: /hi|hello/,
+    message: "Welcome to Jfa Whatsapp Chatbot!",
+  },
 ];

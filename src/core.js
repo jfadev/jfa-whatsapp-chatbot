@@ -1,14 +1,14 @@
 import venom from "venom-bot";
 import { venomOptions } from "./config.js";
 
-console.log('################################');
-console.log('#     Jfa Whatsapp Chatbot     #');
-console.log('################################');
+console.log("################################");
+console.log("#     Jfa Whatsapp Chatbot     #");
+console.log("################################");
 
 /**
  * Create a chatbot session
- * @param {String} name 
- * @param {Array} conversation 
+ * @param {String} name
+ * @param {Array} conversation
  */
 export async function session(name, conversation) {
   venom
@@ -27,8 +27,8 @@ export async function start(client, conversation) {
   try {
     let parent = 0;
     let parents = [];
-    client.onAnyMessage(async (message) => {
-      //client.onMessage(async (message) => {
+    // client.onAnyMessage(async (message) => {
+    client.onMessage(async (message) => {
       const input = message.body.toLowerCase();
       let reply = conversation.find((o) => o.pattern.test(input));
       if (reply && message.isGroupMsg === false) {
@@ -43,7 +43,9 @@ export async function start(client, conversation) {
               parents
             );
           }
-          reply.message = reply.message.replace(/\$input/g, input);
+          if (reply.hasOwnProperty("message")) {
+            reply.message = reply.message.replace(/\$input/g, input);
+          }
           await watchSendLinkPreview(client, message, reply);
           await watchSendButtons(client, message, reply);
           await watchSendImage(client, message, reply);
@@ -134,8 +136,8 @@ async function watchSendImage(client, message, reply) {
       await client
         .sendImageFromBase64(
           message.from,
-          message.image.base64,
-          message.filename
+          reply.image.base64,
+          reply.image.filename
         )
         .then((result) =>
           console.log(
@@ -144,13 +146,14 @@ async function watchSendImage(client, message, reply) {
             ">",
             result.to.remote._serialized,
             ":",
-            reply.voice
+            reply.image.filename
           )
         )
         .catch((err) => console.error("Error (sendImage b64): ", err));
     } else {
+      const filename = reply.image.split("/").pop();
       await client
-        .sendImage(message.from, message.image, message.filename, "")
+        .sendImage(message.from, reply.image, filename, "")
         .then((result) =>
           console.log(
             "Write (sendImage): ",
@@ -158,7 +161,7 @@ async function watchSendImage(client, message, reply) {
             ">",
             result.to.remote._serialized,
             ":",
-            reply.voice
+            reply.image
           )
         )
         .catch((err) => console.error("Error (sendImage): ", err));
@@ -175,11 +178,11 @@ async function watchSendImage(client, message, reply) {
 async function watchSendAudio(client, message, reply) {
   if (reply.hasOwnProperty("audio")) {
     if (
-      reply.image.hasOwnProperty("base64") &&
-      reply.image.hasOwnProperty("filename")
+      reply.audio.hasOwnProperty("base64") &&
+      reply.audio.hasOwnProperty("filename")
     ) {
       await client
-        .sendVoiceBase64(message.from, message.audio.base64)
+        .sendVoiceBase64(message.from, reply.audio.base64)
         .then((result) =>
           console.log(
             "Write (sendAudio b64): ",
@@ -193,7 +196,7 @@ async function watchSendAudio(client, message, reply) {
         .catch((err) => console.error("Error (sendAudio b64): ", err));
     } else {
       await client
-        .sendVoice(message.from, message.audio)
+        .sendVoice(message.from, reply.audio)
         .then((result) =>
           console.log(
             "Write (sendAudio): ",
