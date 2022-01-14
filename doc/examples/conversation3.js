@@ -1,3 +1,4 @@
+import fetch from "sync-fetch";
 import { remoteImg } from "../helpers.js";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
@@ -33,11 +34,11 @@ export default [
     // Inject custom code or overwrite output 'message' property before reply
     beforeReply(from, input, output, parents) {
       // Example check external api and overwrite output 'message'
-      const response = await fetch(
+      const response = fetch(
         `${customEndpoint}/delivery-check-stock.php/?item=${input}&qty=${parents.pop()}`
-      ).then((res) => res.json());
+      ).json();
       return response.stock === 0
-        ? "Item number $input is not avilable in this moment!"
+        ? "Item number $input is not available in this moment!"
         : output;
     },
   },
