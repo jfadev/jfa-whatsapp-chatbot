@@ -1,3 +1,5 @@
+import fetch from "sync-fetch";
+
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
 /**
@@ -13,13 +15,12 @@ export default [
     // Inject custom code after reply
     afterReply(from, input, parents) {
       // Send whatsapp number to external api
-      await fetch(`${customEndpoint}/number-lead.php/`, {
+      const response = fetch(`${customEndpoint}/number-lead.php/`, {
         method: "POST",
         body: JSON.stringify({ number: from }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json());
+        headers: { "Content-Type": "application/json" },
+      }).json();
+      console.log('response:', response);
     },
   },
 ];
