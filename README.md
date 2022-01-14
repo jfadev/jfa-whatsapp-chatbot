@@ -11,7 +11,7 @@ You will only need to edit your conversation flow in a single file.
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
 - [Jfa Whatsapp Chatbot 💬](#jfa-whatsapp-chatbot-)
-  - [Init](#init)
+  - [Getting Started](#getting-started)
   - [Install](#install)
   - [Configuration](#configuration)
   - [Run](#run)
@@ -41,7 +41,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
   - [Contributing](#contributing)
   - [Contributors](#contributors)
 
-## Init
+## Getting Started
 
 Create a new repository from [this template](https://github.com/jfadev/jfa-whatsapp-chatbot/generate).
 
@@ -479,6 +479,8 @@ export default [
 [doc/examples/conversation6.js](doc/examples/conversation6.js)
 
 ```javascript
+import fetch from "sync-fetch";
+
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
 /**
@@ -494,9 +496,7 @@ export default [
     // Inject custom code or overwrite output 'message' property before reply
     beforeReply(from, input, output, parents) {
       // Get reply from external api and overwrite output 'message'
-      const response = await fetch(
-        `${customEndpoint}/ai-reply.php/?input=${input}`
-      ).then((res) => res.json());
+      const response = fetch(`${customEndpoint}/ai-reply.php/?input=${input}`).json();
       return response.message;
     },
   },
@@ -508,6 +508,8 @@ export default [
 [doc/examples/conversation7.js](doc/examples/conversation7.js)
 
 ```javascript
+import fetch from "sync-fetch";
+
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
 /**
@@ -523,13 +525,12 @@ export default [
     // Inject custom code after reply
     afterReply(from, input, parents) {
       // Send whatsapp number to external api
-      await fetch(`${customEndpoint}/number-lead.php/`, {
+      const response = fetch(`${customEndpoint}/number-lead.php/`, {
         method: "POST",
         body: JSON.stringify({ number: from }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json());
+        headers: { "Content-Type": "application/json" },
+      }).json();
+      console.log('response:', response);
     },
   },
 ];

@@ -1,3 +1,5 @@
+import fetch from "sync-fetch";
+
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
 /**
@@ -13,9 +15,7 @@ export default [
     // Inject custom code or overwrite output 'message' property before reply
     beforeReply(from, input, output, parents) {
       // Get reply from external api and overwrite output 'message'
-      const response = await fetch(
-        `${customEndpoint}/ai-reply.php/?input=${input}`
-      ).then((res) => res.json());
+      const response = fetch(`${customEndpoint}/ai-reply.php/?input=${input}`).json();
       return response.message;
     },
   },
