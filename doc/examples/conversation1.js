@@ -25,6 +25,7 @@ export default [
     pattern: /website/,
     message: "Visit my website and learn more about me!",
     link: "https://jordifernandes.com/",
+    end: true,
   },
   {
     id: 3,
@@ -32,6 +33,7 @@ export default [
     pattern: /linkedin/,
     message: "Visit my LinkedIn profile!",
     link: "https://www.linkedin.com/in/jfadev",
+    end: true,
   },
   {
     id: 4,
@@ -39,6 +41,7 @@ export default [
     pattern: /github/,
     message: "Check my Github repositories!",
     link: "https://github.com/jfadev",
+    end: true,
   },
   {
     id: 5,
@@ -46,6 +49,7 @@ export default [
     pattern: /donate/,
     message: "A tip is always good!",
     link: "https://jordifernandes.com/donate/",
+    end: true,
   },
   {
     id: 6,
@@ -58,5 +62,6 @@ export default [
     parent: 6, // Relation with id: 6
     pattern: /.*/, // Match with all text
     message: "Thank you very much, your message will be sent to Jordi! Sincerely the Chatbot 🤖 !",
+    end: true,
   },
 ];

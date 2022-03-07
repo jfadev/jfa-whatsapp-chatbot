@@ -63,3 +63,39 @@ export function remoteAudio(url) {
     base64: `data:audio/mp3;base64,${response}`,
   };
 }
+
+/**
+ * Create list
+ * @param {Array} listRows
+ */
+export function list(listRows) {
+  let rows = [];
+  listRows.forEach((row) => {
+    if (row.hasOwnProperty("title") && row.hasOwnProperty("description")) {
+      rows.push({
+        title: row.title,
+        description: row.description,
+      });
+    } else {
+      rows.push({
+        title: row,
+        description: " ",
+      });
+    }
+  });
+  return [
+    {
+      title: " ",
+      rows: rows,
+    },
+  ];
+}
+
+/**
+ * Get input from parents by reply id
+ * @param {Number} id
+ * @param {Array} parents
+ */
+ export function inp(id, parents) {
+  return parents.find((o) => o.id === id).input;
+}

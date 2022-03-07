@@ -21,9 +21,11 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Replies Types](#replies-types)
       - [Send Text](#send-text)
       - [Send Buttons](#send-buttons)
+      - [Send List](#send-list)
       - [Send Link](#send-link)
       - [Send Image](#send-image)
       - [Send Audio](#send-audio)
+      - [Forward Message](#forward-message)
     - [Helpers](#helpers)
     - [Hooks](#hooks)
   - [Examples](#examples)
@@ -34,6 +36,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 5](#example-5)
     - [Example 6](#example-6)
     - [Example 7](#example-7)
+    - [Example 8](#example-8)
     - [More Examples](#more-examples)
   - [Troubleshooting](#troubleshooting)
   - [Donate](#donate)
@@ -84,9 +87,16 @@ $ yarn log
 ## Conversation Flow
 
 The conversation flow is an array of ordered reply objects. 
-A reply is only triggered if its `parent` is equal to the `id` of the previous reply. 
+A reply is only triggered if its `parent` (can be an integer or an array) 
+is equal to the `id` of the previous reply. 
 
 ![Replies Relations](doc/replies-relations.jpg?raw=true "Replies Relations")
+
+To indicate that a reply is the end of the conversation add the following property:
+
+| Property | Type    | Description                  |
+|----------|---------|------------------------------|
+| `end`    | Boolean | The end of the conversation  |
 
 A reply necessarily needs the following properties:
 
@@ -94,12 +104,12 @@ A reply necessarily needs the following properties:
 
 #### Send Text
 
-| Property | Type    | Description                                                      |
-|----------|---------|------------------------------------------------------------------|
-| `id`     | Integer | Reply `id` is used to link with `parent`                         |
-| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`| RegExp  | Regular expression to match in lower case                        |
-| `message`| String  | Reply text message                                               |
+| Property | Type    | Description                                                                            |
+|----------|---------|----------------------------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                                               |
+| `parent` | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                                              |
+| `message`| String  | Reply text message                                                                     |
 
 Example
 
@@ -116,14 +126,14 @@ Example
 
 #### Send Buttons
 
-| Property     | Type    | Description                                                      |
-|--------------|---------|------------------------------------------------------------------|
-| `id`         | Integer | Reply `id` is used to link with `parent`                         |
-| `parent`     | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`    | RegExp  | Regular expression to match in lower case                        |
-| `message`    | String  | Reply text message                                               |
-| `description`| String  | Reply text subtitle                                              |
-| `buttons`    | Array   | Button object, look at the example                               |
+| Property     | Type    | Description                                                                        |
+|--------------|---------|------------------------------------------------------------------------------------|
+| `id`         | Integer | Reply `id` is used to link with `parent`                                           |
+| `parent` | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`    | RegExp  | Regular expression to match in lower case                                          |
+| `message`    | String  | Reply text message                                                                 |
+| `description`| String  | Reply text subtitle                                                                |
+| `buttons`    | Array   | Button object, look at the example                                                 |
 
 Example
 
@@ -144,15 +154,47 @@ Example
 ]
 ```
 
+#### Send List
+
+| Property     | Type    | Description                                                                            |
+|--------------|---------|----------------------------------------------------------------------------------------|
+| `id`         | Integer | Reply `id` is used to link with `parent`                                               |
+| `parent`     | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`    | RegExp  | Regular expression to match in lower case                                              |
+| `message`    | String  | Reply text message                                                                     |
+| `description`| String  | Reply text subtitle                                                                    |
+| `button`     | String  | List button text                                                                       |
+| `list`       | Array   | List object, look at the example                                                       |
+
+Example
+
+```javascript
+[
+  {
+    id: 1,
+    parent: 0,
+    pattern: /other country/,
+    message: "Choice one country",
+    description: "Choice one option!",
+    button: "Countries list",
+    list: list([
+      "Argentina",
+      "Belize",
+      "Bolivia",
+    ]),
+  },
+]
+```
+
 #### Send Link
 
-| Property | Type    | Description                                                      |
-|----------|---------|------------------------------------------------------------------|
-| `id`     | Integer | Reply `id` is used to link with `parent`                         |
-| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`| RegExp  | Regular expression to match in lower case                        |
-| `message`| String  | Reply text message                                               |
-| `link`   | String  | URL of generated link preview                                    |
+| Property | Type    | Description                                                                            |
+|----------|---------|----------------------------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                                               |
+| `parent` | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                                              |
+| `message`| String  | Reply text message                                                                     |
+| `link`   | String  | URL of generated link preview                                                          |
 
 Example
 
@@ -170,12 +212,12 @@ Example
 
 #### Send Image
 
-| Property | Type    | Description                                                      |
-|----------|---------|------------------------------------------------------------------|
-| `id`     | Integer | Reply `id` is used to link with `parent`                         |
-| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`| RegExp  | Regular expression to match in lower case                        |
-| `image`  | Path / Object  | Path or Object returned by `remoteImg()` funtion.                       |
+| Property | Type    | Description                                                                            |
+|----------|---------|----------------------------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                                               |
+| `parent` | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                                              |
+| `image`  | Path / Object  | Path or Object returned by `remoteImg()` funtion                                |
 
 Example
 
@@ -193,12 +235,12 @@ Example
 
 #### Send Audio
 
-| Property | Type    | Description                                                      |
-|----------|---------|------------------------------------------------------------------|
-| `id`     | Integer | Reply `id` is used to link with `parent`                         |
-| `parent` | Integer | Id of the reply parent, if it has no parent it is `0` by default |
-| `pattern`| RegExp  | Regular expression to match in lower case                        |
-| `audio`  | Path / Object  | Path or Object returned by `remoteAudio()` funtion.                       |
+| Property | Type    | Description                                                                            |
+|----------|---------|----------------------------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                                               |
+| `parent` | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                                              |
+| `audio`  | Path / Object  | Path or Object returned by `remoteAudio()` funtion.                             |
 
 Example
 
@@ -214,22 +256,49 @@ Example
 ]
 ```
 
+#### Forward Message
+
+| Property | Type    | Description                                                                            |
+|----------|---------|----------------------------------------------------------------------------------------|
+| `id`     | Integer | Reply `id` is used to link with `parent`                                               |
+| `parent` | Integer | Id of the reply parent or ids array `[2, 3]`. If it has no parent it is `0` by default |
+| `pattern`| RegExp  | Regular expression to match in lower case                                              |
+| `message`| String  | Reply text message                                                                     |
+| `forward`| String  | Number where the message is forwarded                                                  |
+
+Example
+
+```javascript
+[
+    {
+    id: 1,
+    parent: 0,
+    pattern: /forward/,
+    message: "Text to forward",
+    forward: "55368275082750726@c.us", // forward this message to this number
+  }
+]
+```
+
 ### Helpers
 
-| Helper                 | Return | Description                            |
-|------------------------|--------|----------------------------------------|
-| `buttons(buttonTexts)` | Array  | Generate buttons                       |
-| `remoteTxt(url)`       | String | Return a remote TXT file               |
-| `remoteJson(url)`      | JSON   | Return a remote JSON file              |
-| `remoteImg(url)`       | Object | Return a remote Image file            |
-| `remoteAudio(url)`     | Object | Return a remote Audio file            |
+| Helper                 | Return | Description                                                                       |
+|------------------------|--------|-----------------------------------------------------------------------------------|
+| `buttons(buttonTexts)` | Array  | Generate buttons                                                                  |
+| `remoteTxt(url)`       | String | Return a remote TXT file                                                          |
+| `remoteJson(url)`      | JSON   | Return a remote JSON file                                                         |
+| `remoteImg(url)`       | Object | Return a remote Image file                                                        |
+| `remoteAudio(url)`     | Object | Return a remote Audio file                                                        |
+| `list(listRows)`       | Array  | Generate list                                                                     |
+| `inp(id, parents)`     | String | Return input string by reply id. Use in beforeReply, afterReply and beforeForward |
 
 ### Hooks
 
-| Property                                    | Type     | Description                           |
-|---------------------------------------------|----------|---------------------------------------|
-| `beforeReply(from, input, output, parents)` | Function | Inject custom code before a reply     |
-| `afterReply(from, input, parents)`          | Function | Inject custom code after a reply      |
+| Property                                       | Type     | Description                            |
+|------------------------------------------------|----------|----------------------------------------|
+| `beforeReply(from, input, output, parents)`    | Function | Inject custom code before a reply      |
+| `afterReply(from, input, parents)`             | Function | Inject custom code after a reply       |
+| `beforeForward(from, forward, input, parents)` | Function | Inject custom code before a forward    |
 
 ## Examples
 
@@ -267,6 +336,7 @@ export default [
     pattern: /website/,
     message: "Visit my website and learn more about me!",
     link: "https://jordifernandes.com/",
+    end: true,
   },
   {
     id: 3,
@@ -274,6 +344,7 @@ export default [
     pattern: /linkedin/,
     message: "Visit my LinkedIn profile!",
     link: "https://www.linkedin.com/in/jfadev",
+    end: true,
   },
   {
     id: 4,
@@ -281,6 +352,7 @@ export default [
     pattern: /github/,
     message: "Check my Github repositories!",
     link: "https://github.com/jfadev",
+    end: true,
   },
   {
     id: 5,
@@ -288,6 +360,7 @@ export default [
     pattern: /donate/,
     message: "A tip is always good!",
     link: "https://jordifernandes.com/donate/",
+    end: true,
   },
   {
     id: 6,
@@ -300,6 +373,7 @@ export default [
     parent: 6, // Relation with id: 6
     pattern: /.*/, // Match with all text
     message: "Thank you very much, your message will be sent to Jordi! Sincerely the Chatbot 🤖 !",
+    end: true,
   },
 ];
 ```
@@ -336,6 +410,7 @@ export default [
     pattern: /menu/,
     message: remoteTxt(`${customEndpoint}/menu.txt`),
     // message: remoteJson(`${customEndpoint}/menu.json`)[0].message,
+    end: true,
   },
   {
     id: 3,
@@ -343,12 +418,14 @@ export default [
     pattern: /order/,
     message: "Make a order!",
     link: `${customEndpoint}/delivery-order.php`,
+    end: true,
   },
   {
     id: 4,
     parent: 1, // Relation with id: 1
     pattern: /human/,
     message: "Please call the following whatsapp number: +1 206 555 0100",
+    end: true,
   },
 ];
 ```
@@ -384,7 +461,7 @@ export default [
     id: 3,
     parent: 1, // Relation with id: 1
     pattern: /\d+/, // Match any number
-    message: "You are choice item number $input. How many units do you want?",
+    message: "You are choice item number $input. How many units do you want?", // Inject input value ($input) in message
   },  
   {
     id: 4,
@@ -401,6 +478,7 @@ export default [
         ? "Item number $input is not available in this moment!"
         : output;
     },
+    end: true,
   },
 ];
 ```
@@ -430,12 +508,14 @@ export default [
     parent: 1,
     pattern: /local/, 
     image: "./images/image1.jpg",
+    end: true,
   },
   {
     id: 3,
     parent: 1,
     pattern: /remote/, 
     image: remoteImg(`${customEndpoint}/image1.jpg`),
+    end: true,
   },
 ];
 ```
@@ -465,12 +545,14 @@ export default [
     parent: 1,
     pattern: /local/, 
     audio: "./audios/audio1.mp3",
+    end: true,
   },
   {
     id: 3,
     parent: 1,
     pattern: /remote/, 
     audio: remoteAudio(`${customEndpoint}/audio1.mp3`),
+    end: true,
   },
 ];
 ```
@@ -500,6 +582,7 @@ export default [
       const response = fetch(`${customEndpoint}/ai-reply.php/?input=${input}`).json();
       return response.message;
     },
+    end: true,
   },
 ];
 ```
@@ -533,10 +616,59 @@ export default [
       }).json();
       console.log('response:', response);
     },
+    end: true,
   },
 ];
 ```
 
+### Example 8
+
+[doc/examples/conversation8.js](doc/examples/conversation8.js)
+
+```javascript
+import { buttons, inp } from "../helpers.js";
+
+/**
+ * Chatbot conversation flow
+ * Example 8
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/,
+    message: "Choice one option",
+    description: "choice option:",
+    buttons: buttons(["Option 1", "Option 2"]),
+  },
+  {
+    id: 2,
+    parent: 1,
+    pattern: /.*/,
+    message: "We have received your request. Thanks.\n\n",
+    beforeReply(from, input, output, parents) {
+      output += `Your option: ${inp(2, parents)}`;
+      return output;
+    },
+    forward: "5512736862295@c.us", // default number or empty
+    beforeForward(from, forward, input, parents) { // Overwrite forward number
+      switch (inp(2, parents)) { // Access to replies inputs by id
+        case "option 1":
+          forward = "5511994751001@c.us";
+          break;
+        case "option 2":
+          forward = "5584384738389@c.us";
+          break;
+        default:
+          forward = "5512736862295@c.us";
+          break;
+      }
+      return forward;
+    },
+    end: true,
+  },
+];
+```
 ### More Examples
 
 [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
@@ -546,6 +678,8 @@ export default [
 >**Attention:** Do not log in to whatsapp web with the same account that the chatbot uses. This will make the chatbot unable to hear the messages.
 
 >**Attention:** You need a whatsapp account for the chatbot and a different account to be able to talk to it.
+
+>**Attention:** Does not work with WhatsApp multi-device (beta). Disable it on your device.
 
 ## Donate
 

@@ -24,7 +24,7 @@ export default [
     id: 3,
     parent: 1, // Relation with id: 1
     pattern: /\d+/, // Match any number
-    message: "You are choice item number $input. How many units do you want?",
+    message: "You are choice item number $input. How many units do you want?", // Inject input value ($input) in message
   },  
   {
     id: 4,
@@ -41,5 +41,6 @@ export default [
         ? "Item number $input is not available in this moment!"
         : output;
     },
+    end: true,
   },
 ];
