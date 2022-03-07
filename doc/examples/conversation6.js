@@ -18,5 +18,6 @@ export default [
       const response = fetch(`${customEndpoint}/ai-reply.php/?input=${input}`).json();
       return response.message;
     },
+    end: true,
   },
 ];

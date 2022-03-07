@@ -22,5 +22,6 @@ export default [
       }).json();
       console.log('response:', response);
     },
+    end: true,
   },
 ];

@@ -8,6 +8,7 @@ export const chatbotOptions = {};
  * @link https://github.com/orkestral/venom
  */
 export const venomOptions = {
+  multidevice: false,
   folderNameToken: "tokens", //folder name when saving tokens
   mkdirFolderToken: "", //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory
   headless: true, // Headless chrome
@@ -23,6 +24,6 @@ export const venomOptions = {
   disableSpins: true, // Will disable Spinnies animation, useful for containers (docker) for a better log
   disableWelcome: true, // Will disable the welcoming message which appears in the beginning
   updatesLog: true, // Logs info updates automatically in terminal
-  autoClose: 60000, // Automatically closes the venom-bot only when scanning the QR code (default 60 seconds, if you want to turn it off, assign 0 or false)
+  autoClose: false, //60000, // Automatically closes the venom-bot only when scanning the QR code (default 60 seconds, if you want to turn it off, assign 0 or false)
   createPathFileToken: true, //creates a folder when inserting an object in the client's browser, to work it is necessary to pass the parameters in the function create browserSessionToken
 };

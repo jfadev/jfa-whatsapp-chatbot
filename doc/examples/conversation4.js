@@ -18,11 +18,13 @@ export default [
     parent: 1,
     pattern: /local/, 
     image: "./images/image1.jpg",
+    end: true,
   },
   {
     id: 3,
     parent: 1,
     pattern: /remote/, 
     image: remoteImg(`${customEndpoint}/image1.jpg`),
+    end: true,
   },
 ];

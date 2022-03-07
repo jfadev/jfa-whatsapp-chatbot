@@ -18,11 +18,13 @@ export default [
     parent: 1,
     pattern: /local/, 
     audio: "./audios/audio1.mp3",
+    end: true,
   },
   {
     id: 3,
     parent: 1,
     pattern: /remote/, 
     audio: remoteAudio(`${customEndpoint}/audio1.mp3`),
+    end: true,
   },
 ];

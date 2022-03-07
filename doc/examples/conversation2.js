@@ -25,6 +25,7 @@ export default [
     pattern: /menu/,
     message: remoteTxt(`${customEndpoint}/menu.txt`),
     // message: remoteJson(`${customEndpoint}/menu.json`)[0].message,
+    end: true,
   },
   {
     id: 3,
@@ -32,11 +33,13 @@ export default [
     pattern: /order/,
     message: "Make a order!",
     link: `${customEndpoint}/delivery-order.php`,
+    end: true,
   },
   {
     id: 4,
     parent: 1, // Relation with id: 1
     pattern: /human/,
     message: "Please call the following whatsapp number: +1 206 555 0100",
+    end: true,
   },
 ];
