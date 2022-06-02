@@ -5,9 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "node src/main.js",
-    "start": "node src/main.js >> logs/console.log 2>&1 &",
+    "dev:detach": "node src/main.js >> logs/console.log 2>&1 &",
+    "http-ctrl:dev": "node src/httpCtrl.js",
+    "http-ctrl:dev:detach": "node src/httpCtrl.js >> logs/console.log 2>&1 &",
+    "start": "pm2 start src/main.js --name wchatbot --log logs/console.log",
+    "stop": "pm2 stop wchatbot",
+    "restart": "pm2 restart wchatbot",
+    "reload": "pm2 reload wchatbot",
+    "http-ctrl:start": "pm2 start src/httpCtrl.js --name wchatbotcp --log logs/console.log",
+    "http-ctrl:stop": "pm2 stop wchatbotcp",
+    "http-ctrl:restart": "pm2 restart wchatbotcp",
+    "http-ctrl:reload": "pm2 reload wchatbotcp",
     "log:console": "tail -f logs/console.log",
-    "log:conversations": "tail -f logs/conversations.log"
+    "log:conversations": "tail -f logs/conversations.log",
+    "log:ngrok": "tail -f logs/ngrok.log",
+    "ngrok:start": "ngrok http 37754 --log=stdout > logs/ngrok.log &"
   },
   "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
   "bugs": {
@@ -23,6 +35,7 @@
     "venom"
   ],
   "dependencies": {
+    "child_process": "^1.0.2",
     "express": "^4.17.3",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",

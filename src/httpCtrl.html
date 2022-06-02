@@ -1,0 +1,275 @@
+<html>
+  <title>Whatsapp Chatbot CP</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      ::-webkit-scrollbar {
+        width: 10px;
+        height:10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #444;
+      }
+      ::-webkit-scrollbar-corner {
+        background: #444;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #888; 
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: darkturquoise; 
+      }
+      body {
+        background: #191818;
+        font-family: system-ui;
+      }
+      h1 {
+        font-size: larger;
+        color: darkturquoise;
+      }
+      h2, h3 {
+        font-size: large;
+      }
+      .data {
+        color: darkturquoise;
+      }
+      #refresh {
+        width: 100%;
+        background: #191818;
+        color: darkturquoise;
+      }
+      #terminal {
+        width: 92vw;
+        height: 91%;
+        border: none;
+        margin-top: 12px;
+        font-family: monospace;
+        overflow: auto;
+        color: #bdeff0;
+        font-size: x-small;
+        white-space: nowrap;
+      }
+      #qr {
+        width: 91%;
+        border: 12px solid;
+      }
+      .sidebar {
+        grid-area: sidebar;
+      }
+      .sidebar2 {
+        grid-area: sidebar2;
+      }
+      .sidebar2 > button {
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        background-color: #000;
+        color: darkturquoise;
+        border: 1px solid darkturquoise;
+        cursor: pointer;
+      }
+      .content {
+        grid-area: content;
+        min-height: 80vh;
+      }
+      .header {
+        grid-area: header;
+      }
+      .wrapper {
+        background-color: #191818;
+        color: #444;
+        height: 96vh;
+      }
+      .wrapper {
+        display: grid;
+        grid-gap: 1em;
+        grid-template-areas:
+          "header"
+          "content"
+          "sidebar"
+          "sidebar2";
+      }
+      @media (min-width: 700px) {
+        .wrapper {
+          grid-gap: 20px;
+          grid-template-columns: 280px auto 140px;
+          grid-template-areas:
+            "header  header  header"
+            "sidebar content sidebar2";
+        }
+        #terminal {
+          width: calc(100vw - 498px);
+          font-size: initial;
+        }
+      }
+      .box {
+        background-color: #252222;
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px;
+      }
+      .header {
+        background-color: #252222;
+      }
+      .sidebar2 {
+        background-color: #252222;
+        color: #fff;
+      }
+      .yellow {
+        color: #d0cd66;
+      }
+      .green {
+        color: #68d066;
+      }
+      .red {
+        color: #e64f4f;
+      }
+      .purple {
+        color: #dfbdf0;
+      }
+      .white {
+        color: darkcyan;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="box header">
+        <h1>Whatsapp Chatbot Control Panel</h1>
+      </div>
+      <div class="box sidebar">
+        <h2>Login</h2>
+        <p>Session: <b id="session" class="data"></b></p>
+        <p>Status: <b id="status" class="data"></b></p>
+        <h3>Scan QR code</h3>
+        <img id="qr" src="" />
+        <p><b id="attempts" class="data"></b> attempts!</p>
+      </div>
+      <div class="box sidebar2">
+        <h2>Controls</h2>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="reload">Reload</button>
+        <button id="restart">Restart</button>
+        <p>Refresh rate (s)</p>
+        <input type="number" id="refresh" min="1" value="4" />
+      </div>
+      <div class="box content">
+        <h2>Log</h2>
+        <div id="terminal"></div>
+      </div>
+    </div>
+    <script>
+      const refreshLoop = () => {
+        const rate = document.getElementById("refresh").value ?? 4;
+        fetch("/data")
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            const session = data.session ? data.session.session : "";
+            const status = data.session ? data.session.status : "";
+            const attempts = data.qr ? data.qr.attempts : "0";
+            const qr = data.qr ? data.qr.base64Qr : "";
+            const logs = data.logs
+              ? data.logs
+                  .replace(/\[Receive\]/g, "<span class='yellow'>[Receive]</span>")
+                  .replace(/\[Send\]/g, "<span class='green'>[Send]</span>")
+                  .replace(/\[Error\]/g, "<span class='red'>[Error]</span>")
+                  .replace(/\[Start\]/g, "<span class='purple'>[Start]</span>")
+                  .replace(/from:/g, "<span class='white'>from:</span>")
+                  .replace(/to:/g, "<span class='white'>to:</span>")
+                  .replace(/id:/g, "<span class='white'>id:</span>")
+                  .replace(/parent:/g, "<span class='white'>parent:</span>")
+                  .replace(/pattern:/g, "<span class='white'>pattern:</span>")
+                  .replace(/input:/g, "<span class='white'>input:</span>")
+              : "";
+            document.getElementById("session").innerText = session;
+            document.getElementById("status").innerText = status;
+            document.getElementById("attempts").innerText = attempts;
+            document.getElementById("qr").src = qr;
+            document.getElementById("terminal").innerHTML = logs;
+          })
+          .catch((err) => {
+            console.log("error", err);
+          });
+        const terminal = document.getElementById("terminal");
+        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(refreshLoop, rate * 1000);
+      };
+      setTimeout(refreshLoop, 1);
+      document.getElementById("start").addEventListener(
+        "click",
+        (event) => {
+          fetch("/controls/start")
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              alert("Starting Chatbot...");
+              console.log(data);
+            })
+            .catch((err) => {
+              alert("Error starting Chatbot!");
+              console.log("error", err);
+            });
+        },
+        false
+      );
+      document.getElementById("stop").addEventListener(
+        "click",
+        (event) => {
+          fetch("/controls/stop")
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              alert("Stoping Chatbot...");
+              console.log(data);
+            })
+            .catch((err) => {
+              alert("Error stoping Chatbot!");
+              console.log("error", err);
+            });
+        },
+        false
+      );
+      document.getElementById("reload").addEventListener(
+        "click",
+        (event) => {
+          fetch("/controls/reload")
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              alert("Reloading Chatbot...");
+              console.log(data);
+            })
+            .catch((err) => {
+              alert("Error reloading Chatbot!");
+              console.log("error", err);
+            });
+        },
+        false
+      );
+      document.getElementById("restart").addEventListener(
+        "click",
+        (event) => {
+          fetch("/controls/restart")
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              alert("Restarting Chatbot...");
+              console.log(data);
+            })
+            .catch((err) => {
+              alert("Error restarting Chatbot!");
+              console.log("error", err);
+            });
+        },
+        false
+      );
+    </script>
+  </body>
+</html>

@@ -16,7 +16,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
   - [Configuration](#configuration)
   - [Run](#run)
   - [Sessions](#sessions)
-  - [Log](#log)
+  - [Logs](#logs)
   - [Conversation Flow](#conversation-flow)
     - [Replies Types](#replies-types)
       - [Send Text](#send-text)
@@ -50,6 +50,8 @@ Create a new repository from [this template](https://github.com/jfadev/jfa-whats
 
 ## Install
 
+Requirements: [nodejs](https://nodejs.org/), [yarn](https://yarnpkg.com/), [pm2](https://www.npmjs.com/package/pm2), [ngrok](https://ngrok.com/)
+
 ```bash
 $ yarn install
 ```
@@ -64,24 +66,37 @@ For production:
 
 ```bash
 $ yarn start
+$ yarn stop
+$ yarn restart
+$ yarn reload
+$ yarn http-ctrl:start
+$ yarn http-ctrl:stop
+$ yarn http-ctrl:restart
+$ yarn http-ctrl:reload
 ```
 
 For development:
 
 ```bash
 $ yarn dev
+$ yarn dev:detach
+$ yarn http-ctrl:dev
+$ yarn http-ctrl:dev:detach
+$ yarn ngrok:start
 ```
 
 ## Sessions
 
-Folder `./tokens`
+Sessions and auth tokens are write in Folder `./tokens`
 
-## Log
+## Logs
 
-Log is write in `./logs/console.log` file.
+Logs are write in `./logs` folder.
 
 ```bash
-$ yarn log
+$ yarn log:console
+$ yarn log:conversations
+$ yarn log:ngrok
 ```
 
 ## Conversation Flow
