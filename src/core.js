@@ -3,6 +3,7 @@ import { venomOptions } from "./config.js";
 import express from "express";
 import fs from "fs";
 import http from "http";
+import { exec } from "child_process";
 
 console.log("\x1b[36m", "--- Jfa WhatsApp Chatbot (by @jfadev) ---", "\x1b[0m");
 
@@ -12,8 +13,8 @@ console.log("\x1b[36m", "--- Jfa WhatsApp Chatbot (by @jfadev) ---", "\x1b[0m");
  * @param {String} message
  */
 export function log(type, message) {
-  let datetime = new Date().toLocaleString();
-  let msg = `[${datetime}] [${type}] ${message}`;
+  const datetime = new Date().toLocaleString();
+  const msg = `[${datetime}] [${type}] ${message.replace(/\n/g, " ")}`;
   console.log(msg);
   fs.appendFileSync("logs/conversations.log", msg + "\n", "utf8");
 }
@@ -23,8 +24,8 @@ export function log(type, message) {
  * @param {String} message
  */
 export function error(message, err) {
-  let datetime = new Date().toLocaleString();
-  let msg = `[${datetime}] [Error] ${message}`;
+  const datetime = new Date().toLocaleString();
+  const msg = `[${datetime}] [Error] ${message.replace(/\n/g, " ")}`;
   console.error(msg);
   console.error(err);
   fs.appendFileSync(
@@ -83,43 +84,68 @@ export async function httpCtrl(name, port = 3000) {
     );
   });
   app.get("/", (req, res, next) => {
-    let qr = JSON.parse(fs.readFileSync(`tokens/${name}/qr.json`));
-    let sess = JSON.parse(fs.readFileSync(`tokens/${name}/session.json`));
-    res.send(`
-      <html><head></head><body>
-      <h1>Chatbot Login</h1>
-      <p>Session: <b>${sess.session}</b></p>
-      <p>Status: <b>${sess.status}</b></p>
-      <h3>Scan QR code</h3>
-      <p>${qr.attempts} attempts!</p>
-      <img id="qr" src="${qr.base64Qr}"></body>
-      <script>
-        setInterval(() => {
-          location.reload();
-        }, 4000);
-      </script>
-      <p><a href="/logs" target="_blank">View conversations logs</a></p>
-      </body></html>`);
+    const qr = JSON.parse(fs.readFileSync(`tokens/${name}/qr.json`));
+    const sess = JSON.parse(fs.readFileSync(`tokens/${name}/session.json`));
+    const buffer = fs.readFileSync("src/httpCtrl.html");
+    let html = buffer.toString();
+    res.send(html);
   });
-  app.get("/logs", (req, res, next) => {
-    let sess = JSON.parse(fs.readFileSync(`tokens/${name}/session.json`));
-    let logs = fs
+  app.get("/data", (req, res, next) => {
+    const qr = JSON.parse(fs.readFileSync(`tokens/${name}/qr.json`));
+    const sess = JSON.parse(fs.readFileSync(`tokens/${name}/session.json`));
+    const logs = fs
       .readFileSync("logs/conversations.log")
       .toString()
       .replace(/\n/g, "<br>");
-    res.send(`
-      <html><head></head><body>
-      <h1>Chatbot Logs</h1>
-      <p>Session: <b>${sess.session}</b></p>
-      <p>Status: <b>${sess.status}</b></p>
-      <h3>Conversation Logs</h3>
-      <p>${logs}</p>
-      <script>
-        setInterval(() => {
-          location.reload();
-        }, 4000);
-      </script>
-      </body></html>`);
+    res.json({
+      session: sess,
+      qr: qr,
+      logs: logs,
+    });
+  });
+  app.get("/controls/start", (req, res, next) => {
+    exec("yarn start", (err, stdout, stderr) => {
+      if (err) {
+        res.json({ status: "ERROR" });
+        console.error(err);
+        return;
+      }
+      res.json({ status: "OK" });
+      console.log(stdout);
+    });
+  });
+  app.get("/controls/stop", (req, res, next) => {
+    exec("yarn stop", (err, stdout, stderr) => {
+      if (err) {
+        res.json({ status: "ERROR" });
+        console.error(err);
+        return;
+      }
+      res.json({ status: "OK" });
+      console.log(stdout);
+    });
+  });
+  app.get("/controls/reload", (req, res, next) => {
+    exec("yarn reload", (err, stdout, stderr) => {
+      if (err) {
+        res.json({ status: "ERROR" });
+        console.error(err);
+        return;
+      }
+      res.json({ status: "OK" });
+      console.log(stdout);
+    });
+  });
+  app.get("/controls/restart", (req, res, next) => {
+    exec("yarn restart", (err, stdout, stderr) => {
+      if (err) {
+        res.json({ status: "ERROR" });
+        console.error(err);
+        return;
+      }
+      res.json({ status: "OK" });
+      console.log(stdout);
+    });
   });
 }
 
@@ -372,11 +398,21 @@ async function watchForward(client, message, reply) {
     //     log("Send", `(forward): ${reply.message.substring(0, 40)}...`)
     //   )
     //   .catch((err) => error("(forward):", err));
+
     await client
       .sendText(reply.forward, reply.message)
       .then((result) =>
-        log("Send", `(forward): ${reply.message.substring(0, 40)}...`)
+        log("Send", `(forward): to: ${reply.forward} : ${reply.message.substring(0, 40)}...`)
       )
       .catch((err) => error("(forward):", err));
+
+    // /* Debug */
+    // console.log("--- DEBUG --- forward", reply.forward);
+    // await client
+    //   .sendText(message.from, "--- DEBUG --- forward: " + reply.forward)
+    //   .then((result) =>
+    //     log("Send", `(DEBUG : forward): ${reply.message.substring(0, 40)}...`)
+    //   )
+    //   .catch((err) => error("(DEBUG : forward):", err));
   }
 }

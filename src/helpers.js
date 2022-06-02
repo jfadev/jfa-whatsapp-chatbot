@@ -97,5 +97,6 @@ export function list(listRows) {
  * @param {Array} parents
  */
  export function inp(id, parents) {
-  return parents.find((o) => o.id === id).input;
+  const row = parents.find((o) => o.id === id);
+  return row ? row.input.replace("\n ", "") : "";
 }
