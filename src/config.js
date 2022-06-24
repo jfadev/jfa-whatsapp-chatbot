@@ -1,7 +1,13 @@
 /**
  * Chatbot options
  */
-export const chatbotOptions = {};
+export const chatbotOptions = {
+  httpCtrl: {
+    port: 3000, // httpCtrl port (http://localhost:3000/)
+    username: "admin",
+    password: "chatbot"
+  }
+};
 
 /**
  * Venom Bot options
