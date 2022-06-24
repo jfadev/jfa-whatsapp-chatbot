@@ -1,5 +1,5 @@
 import venom from "venom-bot";
-import { venomOptions } from "./config.js";
+import { chatbotOptions, venomOptions } from "./config.js";
 import express from "express";
 import fs from "fs";
 import http from "http";
@@ -83,16 +83,43 @@ export async function httpCtrl(name, port = 3000) {
       `\x1b[32minfo\x1b[39m:     [${name}] Http chatbot control running on http://localhost:${port}/`
     );
   });
+  const authorize = (req, res) => {
+    const reject = () => {
+      res.setHeader("www-authenticate", "Basic");
+      res.sendStatus(401);
+    };
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+      return reject();
+    }
+    const [username, password] = Buffer.from(
+      authorization.replace("Basic ", ""),
+      "base64"
+    )
+      .toString()
+      .split(":");
+
+    if (
+      !(
+        username === chatbotOptions.httpCtrl.username &&
+        password === chatbotOptions.httpCtrl.password
+      )
+    ) {
+      return reject();
+    }
+  };
   app.get("/", (req, res, next) => {
-    const qr = JSON.parse(fs.readFileSync(`tokens/${name}/qr.json`));
-    const sess = JSON.parse(fs.readFileSync(`tokens/${name}/session.json`));
+    authorize(req, res);
     const buffer = fs.readFileSync("src/httpCtrl.html");
     let html = buffer.toString();
     res.send(html);
   });
   app.get("/data", (req, res, next) => {
-    const qr = JSON.parse(fs.readFileSync(`tokens/${name}/qr.json`));
-    const sess = JSON.parse(fs.readFileSync(`tokens/${name}/session.json`));
+    authorize(req, res);
+    const qrPath = `tokens/${name}/qr.json`;
+    const sessPath = `tokens/${name}/session.json`;
+    const qr = fs.existsSync(qrPath) ? JSON.parse(fs.readFileSync(qrPath)) : null;
+    const sess = fs.existsSync(sessPath) ? JSON.parse(fs.readFileSync(sessPath)) : null;
     const logs = fs
       .readFileSync("logs/conversations.log")
       .toString()
@@ -104,6 +131,7 @@ export async function httpCtrl(name, port = 3000) {
     });
   });
   app.get("/controls/start", (req, res, next) => {
+    authorize(req, res);
     exec("yarn start", (err, stdout, stderr) => {
       if (err) {
         res.json({ status: "ERROR" });
@@ -115,6 +143,7 @@ export async function httpCtrl(name, port = 3000) {
     });
   });
   app.get("/controls/stop", (req, res, next) => {
+    authorize(req, res);
     exec("yarn stop", (err, stdout, stderr) => {
       if (err) {
         res.json({ status: "ERROR" });
@@ -126,6 +155,7 @@ export async function httpCtrl(name, port = 3000) {
     });
   });
   app.get("/controls/reload", (req, res, next) => {
+    authorize(req, res);
     exec("yarn reload", (err, stdout, stderr) => {
       if (err) {
         res.json({ status: "ERROR" });
@@ -137,6 +167,7 @@ export async function httpCtrl(name, port = 3000) {
     });
   });
   app.get("/controls/restart", (req, res, next) => {
+    authorize(req, res);
     exec("yarn restart", (err, stdout, stderr) => {
       if (err) {
         res.json({ status: "ERROR" });
@@ -402,7 +433,13 @@ async function watchForward(client, message, reply) {
     await client
       .sendText(reply.forward, reply.message)
       .then((result) =>
-        log("Send", `(forward): to: ${reply.forward} : ${reply.message.substring(0, 40)}...`)
+        log(
+          "Send",
+          `(forward): to: ${reply.forward} : ${reply.message.substring(
+            0,
+            40
+          )}...`
+        )
       )
       .catch((err) => error("(forward):", err));
 

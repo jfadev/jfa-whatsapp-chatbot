@@ -1,11 +1,11 @@
 <html>
   <title>Whatsapp Chatbot CP</title>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       ::-webkit-scrollbar {
         width: 10px;
-        height:10px;
+        height: 10px;
       }
       ::-webkit-scrollbar-track {
         background: #444;
@@ -14,10 +14,10 @@
         background: #444;
       }
       ::-webkit-scrollbar-thumb {
-        background: #888; 
+        background: #888;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: darkturquoise; 
+        background: darkturquoise;
       }
       body {
         background: #191818;
@@ -27,7 +27,8 @@
         font-size: larger;
         color: darkturquoise;
       }
-      h2, h3 {
+      h2,
+      h3 {
         font-size: large;
       }
       .data {
@@ -161,6 +162,8 @@
     </div>
     <script>
       const refreshLoop = () => {
+        const emptyImg =
+          "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         const rate = document.getElementById("refresh").value ?? 4;
         fetch("/data")
           .then((res) => {
@@ -173,7 +176,10 @@
             const qr = data.qr ? data.qr.base64Qr : "";
             const logs = data.logs
               ? data.logs
-                  .replace(/\[Receive\]/g, "<span class='yellow'>[Receive]</span>")
+                  .replace(
+                    /\[Receive\]/g,
+                    "<span class='yellow'>[Receive]</span>"
+                  )
                   .replace(/\[Send\]/g, "<span class='green'>[Send]</span>")
                   .replace(/\[Error\]/g, "<span class='red'>[Error]</span>")
                   .replace(/\[Start\]/g, "<span class='purple'>[Start]</span>")
@@ -187,7 +193,7 @@
             document.getElementById("session").innerText = session;
             document.getElementById("status").innerText = status;
             document.getElementById("attempts").innerText = attempts;
-            document.getElementById("qr").src = qr;
+            document.getElementById("qr").src = qr || emptyImg;
             document.getElementById("terminal").innerHTML = logs;
           })
           .catch((err) => {
