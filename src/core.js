@@ -4,6 +4,7 @@ import express from "express";
 import fs from "fs";
 import http from "http";
 import { exec } from "child_process";
+import mime from "mime-types";
 
 console.log("\x1b[36m", "--- Jfa WhatsApp Chatbot (by @jfadev) ---", "\x1b[0m");
 
@@ -16,6 +17,10 @@ export function log(type, message) {
   const datetime = new Date().toLocaleString();
   const msg = `[${datetime}] [${type}] ${message.replace(/\n/g, " ")}`;
   console.log(msg);
+  if (!fs.existsSync("logs")) {
+    fs.mkdirSync("logs", { recursive: true });
+    fs.writeFileSync("logs/conversations.log", "");
+  }
   fs.appendFileSync("logs/conversations.log", msg + "\n", "utf8");
 }
 
@@ -28,6 +33,10 @@ export function error(message, err) {
   const msg = `[${datetime}] [Error] ${message.replace(/\n/g, " ")}`;
   console.error(msg);
   console.error(err);
+  if (!fs.existsSync("logs")) {
+    fs.mkdirSync("logs", { recursive: true });
+    fs.writeFileSync("logs/conversations.log", "");
+  }
   fs.appendFileSync(
     "logs/conversations.log",
     msg + " " + err.status + "\n",
@@ -41,13 +50,16 @@ export function error(message, err) {
  * @param {Array} conversation
  */
 export async function session(name, conversation) {
+  if (!fs.existsSync(`tokens/${name}`)) {
+    fs.mkdirSync(`tokens/${name}`, { recursive: true });
+  }
   fs.writeFileSync(
     `tokens/${name}/qr.json`,
     JSON.stringify({ attempts: 0, base64Qr: "" })
   );
   fs.writeFileSync(
     `tokens/${name}/session.json`,
-    JSON.stringify({ session: "", status: "starting" })
+    JSON.stringify({ session: name, status: "starting" })
   );
   venom
     .create(
@@ -61,7 +73,7 @@ export async function session(name, conversation) {
       (statusSession, session) => {
         fs.writeFileSync(
           `tokens/${name}/session.json`,
-          JSON.stringify({ session, status: statusSession })
+          JSON.stringify({ session: name, status: statusSession })
         );
       },
       venomOptions
@@ -76,6 +88,10 @@ export async function session(name, conversation) {
  * @param {Number} port
  */
 export async function httpCtrl(name, port = 3000) {
+  if (!fs.existsSync("logs")) {
+    fs.mkdirSync("logs", { recursive: true });
+    fs.writeFileSync("logs/conversations.log", "");
+  }
   const app = express();
   const httpServer = http.createServer(app);
   httpServer.listen(port, () => {
@@ -118,8 +134,12 @@ export async function httpCtrl(name, port = 3000) {
     authorize(req, res);
     const qrPath = `tokens/${name}/qr.json`;
     const sessPath = `tokens/${name}/session.json`;
-    const qr = fs.existsSync(qrPath) ? JSON.parse(fs.readFileSync(qrPath)) : null;
-    const sess = fs.existsSync(sessPath) ? JSON.parse(fs.readFileSync(sessPath)) : null;
+    const qr = fs.existsSync(qrPath)
+      ? JSON.parse(fs.readFileSync(qrPath))
+      : null;
+    const sess = fs.existsSync(sessPath)
+      ? JSON.parse(fs.readFileSync(sessPath))
+      : null;
     const logs = fs
       .readFileSync("logs/conversations.log")
       .toString()
@@ -195,7 +215,20 @@ export async function start(client, conversation) {
       }
       const parent = sessions.find((o) => o.from === message.from).parent;
       const parents = sessions.find((o) => o.from === message.from).parents;
-      const input = message.body ? message.body.toLowerCase() : message.body;
+      // const input = message.body ? message.body.toLowerCase() : message.body;
+      const media =
+        message.isMedia || message.isMMS
+          ? {
+              buffer: client.decryptFile(message),
+              extension: mime.extension(message.mimetype),
+            }
+          : null;
+      const input =
+        message.isMedia || message.isMMS
+          ? `[media file ${media.extention}]`
+          : message.body
+          ? message.body.toLowerCase()
+          : "[undefined]";
       let replies = conversation.filter(
         (o) =>
           (Array.isArray(o.parent) && o.parent.includes(parent)) ||
@@ -217,7 +250,8 @@ export async function start(client, conversation) {
                 message.from,
                 input,
                 reply.message,
-                parents
+                parents,
+                media
               );
             }
             if (reply.hasOwnProperty("beforeForward")) {
@@ -225,7 +259,8 @@ export async function start(client, conversation) {
                 message.from,
                 reply.forward,
                 input,
-                parents
+                parents,
+                media
               );
             }
             if (reply.hasOwnProperty("message")) {
@@ -239,7 +274,7 @@ export async function start(client, conversation) {
             await watchSendList(client, message, reply);
             await watchForward(client, message, reply);
             if (reply.hasOwnProperty("afterReply")) {
-              reply.afterReply(message.from, input, parents);
+              reply.afterReply(message.from, input, parents, media);
             }
             if (reply.hasOwnProperty("end")) {
               if (reply.end) {
