@@ -688,7 +688,7 @@ export default [
 
 ### Example 9
 
-[doc/examples/conversation9.js](doc/examples/conversation8.js)
+[doc/examples/conversation9.js](doc/examples/conversation9.js)
 
 ```javascript
 /**
