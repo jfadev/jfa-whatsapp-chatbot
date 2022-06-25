@@ -37,6 +37,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 6](#example-6)
     - [Example 7](#example-7)
     - [Example 8](#example-8)
+    - [Example 9](#example-9)
     - [More Examples](#more-examples)
   - [Troubleshooting](#troubleshooting)
   - [Donate](#donate)
@@ -309,11 +310,11 @@ Example
 
 ### Hooks
 
-| Property                                       | Type     | Description                            |
-|------------------------------------------------|----------|----------------------------------------|
-| `beforeReply(from, input, output, parents)`    | Function | Inject custom code before a reply      |
-| `afterReply(from, input, parents)`             | Function | Inject custom code after a reply       |
-| `beforeForward(from, forward, input, parents)` | Function | Inject custom code before a forward    |
+| Property                                              | Type     | Description                            |
+|-------------------------------------------------------|----------|----------------------------------------|
+| `beforeReply(from, input, output, parents, media)`    | Function | Inject custom code before a reply      |
+| `afterReply(from, input, parents, media)`             | Function | Inject custom code after a reply       |
+| `beforeForward(from, forward, input, parents, media)` | Function | Inject custom code before a forward    |
 
 ## Examples
 
@@ -684,6 +685,36 @@ export default [
   },
 ];
 ```
+
+### Example 9
+
+[doc/examples/conversation9.js](doc/examples/conversation8.js)
+
+```javascript
+/**
+ * Chatbot conversation flow
+ * Example 9
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /.*/, // Match all
+    message: "",
+    // Inject custom code or overwrite output 'message' property before reply
+    beforeReply(from, input, output, parents, media) {
+      if (media) {
+        console.log("media buffer", media.buffer);
+        return `You send file with .${media.extension} extension!`;
+      } else {
+        return "Send a picture please!";
+      }
+    },
+    end: true,
+  },
+];
+```
+
 ### More Examples
 
 [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
