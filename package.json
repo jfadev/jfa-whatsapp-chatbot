@@ -17,9 +17,7 @@
     "http-ctrl:restart": "pm2 restart wchatbotcp",
     "http-ctrl:reload": "pm2 reload wchatbotcp",
     "log:console": "tail -f logs/console.log",
-    "log:conversations": "tail -f logs/conversations.log",
-    "log:ngrok": "tail -f logs/ngrok.log",
-    "ngrok:start": "ngrok http 37754 --log=stdout > logs/ngrok.log &"
+    "log:conversations": "tail -f logs/conversations.log"
   },
   "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
   "bugs": {
