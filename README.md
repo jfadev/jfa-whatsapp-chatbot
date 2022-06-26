@@ -71,6 +71,7 @@ $ yarn start
 $ yarn stop
 $ yarn restart
 $ yarn reload
+
 $ yarn http-ctrl:start
 $ yarn http-ctrl:stop
 $ yarn http-ctrl:restart
@@ -82,13 +83,14 @@ For development:
 ```bash
 $ yarn dev
 $ yarn dev:detach
+
 $ yarn http-ctrl:dev
 $ yarn http-ctrl:dev:detach
 ```
 
 ## Sessions
 
-Sessions and auth tokens are write in Folder `./tokens`
+Sessions and auth tokens are write in `./tokens` folder.
 
 ## Logs
 
@@ -320,6 +322,16 @@ Example
 With the control panel you can log in, start, stop or restart the bot and monitor the logs.
 
 Set your `username` and `password` to access your control panel in file `./src/config.js`
+
+```javascript
+export const chatbotOptions = {
+  httpCtrl: {
+    port: 3000, // httpCtrl port (http://localhost:3000/)
+    username: "admin",
+    password: "chatbot"
+  }
+};
+```
 
 Use an nginx reverse proxy to publicly expose the http control panel ([configuration example](doc/nginx/reverse-proxy.conf)).
 
