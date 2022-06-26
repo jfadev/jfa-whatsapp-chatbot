@@ -28,6 +28,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
       - [Forward Message](#forward-message)
     - [Helpers](#helpers)
     - [Hooks](#hooks)
+  - [Http Control Panel](#http-control-panel)
   - [Examples](#examples)
     - [Example 1](#example-1)
     - [Example 2](#example-2)
@@ -51,7 +52,7 @@ Create a new repository from [this template](https://github.com/jfadev/jfa-whats
 
 ## Install
 
-Requirements: [nodejs](https://nodejs.org/), [yarn](https://yarnpkg.com/), [pm2](https://www.npmjs.com/package/pm2), [ngrok](https://ngrok.com/)
+Requirements: [nodejs](https://nodejs.org/), [yarn](https://yarnpkg.com/), [pm2](https://www.npmjs.com/package/pm2), [chrome/chromium](https://www.chromium.org/chromium-projects/)
 
 ```bash
 $ yarn install
@@ -83,7 +84,6 @@ $ yarn dev
 $ yarn dev:detach
 $ yarn http-ctrl:dev
 $ yarn http-ctrl:dev:detach
-$ yarn ngrok:start
 ```
 
 ## Sessions
@@ -97,7 +97,6 @@ Logs are write in `./logs` folder.
 ```bash
 $ yarn log:console
 $ yarn log:conversations
-$ yarn log:ngrok
 ```
 
 ## Conversation Flow
@@ -315,6 +314,17 @@ Example
 | `beforeReply(from, input, output, parents, media)`    | Function | Inject custom code before a reply      |
 | `afterReply(from, input, parents, media)`             | Function | Inject custom code after a reply       |
 | `beforeForward(from, forward, input, parents, media)` | Function | Inject custom code before a forward    |
+
+## Http Control Panel
+
+With the control panel you can log in, start, stop or restart the bot and monitor the logs.
+
+Set your `username` and `password` to access your control panel in file `./src/config.js`
+
+Use an nginx reverse proxy to publicly expose the http control panel ([configuration example](doc/nginx/reverse-proxy.conf)).
+
+![Http Control Panel](doc/whatsapp-chatbot-control.jpg?raw=true "Http Control Panel")
+
 
 ## Examples
 
