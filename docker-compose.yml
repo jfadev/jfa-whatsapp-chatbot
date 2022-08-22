@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  wchatbot:
+    container_name: wchatbot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./src:/wchatbot/src
+    ports:
+      - '3000:3000'
