@@ -61,7 +61,7 @@ describe("Conversation Flow", () => {
         !reply.hasOwnProperty("image") ||
         (
           typeof reply.image === "string" ||
-          typeof reply.image.hasOwnProperty("base64")
+          reply.image.hasOwnProperty("base64")
         )
       ).toBeTruthy();
     });
@@ -70,7 +70,7 @@ describe("Conversation Flow", () => {
         !reply.hasOwnProperty("audio") ||
         (
           typeof reply.audio === "string" ||
-          typeof reply.audio.hasOwnProperty("base64")
+          reply.audio.hasOwnProperty("base64")
         )
       ).toBeTruthy();
     });
