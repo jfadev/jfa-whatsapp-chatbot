@@ -1,4 +1,4 @@
-import { buttons, inp } from "../helpers.js";
+import { buttons, inp } from "../helpers";
 
 /**
  * Chatbot conversation flow

@@ -1,6 +1,6 @@
-![Jfa Whatsapp Chatbot](doc/whatsapp-chatbot.jpg?raw=true "Jfa Whatsapp Chatbot")
+![Jfa WhatsApp Chatbot](doc/whatsapp-chatbot.jpg?raw=true "Jfa Whatsapp Chatbot")
 
-# Jfa Whatsapp Chatbot 💬 
+# Jfa WhatsApp Chatbot 💬 
 
 >**Attention:** This version is **NOT STABLE** yet!!! **NOT USE YET**!!!
 
@@ -10,7 +10,8 @@ You will only need to edit your conversation flow in a single file.
 
 Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
 
-- [Jfa Whatsapp Chatbot 💬](#jfa-whatsapp-chatbot-)
+
+- [Jfa WhatsApp Chatbot 💬](#jfa-whatsapp-chatbot-)
   - [Getting Started](#getting-started)
   - [Install](#install)
     - [Docker](#docker)
@@ -283,7 +284,7 @@ Example
     description: "Can I help with something?",
     buttons: buttons([
       "Website",
-      "Linkedin",
+      "LinkedIn",
       "Github",
     ]),
   }
@@ -466,7 +467,7 @@ Edit your file `./src/conversations/conversation.js` and create your custom conv
 [doc/examples/conversation1.js](doc/examples/conversation1.js)
 
 ```javascript
-import { buttons } from "../helpers.js";
+import { buttons } from "../helpers";
 
 /**
  * Chatbot conversation flow
@@ -540,7 +541,7 @@ export default [
 [doc/examples/conversation2.js](doc/examples/conversation2.js)
 
 ```javascript
-import { buttons, remoteTxt, remoteJson } from "../helpers.js";
+import { buttons, remoteTxt, remoteJson } from "../helpers";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -581,7 +582,7 @@ export default [
     id: 4,
     parent: 1, // Relation with id: 1
     pattern: /human/,
-    message: "Please call the following whatsapp number: +1 206 555 0100",
+    message: "Please call the following WhatsApp number: +1 206 555 0100",
     end: true,
   },
 ];
@@ -593,7 +594,7 @@ export default [
 
 ```javascript
 import fetch from "sync-fetch";
-import { remoteImg } from "../helpers.js";
+import { remoteImg } from "../helpers";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -645,7 +646,7 @@ export default [
 [doc/examples/conversation4.js](doc/examples/conversation4.js)
 
 ```javascript
-import { remoteImg } from "../helpers.js";
+import { remoteImg } from "../helpers";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -682,7 +683,7 @@ export default [
 [doc/examples/conversation5.js](doc/examples/conversation5.js)
 
 ```javascript
-import { remoteImg } from "../helpers.js";
+import { remoteImg } from "../helpers";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -765,7 +766,7 @@ export default [
     message: "Hello!",
     // Inject custom code after reply
     afterReply(from, input, parents) {
-      // Send whatsapp number to external api
+      // Send WhatApp number to external api
       const response = fetch(`${customEndpoint}/number-lead.php/`, {
         method: "POST",
         body: JSON.stringify({ number: from }),
@@ -783,7 +784,7 @@ export default [
 [doc/examples/conversation8.js](doc/examples/conversation8.js)
 
 ```javascript
-import { buttons, inp } from "../helpers.js";
+import { buttons, inp } from "../helpers";
 
 /**
  * Chatbot conversation flow
@@ -863,9 +864,9 @@ export default [
 Edit `./src/main.js` file.
 
 ```javascript
-import { session } from './core.js';
-import info from './conversations/info.js';
-import delivery from './conversations/delivery.js';
+import { session } from "./core";
+import info from "./conversations/info";
+import delivery from "./conversations/delivery";
 
 session("chatbotSession", info);
 session("chatbotSession", delivery);
@@ -876,9 +877,9 @@ session("chatbotSession", delivery);
 Edit `./src/main.js` file.
 
 ```javascript
-import { session } from './core.js';
-import commercial from './conversations/commercial.js';
-import delivery from './conversations/delivery.js';
+import { session } from "./core";
+import commercial from "./conversations/commercial";
+import delivery from "./conversations/delivery";
 
 session("commercial_1", commercial);
 session("commercial_2", commercial);
@@ -888,7 +889,7 @@ session("delivery", delivery);
 Edit `./src/httpCtrl.js` file.
 
 ```javascript
-import { httpCtrl } from './core.js';
+import { httpCtrl } from "./core";
 
 httpCtrl("commercial_1", 3000);
 httpCtrl("commercial_2", 3001);

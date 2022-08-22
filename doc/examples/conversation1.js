@@ -1,4 +1,4 @@
-import { buttons } from "../helpers.js";
+import { buttons } from "../helpers";
 
 /**
  * Chatbot conversation flow
@@ -13,7 +13,7 @@ export default [
     description: "Can I help with something?",
     buttons: buttons([
       "Website",
-      "Linkedin",
+      "LinkedIn",
       "Github",
       "Donate",
       "Leave a Message",

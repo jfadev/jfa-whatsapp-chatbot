@@ -1,5 +1,5 @@
 import venom from "venom-bot";
-import { chatbotOptions, venomOptions } from "./config.js";
+import { chatbotOptions, venomOptions } from "./config";
 import express from "express";
 import fs from "fs";
 import http from "http";

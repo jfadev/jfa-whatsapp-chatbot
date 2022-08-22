@@ -20,7 +20,7 @@ export default [
         body: JSON.stringify({ number: from }),
         headers: { "Content-Type": "application/json" },
       }).json();
-      console.log('response:', response);
+      console.log("response:", response);
     },
     end: true,
   },

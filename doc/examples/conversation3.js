@@ -1,5 +1,5 @@
 import fetch from "sync-fetch";
-import { remoteImg } from "../helpers.js";
+import { remoteImg } from "../helpers";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 

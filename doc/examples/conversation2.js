@@ -1,4 +1,4 @@
-import { buttons, remoteTxt, remoteJson } from "../helpers.js";
+import { buttons, remoteTxt, remoteJson } from "../helpers";
 
 const customEndpoint = "https://jordifernandes.com/examples/chatbot";
 
@@ -39,7 +39,7 @@ export default [
     id: 4,
     parent: 1, // Relation with id: 1
     pattern: /human/,
-    message: "Please call the following whatsapp number: +1 206 555 0100",
+    message: "Please call the following WhatsApp number: +1 206 555 0100",
     end: true,
   },
 ];

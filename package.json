@@ -4,10 +4,10 @@
   "description": "Whatsapp Chatbot",
   "type": "module",
   "scripts": {
-    "dev": "node src/main.js",
-    "dev:detach": "node src/main.js >> logs/console.log 2>&1 &",
-    "http-ctrl:dev": "node src/httpCtrl.js",
-    "http-ctrl:dev:detach": "node src/httpCtrl.js >> logs/console.log 2>&1 &",
+    "dev": "node --es-module-specifier-resolution=node src/main.js",
+    "dev:detach": "node --es-module-specifier-resolution=node src/main.js >> logs/console.log 2>&1 &",
+    "http-ctrl:dev": "node --es-module-specifier-resolution=node src/httpCtrl.js",
+    "http-ctrl:dev:detach": "node --es-module-specifier-resolution=node src/httpCtrl.js >> logs/console.log 2>&1 &",
     "start": "pm2 start src/main.js --name wchatbot --log logs/console.log",
     "stop": "pm2 stop wchatbot",
     "restart": "pm2 restart wchatbot",
@@ -31,7 +31,8 @@
     "nodejs",
     "whatsapp",
     "chatbot",
-    "venom"
+    "venom",
+    "docker"
   ],
   "dependencies": {
     "child_process": "^1.0.2",

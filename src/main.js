@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { session } from './core.js';
-import conversation from './conversations/conversation.js';
+import { session } from "./core";
+import conversation from "./conversations/conversation";
 // import conversation1 from './conversations/conversation1.js';
 // import conversation2 from './conversations/conversation2.js';
 
