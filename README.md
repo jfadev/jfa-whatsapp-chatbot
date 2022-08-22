@@ -13,8 +13,16 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 - [Jfa Whatsapp Chatbot 💬](#jfa-whatsapp-chatbot-)
   - [Getting Started](#getting-started)
   - [Install](#install)
+    - [Docker](#docker)
+    - [Virtual Machine](#virtual-machine)
+    - [Local Machine](#local-machine)
   - [Configuration](#configuration)
-  - [Run](#run)
+    - [Basic](#basic)
+    - [Advanced](#advanced)
+  - [Commands](#commands)
+    - [Docker](#docker-1)
+    - [Virtual Machine](#virtual-machine-1)
+    - [Local Machine](#local-machine-1)
   - [Sessions](#sessions)
   - [Logs](#logs)
   - [Conversation Flow](#conversation-flow)
@@ -39,7 +47,10 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 7](#example-7)
     - [Example 8](#example-8)
     - [Example 9](#example-9)
-    - [More Examples](#more-examples)
+  - [Advanced](#advanced-1)
+    - [Multiple Conversation Flows](#multiple-conversation-flows)
+    - [Multiple Accounts](#multiple-accounts)
+  - [Testing](#testing)
   - [Troubleshooting](#troubleshooting)
   - [Donate](#donate)
   - [License](#license)
@@ -48,42 +59,148 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
 
 ## Getting Started
 
-Create a new repository from [this template](https://github.com/jfadev/jfa-whatsapp-chatbot/generate).
+1. Create a new repository from [this template](https://github.com/jfadev/jfa-whatsapp-chatbot/generate)
+1. [Install](#install) in your development environment
+2. [Configure](#configuration) port(s), credentials, etc
+3. Write your [conversation flow](#conversation-flow)
+4. [Start](#commands)
 
 ## Install
 
-Requirements: [nodejs](https://nodejs.org/), [yarn](https://yarnpkg.com/), [pm2](https://www.npmjs.com/package/pm2), [chrome/chromium](https://www.chromium.org/chromium-projects/)
+### Docker
+
+Requirements: [docker](https://docs.docker.com/desktop/install/windows-install/)
+
+Build and Run with Dockerfile
+
+```bash
+$ docker build -t wchatbot .
+$ docker run --name wchatbot -p 3000:3000 -v /your_project_absolute_path/src:/wchatbot/src wchatbot
+```
+
+or Build and Run with Docker Compose
+
+```bash
+$ docker-compose build
+$ docker-compose up
+```
+
+Visit http://localhost:3000 and play with your chatbot!
+
+### Virtual Machine
+
+Requirements: [nodejs](https://nodejs.org/) (Latest [maintenance LTS](https://github.com/nodejs/Release#release-schedule) version), [yarn](https://yarnpkg.com/) (or npm), [pm2](https://www.npmjs.com/package/pm2), [chrome/chromium](https://www.chromium.org/chromium-projects/)
+
+Use an [nginx](https://www.nginx.com/) reverse proxy to publicly expose the http control panel ([configuration example](doc/nginx/reverse-proxy.conf)).
 
 ```bash
 $ yarn install
 ```
+Launch the chatbot and the http control panel
+
+```bash
+$ yarn start
+$ yarn http-ctrl:start
+
+```
+
+Visit http://localhost:3000 and play with your chatbot!
+
+### Local Machine
+
+Requirements: [nodejs](https://nodejs.org/) (Latest [maintenance LTS](https://github.com/nodejs/Release#release-schedule) version), [yarn](https://yarnpkg.com/) (or npm), [chrome/chromium](https://www.chromium.org/chromium-projects/)
+
+
+```bash
+$ yarn install
+```
+Launch the chatbot and the http control panel
+
+```bash
+$ yarn http-ctrl:dev:detach
+$ yarn dev
+
+```
+
+Visit http://localhost:3000 and play with your chatbot!
 
 ## Configuration
 
 Edit `./src/config.js` file
 
-## Run
+### Basic
 
-For production:
+```javascript
+export const chatbotOptions = {
+  httpCtrl: {
+    port: 3000, // httpCtrl port (http://localhost:3000/)
+    username: "admin", // httpCtrl auth login
+    password: "chatbot",
+  },
+};
+```
+### Advanced
 
+```javascript
+export const venomOptions = {
+  ...
+  puppeteerOptions: { // Will be passed to puppeteer.launch.
+    args: ["--no-sandbox"] // Use --no-sandbox with Docker
+  },
+  ...
+};
+```
+
+## Commands
+
+### Docker
+
+Chatbot Controls
+```bash
+$ docker exec wchatbot yarn start
+$ docker exec wchatbot yarn stop
+$ docker exec wchatbot yarn restart
+$ docker exec wchatbot yarn reload
+```
+
+HTTP Control Panel Controls
+```bash
+$ docker exec wchatbot yarn http-ctrl:start
+$ docker exec wchatbot yarn http-ctrl:stop
+$ docker exec wchatbot yarn http-ctrl:restart
+$ docker exec wchatbot yarn http-ctrl:reload
+```
+
+### Virtual Machine
+
+Chatbot Controls
 ```bash
 $ yarn start
 $ yarn stop
 $ yarn restart
 $ yarn reload
+```
 
+HTTP Control Panel Controls
+```bash
 $ yarn http-ctrl:start
 $ yarn http-ctrl:stop
 $ yarn http-ctrl:restart
 $ yarn http-ctrl:reload
 ```
 
-For development:
+### Local Machine
 
+Direct in your OS without Docker
+
+Chatbot
 ```bash
 $ yarn dev
 $ yarn dev:detach
+```
 
+Launch HTTP Control Panel
+```bash
 $ yarn http-ctrl:dev
 $ yarn http-ctrl:dev:detach
 ```
@@ -102,6 +219,8 @@ $ yarn log:conversations
 ```
 
 ## Conversation Flow
+
+Edit `./src/conversations/conversation.js` file.
 
 The conversation flow is an array of ordered reply objects. 
 A reply is only triggered if its `parent` (can be an integer or an array) 
@@ -737,9 +856,56 @@ export default [
 ];
 ```
 
-### More Examples
+## Advanced
 
-[https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
+### Multiple Conversation Flows
+
+Edit `./src/main.js` file.
+
+```javascript
+import { session } from './core.js';
+import info from './conversations/info.js';
+import delivery from './conversations/delivery.js';
+
+session("chatbotSession", info);
+session("chatbotSession", delivery);
+```
+
+### Multiple Accounts
+
+Edit `./src/main.js` file.
+
+```javascript
+import { session } from './core.js';
+import commercial from './conversations/commercial.js';
+import delivery from './conversations/delivery.js';
+
+session("commercial_1", commercial);
+session("commercial_2", commercial);
+session("delivery", delivery);
+```
+
+Edit `./src/httpCtrl.js` file.
+
+```javascript
+import { httpCtrl } from './core.js';
+
+httpCtrl("commercial_1", 3000);
+httpCtrl("commercial_2", 3001);
+httpCtrl("delivery", 3002);
+
+```
+## Testing
+
+Unit tests writes with [jest](https://jestjs.io)
+```bash
+$ yarn test
+```
+
+Test you conversation flow array structure with [conversation.test.js](/src/conversations/conversation.test.js) file as example.
+```bash
+$ yarn test src/conversations/conversation  
+```
 
 ## Troubleshooting
 

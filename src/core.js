@@ -6,7 +6,7 @@ import http from "http";
 import { exec } from "child_process";
 import mime from "mime-types";
 
-console.log("\x1b[36m", "--- Jfa WhatsApp Chatbot (by @jfadev) ---", "\x1b[0m");
+// console.log("\x1b[36m", "--- Jfa WhatsApp Chatbot (by @jfadev) ---", "\x1b[0m");
 
 /**
  * Logging debug
