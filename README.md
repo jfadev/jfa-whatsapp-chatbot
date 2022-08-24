@@ -26,6 +26,9 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Local Machine](#local-machine-1)
   - [Sessions](#sessions)
   - [Logs](#logs)
+    - [Docker](#docker-2)
+    - [Virtual Machine](#virtual-machine-2)
+    - [Local Machine](#local-machine-2)
   - [Conversation Flow](#conversation-flow)
     - [Replies Types](#replies-types)
       - [Send Text](#send-text)
@@ -213,10 +216,57 @@ Sessions and auth tokens are write in `./tokens` folder.
 ## Logs
 
 Logs are write in `./logs` folder.
+Attention: `console.log` and `http-ctrl-console.log` only write in `./logs` folder with `yarn dev:detach` and `yarn http-ctrl:dev:detach` otherwise managed by ` pm2`.
 
+### Docker
+
+Chatbot
 ```bash
-$ yarn log:console
-$ yarn log:conversations
+$ docker exec wchatbot yarn log
+```
+
+HTTP Control Panel
+```bash
+$ docker exec wchatbot yarn http-ctrl:log
+```
+
+Coversations
+```bash
+$ docker exec wchatbot yarn conversations
+```
+
+### Virtual Machine
+
+Chatbot
+```bash
+$ yarn log
+```
+
+HTTP Control Panel
+```bash
+$ yarn http-ctrl:log
+```
+
+Coversations
+```bash
+$ yarn conversations
+```
+
+### Local Machine
+
+Chatbot
+```bash
+$ yarn log:dev
+```
+
+HTTP Control Panel
+```bash
+$ yarn log:http-ctrl:dev
+```
+
+Coversations
+```bash
+$ yarn conversations
 ```
 
 ## Conversation Flow

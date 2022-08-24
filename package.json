@@ -1,23 +1,26 @@
 {
   "name": "jfa-whatsapp-chatbot",
   "version": "0.0.1",
-  "description": "Whatsapp Chatbot",
+  "description": "WhatsApp Chatbot",
   "type": "module",
   "scripts": {
     "dev": "node --es-module-specifier-resolution=node src/main.js",
     "dev:detach": "node --es-module-specifier-resolution=node src/main.js >> logs/console.log 2>&1 &",
+    "log:dev": "tail -f logs/console.log",
     "http-ctrl:dev": "node --es-module-specifier-resolution=node src/httpCtrl.js",
-    "http-ctrl:dev:detach": "node --es-module-specifier-resolution=node src/httpCtrl.js >> logs/console.log 2>&1 &",
-    "start": "pm2 start src/main.js --name wchatbot --log logs/console.log",
+    "http-ctrl:dev:detach": "node --es-module-specifier-resolution=node src/httpCtrl.js >> logs/http-ctrl-console.log 2>&1 &",
+    "log:http-ctrl:dev": "tail -f logs/http-ctrl-console.log",
+    "start": "pm2 start src/main.js --node-args='--es-module-specifier-resolution=node' --name wchatbot",
     "stop": "pm2 stop wchatbot",
     "restart": "pm2 restart wchatbot",
     "reload": "pm2 reload wchatbot",
-    "http-ctrl:start": "pm2 start src/httpCtrl.js --name wchatbotcp --log logs/console.log",
+    "log": "pm2 logs wchatbot",
+    "http-ctrl:start": "pm2 start src/httpCtrl.js --node-args='--es-module-specifier-resolution=node'--name wchatbotcp",
     "http-ctrl:stop": "pm2 stop wchatbotcp",
     "http-ctrl:restart": "pm2 restart wchatbotcp",
     "http-ctrl:reload": "pm2 reload wchatbotcp",
-    "log:console": "tail -f logs/console.log",
-    "log:conversations": "tail -f logs/conversations.log",
+    "http-ctrl:log": "pm2 logs wchatbotcp",
+    "conversations": "tail -f logs/conversations.log",
     "test": "jest"
   },
   "repository": "git@github.com:jfadev/jfa-whatsapp-chatbot.git",
@@ -40,8 +43,8 @@
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "node-fetch": "^3.1.0",
-    "sync-fetch": "^0.3.1",
-    "venom-bot": "^4.0.10"
+    "sync-fetch": "^0.4.1",
+    "venom-bot": "^4.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",

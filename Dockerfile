@@ -16,5 +16,9 @@ RUN npm install pm2 -g
 COPY . /wchatbot
 RUN npm install
 EXPOSE 3000
-CMD pm2 start src/main.js --name wchatbot && \
-    pm2-runtime start src/httpCtrl.js --name wchatbotcp
+CMD pm2 start src/main.js \ 
+        --node-args='--es-module-specifier-resolution=node' \
+        --name wchatbot && \
+    pm2-runtime start src/httpCtrl.js \
+        --node-args='--es-module-specifier-resolution=node' \
+        --name wchatbotcp
