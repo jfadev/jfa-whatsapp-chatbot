@@ -14,7 +14,7 @@ export const chatbotOptions = {
  * @link https://github.com/orkestral/venom
  */
 export const venomOptions = {
-  multidevice: false,
+  multidevice: true,
   folderNameToken: "tokens", //folder name when saving tokens
   mkdirFolderToken: "", //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory
   headless: true, // Headless chrome
