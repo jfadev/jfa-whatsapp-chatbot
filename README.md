@@ -230,7 +230,7 @@ HTTP Control Panel
 $ docker exec wchatbot yarn http-ctrl:log
 ```
 
-Coversations
+Conversations
 ```bash
 $ docker exec wchatbot yarn conversations
 ```
@@ -247,7 +247,7 @@ HTTP Control Panel
 $ yarn http-ctrl:log
 ```
 
-Coversations
+Conversations
 ```bash
 $ yarn conversations
 ```
@@ -264,7 +264,7 @@ HTTP Control Panel
 $ yarn log:http-ctrl:dev
 ```
 
-Coversations
+Conversations
 ```bash
 $ yarn conversations
 ```
