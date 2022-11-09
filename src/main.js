@@ -2,8 +2,7 @@
 
 // import schedule from "node-schedule";
 import { session, log } from "./core";
-import conversation from "../doc/examples/conversation10";
-// import conversation from "./conversations/conversation";
+import conversation from "./conversations/conversation";
 // import conversation1 from './conversations/conversation1.js';
 // import conversation2 from './conversations/conversation2.js';
 
