@@ -1035,7 +1035,7 @@ Edit `./src/main.js` file.
 import schedule from "node-schedule"; // Add node-schedule in your project
 import { session, log } from "./core";
 import { jobsOptions } from "./config";
-import conversation from "../doc/examples/conversation";
+import conversation from "./conversations/conversation";
 
 // Run conversation flow and return a Venom client
 const chatbot = await session("chatbotSession", conversation);
