@@ -40,6 +40,7 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
       - [Forward Message](#forward-message)
     - [Helpers](#helpers)
     - [Hooks](#hooks)
+    - [Loops](#loops)
   - [Http Control Panel](#http-control-panel)
   - [Examples](#examples)
     - [Example 1](#example-1)
@@ -51,9 +52,12 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
     - [Example 7](#example-7)
     - [Example 8](#example-8)
     - [Example 9](#example-9)
+    - [Example 10](#example-10)
   - [Advanced](#advanced-1)
     - [Multiple Conversation Flows](#multiple-conversation-flows)
     - [Multiple Accounts](#multiple-accounts)
+    - [Access to Venom client](#access-to-venom-client)
+    - [Schedule Jobs](#schedule-jobs)
   - [Testing](#testing)
   - [Troubleshooting](#troubleshooting)
   - [Donate](#donate)
@@ -343,6 +347,8 @@ Example
 
 #### Send List
 
+>**Attention:** Does not work with Business account.
+
 | Property     | Type    | Description                                                                            |
 |--------------|---------|----------------------------------------------------------------------------------------|
 | `id`         | Integer | Reply `id` is used to link with `parent`                                               |
@@ -487,6 +493,11 @@ Example
 | `afterReply(from, input, parents, media)`             | Function | Inject custom code after a reply       |
 | `beforeForward(from, forward, input, parents, media)` | Function | Inject custom code before a forward    |
 
+### Loops
+
+| Property                                              | Type     | Description                            |
+|-------------------------------------------------------|----------|----------------------------------------|
+| `goTo(from, input, output, parents, media)`    | Function | Should return the reply id where to jump      |
 ## Http Control Panel
 
 With the control panel you can log in, start, stop or restart the bot and monitor the logs.
@@ -907,6 +918,62 @@ export default [
 ];
 ```
 
+### Example 10
+
+[doc/examples/conversation10.js](doc/examples/conversation10.js)
+
+```javascript
+import { promises as fs } from "fs";
+
+/**
+ * Chatbot conversation flow
+ * Example 10
+ */
+ export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /\b(?!photo\b)\w+/, // different to photo
+    message: `Write "photo" for starting.`,
+  },
+  {
+    id: 2,
+    parent: [0, 1],
+    pattern: /photo/,
+    message: `Hi I'm a Chatbot, send a photo(s)`,
+  },
+  {
+    id: 3,
+    parent: 2,
+    pattern: /\b(?!finalize\b)\w+/, // different to finalize
+    message: "",
+    async beforeReply(from, input, output, parents, media) {
+      const uniqId =  (new Date()).getTime();
+      // Download media
+      if (media) {
+        const dirName = "./downloads";
+        const fileName = `${uniqId}.${media.extension}`;
+        const filePath = `${dirName}/${fileName}`;
+        await fs.mkdir(dirName, { recursive: true });
+        await fs.writeFile(filePath, await media.buffer);
+        return `Photo download successfully! Send another or write "finalize".`;
+      } else {
+        return `Try send again or write "finalize".`;
+      }
+    },
+    goTo(from, input, output, parents, media) {
+      return 3; // return to id = 3
+    },
+  },
+  {
+    id: 4,
+    parent: 2,
+    pattern: /finalize/,
+    message: "Thank's you!",
+    end: true,
+  },
+];
+```
 ## Advanced
 
 ### Multiple Conversation Flows
@@ -946,6 +1013,42 @@ httpCtrl("commercial_2", 3001);
 httpCtrl("delivery", 3002);
 
 ```
+
+### Access to Venom client
+
+Edit `./src/main.js` file.
+
+```javascript
+import { session } from "./core";
+import conversation from "./conversations/conversation";
+
+// Run conversation flow and return a Venom client
+const chatbot = await session("chatbotSession", conversation);
+
+```
+
+### Schedule Jobs
+
+Edit `./src/main.js` file.
+
+```javascript
+import schedule from "node-schedule"; // Add node-schedule in your project
+import { session, log } from "./core";
+import { jobsOptions } from "./config";
+import conversation from "../doc/examples/conversation";
+
+// Run conversation flow and return a Venom client
+const chatbot = await session("chatbotSession", conversation);
+
+const job1 = schedule.scheduleJob(
+  jobsOptions.job1.rule, // "*/15 * * * *"
+  async () => {
+    // custom logic example
+    await chatbot.sendText("000000000000@c.us", "test");
+  }
+);
+```
+
 ## Testing
 
 Unit tests writes with [jest](https://jestjs.io)

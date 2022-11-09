@@ -31,8 +31,16 @@
       h3 {
         font-size: large;
       }
+      p {
+        font-size: small;
+        font-family: monospace;
+        margin-block-start: 2px;
+        margin-block-end: 2px;
+      }
       .data {
         color: darkturquoise;
+        font-family: monospace;
+        text-decoration: none;
       }
       #refresh {
         width: 100%;
@@ -50,9 +58,30 @@
         font-size: x-small;
         white-space: nowrap;
       }
+      #groups-wrapper {
+        width: 100%;
+        height: 90px;
+        border: none;
+        margin-top: 12px;
+        font-family: monospace;
+        overflow: auto;
+        color: #bdeff0;
+        font-size: small;
+        white-space: nowrap;
+      }
+      #avatar {
+        width: 44px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+        border: 2px solid darkturquoise;
+      }
       #qr {
         width: 91%;
         border: 12px solid;
+      }
+      #qr-attempts {
+        margin-top: 6px;
+        margin-bottom: 14px;
       }
       .sidebar {
         grid-area: sidebar;
@@ -131,6 +160,9 @@
       .white {
         color: darkcyan;
       }
+      .blue {
+        color: rgb(87, 139, 230);
+      }
     </style>
   </head>
   <body>
@@ -139,12 +171,24 @@
         <h1>Whatsapp Chatbot Control Panel</h1>
       </div>
       <div class="box sidebar">
-        <h2>Login</h2>
-        <p>Session: <b id="session" class="data"></b></p>
-        <p>Status: <b id="status" class="data"></b></p>
-        <h3>Scan QR code</h3>
-        <img id="qr" src="" />
-        <p><b id="attempts" class="data"></b> attempts!</p>
+        <h2>WhatsApp</h2>
+        <img id="avatar" src="" />
+        <p>User: <span id="user" class="data"></span></p>
+        <p>Name: <span id="name" class="data"></span></p>
+        <p>Connection: <span id="connection" class="data"></span></p>
+        <p>Business: <span id="isBusiness" class="data"></span></p>
+        <p>WWeb: <span id="wWebVersion" class="data"></span></p>
+        <p>Instance: <span id="session" class="data"></span></p>
+        <p>Status: <span id="status" class="data"></span></p>
+        <div id="qr-wrapper">
+          <h3>Scan QR code</h3>
+          <img id="qr" src="" />
+          <p id="qr-attempts">
+            <span id="attempts" class="data"></span> attempts!
+          </p>
+        </div>
+        <p>Groups: <span id="groups" class="data"></span></p>
+        <div id="groups-wrapper"></div>
       </div>
       <div class="box sidebar2">
         <h2>Controls</h2>
@@ -152,7 +196,8 @@
         <button id="stop">Stop</button>
         <button id="reload">Reload</button>
         <button id="restart">Restart</button>
-        <p>Refresh rate (s)</p>
+        <button id="clearLog">Clear Log</button>
+        <p style="margin-top: 14px">Refresh rate (s)</p>
         <input type="number" id="refresh" min="1" value="4" />
       </div>
       <div class="box content">
@@ -161,19 +206,37 @@
       </div>
     </div>
     <script>
+      const emptyImg =
+        "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+      document.getElementById("qr").src = emptyImg;
       const refreshLoop = () => {
-        const emptyImg =
-          "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         const rate = document.getElementById("refresh").value ?? 4;
+        fetch("/connection")
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            document.getElementById("connection").innerText = data.status;
+          })
+          .catch((err) => {
+            document.getElementById("connection").innerText = "DISCONNECTED";
+            console.log("error", err);
+          });
         fetch("/data")
           .then((res) => {
             return res.json();
           })
           .then((data) => {
+            const avatar = data.info ? data.info.imgUrl : false;
+            const user = data.info ? data.info.id : "";
+            const name = data.info ? data.info.displayName : "";
+            const isBusiness = data.info ? data.info.isBusiness : "";
+            const wWebVersion = data.info ? data.info.wWebVersion : "";
             const session = data.session ? data.session.session : "";
             const status = data.session ? data.session.status : "";
+            const groups = data.info ? data.info.groups : "0";
             const attempts = data.qr ? data.qr.attempts : "0";
-            const qr = data.qr ? data.qr.base64Qr : "";
+            const qr = data.qr ? data.qr.base64Qr : false;
             const logs = data.logs
               ? data.logs
                   .replace(
@@ -183,6 +246,11 @@
                   .replace(/\[Send\]/g, "<span class='green'>[Send]</span>")
                   .replace(/\[Error\]/g, "<span class='red'>[Error]</span>")
                   .replace(/\[Start\]/g, "<span class='purple'>[Start]</span>")
+                  .replace(/\[Init\]/g, "<span class='purple'>[Init]</span>")
+                  .replace(/\[Stop\]/g, "<span class='red'>[Stop]</span>")
+                  .replace(/\[Restart\]/g, "<span class='red'>[Restart]</span>")
+                  .replace(/\[Reload\]/g, "<span class='red'>[Reload]</span>")
+                  .replace(/\[Job\]/g, "<span class='blue'>[Job]</span>")
                   .replace(/from:/g, "<span class='white'>from:</span>")
                   .replace(/to:/g, "<span class='white'>to:</span>")
                   .replace(/id:/g, "<span class='white'>id:</span>")
@@ -190,11 +258,28 @@
                   .replace(/pattern:/g, "<span class='white'>pattern:</span>")
                   .replace(/input:/g, "<span class='white'>input:</span>")
               : "";
+            document.getElementById("avatar").src = avatar ? avatar : emptyImg;
+            document.getElementById("avatar").style.display = avatar
+              ? "block"
+              : "none";
+            document.getElementById("user").innerText = user;
+            document.getElementById("name").innerText = name;
+            document.getElementById("isBusiness").innerText = isBusiness;
+            document.getElementById("wWebVersion").innerText = wWebVersion;
             document.getElementById("session").innerText = session;
             document.getElementById("status").innerText = status;
-            document.getElementById("attempts").innerText = attempts;
-            document.getElementById("qr").src = qr || emptyImg;
+            document.getElementById("groups").innerText = groups?.length;
+            document.getElementById("attempts").innerText =
+              status == "successChat" ? 0 : attempts;
+            document.getElementById("qr").src = qr;
             document.getElementById("terminal").innerHTML = logs;
+            document.getElementById("qr-wrapper").style.display =
+              status == "notLogged" ? "block" : "none";
+            document.getElementById("groups-wrapper").innerHTML = groups
+              .map((o) => `${o.name}<br><span class="data">${o.id}</span><br>`)
+              .join("<br>");
+            document.getElementById("groups-wrapper").style.display =
+              groups?.length ? "block" : "none";
           })
           .catch((err) => {
             console.log("error", err);
@@ -271,6 +356,24 @@
             })
             .catch((err) => {
               alert("Error restarting Chatbot!");
+              console.log("error", err);
+            });
+        },
+        false
+      );
+      document.getElementById("clearLog").addEventListener(
+        "click",
+        (event) => {
+          fetch("/controls/log/clear")
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              alert("Clearing log...");
+              console.log(data);
+            })
+            .catch((err) => {
+              alert("Error clearing log!");
               console.log("error", err);
             });
         },

@@ -50,36 +50,86 @@ export function error(message, err) {
  * @param {Array} conversation
  */
 export async function session(name, conversation) {
-  if (!fs.existsSync(`tokens/${name}`)) {
-    fs.mkdirSync(`tokens/${name}`, { recursive: true });
-  }
-  fs.writeFileSync(
-    `tokens/${name}/qr.json`,
-    JSON.stringify({ attempts: 0, base64Qr: "" })
-  );
-  fs.writeFileSync(
-    `tokens/${name}/session.json`,
-    JSON.stringify({ session: name, status: "starting" })
-  );
-  venom
-    .create(
-      name,
-      (base64Qr, asciiQR, attempts, urlCode) => {
-        fs.writeFileSync(
-          `tokens/${name}/qr.json`,
-          JSON.stringify({ attempts, base64Qr })
-        );
-      },
-      (statusSession, session) => {
-        fs.writeFileSync(
-          `tokens/${name}/session.json`,
-          JSON.stringify({ session: name, status: statusSession })
-        );
-      },
-      venomOptions
-    )
-    .then((client) => start(client, conversation))
-    .catch((err) => console.error(err));
+  log("Init", "Starting chatbot...");
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(`tokens/${name}`)) {
+      fs.mkdirSync(`tokens/${name}`, { recursive: true });
+    }
+    fs.writeFileSync(
+      `tokens/${name}/qr.json`,
+      JSON.stringify({ attempts: 0, base64Qr: "" })
+    );
+    fs.writeFileSync(
+      `tokens/${name}/session.json`,
+      JSON.stringify({ session: name, status: "starting" })
+    );
+    fs.writeFileSync(
+      `tokens/${name}/info.json`,
+      JSON.stringify({
+        id: "",
+        formattedTitle: "",
+        displayName: "",
+        isBusiness: "",
+        imgUrl: "",
+        wWebVersion: "",
+        groups: [],
+      })
+    );
+    venom
+      .create(
+        name,
+        (base64Qr, asciiQR, attempts, urlCode) => {
+          fs.writeFileSync(
+            `tokens/${name}/qr.json`,
+            JSON.stringify({ attempts, base64Qr })
+          );
+        },
+        (statusSession, session) => {
+          fs.writeFileSync(
+            `tokens/${name}/session.json`,
+            JSON.stringify({ session: name, status: statusSession })
+          );
+        },
+        venomOptions
+      )
+      .then(async (client) => {
+        await start(client, conversation);
+        const hostDevice = await client.getHostDevice();
+        const wWebVersion = await client.getWAVersion();
+        const groups = (await client.getAllChats())
+          .filter((chat) => chat.isGroup)
+          .map((group) => {
+            return { id: group.id._serialized, name: group.name };
+          });
+        setInterval(async () => {
+          let status = "DISCONNECTED";
+          try {
+            status = await client.getConnectionState();
+          } catch (error) {}
+          fs.writeFileSync(
+            `tokens/${name}/connection.json`,
+            JSON.stringify({ status })
+          );
+          fs.writeFileSync(
+            `tokens/${name}/info.json`,
+            JSON.stringify({
+              id: hostDevice.id._serialized,
+              formattedTitle: hostDevice.formattedTitle,
+              displayName: hostDevice.displayName,
+              isBusiness: hostDevice.isBusiness,
+              imgUrl: hostDevice.imgUrl,
+              wWebVersion,
+              groups,
+            })
+          );
+        }, 2000);
+        resolve(client);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      });
+  });
 }
 
 /**
@@ -132,8 +182,12 @@ export async function httpCtrl(name, port = 3000) {
   });
   app.get("/data", (req, res, next) => {
     authorize(req, res);
+    const infoPath = `tokens/${name}/info.json`;
     const qrPath = `tokens/${name}/qr.json`;
     const sessPath = `tokens/${name}/session.json`;
+    const info = fs.existsSync(infoPath)
+      ? JSON.parse(fs.readFileSync(infoPath))
+      : null;
     const qr = fs.existsSync(qrPath)
       ? JSON.parse(fs.readFileSync(qrPath))
       : null;
@@ -145,10 +199,19 @@ export async function httpCtrl(name, port = 3000) {
       .toString()
       .replace(/\n/g, "<br>");
     res.json({
+      info,
       session: sess,
       qr: qr,
       logs: logs,
     });
+  });
+  app.get("/connection", async (req, res, next) => {
+    authorize(req, res);
+    const connectionPath = `tokens/${name}/connection.json`;
+    const connection = fs.existsSync(connectionPath)
+      ? JSON.parse(fs.readFileSync(connectionPath))
+      : null;
+    res.json({ status: connection?.status });
   });
   app.get("/controls/start", (req, res, next) => {
     authorize(req, res);
@@ -160,6 +223,7 @@ export async function httpCtrl(name, port = 3000) {
       }
       res.json({ status: "OK" });
       console.log(stdout);
+      log("Start", `Start chatbot...`);
     });
   });
   app.get("/controls/stop", (req, res, next) => {
@@ -172,6 +236,7 @@ export async function httpCtrl(name, port = 3000) {
       }
       res.json({ status: "OK" });
       console.log(stdout);
+      log("Stop", `Stop chatbot...`);
     });
   });
   app.get("/controls/reload", (req, res, next) => {
@@ -184,11 +249,25 @@ export async function httpCtrl(name, port = 3000) {
       }
       res.json({ status: "OK" });
       console.log(stdout);
+      log("Reload", `Reload chatbot...`);
     });
   });
   app.get("/controls/restart", (req, res, next) => {
     authorize(req, res);
     exec("yarn restart", (err, stdout, stderr) => {
+      if (err) {
+        res.json({ status: "ERROR" });
+        console.error(err);
+        return;
+      }
+      res.json({ status: "OK" });
+      console.log(stdout);
+      log("Restart", `Restart chatbot...`);
+    });
+  });
+  app.get("/controls/log/clear", (req, res, next) => {
+    authorize(req, res);
+    exec("> logs/conversations.log", (err, stdout, stderr) => {
       if (err) {
         res.json({ status: "ERROR" });
         console.error(err);
@@ -219,16 +298,16 @@ export async function start(client, conversation) {
       const media =
         message.isMedia || message.isMMS
           ? {
-              buffer: client.decryptFile(message),
-              extension: mime.extension(message.mimetype),
-            }
+            buffer: client.decryptFile(message),
+            extension: mime.extension(message.mimetype),
+          }
           : null;
       const input =
         message.isMedia || message.isMMS
           ? `[media file ${media.extention}]`
           : message.body
-          ? message.body.toLowerCase().replace("\n ", "")
-          : "[undefined]";
+            ? message.body.toLowerCase().replace("\n ", "")
+            : "[undefined]";
       let replies = conversation.filter(
         (o) =>
           (Array.isArray(o.parent) && o.parent.includes(parent)) ||
@@ -263,9 +342,10 @@ export async function start(client, conversation) {
                 media
               );
             }
-            if (reply.hasOwnProperty("message")) {
-              reply.message = reply.message.replace(/\$input/g, input);
-            }
+            // TODO: Verifty
+            // if (reply.hasOwnProperty("message")) {
+            //   reply.message = reply.message.replace(/\$input/g, input);
+            // }
             await watchSendLinkPreview(client, message, reply);
             await watchSendButtons(client, message, reply);
             await watchSendImage(client, message, reply);
@@ -286,6 +366,20 @@ export async function start(client, conversation) {
               // sessions
               //   .find((o) => o.from === message.from)
               //   .parents.push({ id: reply.id, input: input });
+            }
+            if (reply.hasOwnProperty("goTo")) {
+              let parent = sessions.find((o) => o.from === message.from).parent;
+              let id = reply.goTo(
+                message.from,
+                input,
+                reply.message,
+                parents,
+                media
+              );
+              parent = parent ? id - 1 : null;
+              if (parent) {
+                sessions.find((o) => o.from === message.from).parent = parent;
+              }
             }
             client.stopTyping(message.from);
           }
@@ -438,7 +532,6 @@ async function watchSendList(client, message, reply) {
       .sendListMenu(
         message.from,
         reply.message,
-        " ",
         reply.description,
         reply.button,
         reply.list

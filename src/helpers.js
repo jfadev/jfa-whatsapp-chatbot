@@ -68,16 +68,18 @@ export function remoteAudio(url) {
  * Create list
  * @param {Array} listRows
  */
-export function list(listRows) {
+ export function list(listRows) {
   let rows = [];
-  listRows.forEach((row) => {
+  listRows.forEach((row, i) => {
     if (row.hasOwnProperty("title") && row.hasOwnProperty("description")) {
       rows.push({
+        rowId: `${i + 1}`,
         title: row.title,
         description: row.description,
       });
     } else {
       rows.push({
+        rowId: `${i + 1}`,
         title: row,
         description: " ",
       });

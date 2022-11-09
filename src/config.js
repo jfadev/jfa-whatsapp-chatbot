@@ -10,6 +10,15 @@ export const chatbotOptions = {
 };
 
 /**
+ * Jobs options
+ */
+// export const jobsOptions = {
+//   job1: {
+//     rule: "*/15 * * * *",
+//   },
+// };
+
+/**
  * Venom Bot options
  * @link https://github.com/orkestral/venom
  */
