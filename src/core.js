@@ -75,6 +75,10 @@ export async function session(name, conversation) {
         groups: [],
       })
     );
+    fs.writeFileSync(
+      `tokens/${name}/connection.json`,
+      JSON.stringify({ status: "DISCONNECTED" })
+    );
     venom
       .create(
         name,
@@ -94,7 +98,15 @@ export async function session(name, conversation) {
       )
       .then(async (client) => {
         await start(client, conversation);
-        const hostDevice = await client.getHostDevice();
+        // const hostDevice = await client.getHostDevice();
+        const me = (await client.getAllContacts()).find(o => o.isMe);
+        const hostDevice = {
+          id: { _serialized: me.id._serialized },
+          formattedTitle: me.formattedName,
+          displayName: me.displayName,
+          isBusiness: me.isBusiness,
+          imgUrl: me.profilePicThumbObj.img,
+        };
         const wWebVersion = await client.getWAVersion();
         const groups = (await client.getAllChats())
           .filter((chat) => chat.isGroup)
@@ -325,7 +337,7 @@ export async function start(client, conversation) {
               .find((o) => o.from === message.from)
               .parents.push({ id: reply.id, input: input });
             if (reply.hasOwnProperty("beforeReply")) {
-              reply.message = reply.beforeReply(
+              reply.message = await reply.beforeReply(
                 message.from,
                 input,
                 reply.message,
