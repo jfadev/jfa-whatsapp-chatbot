@@ -8,7 +8,7 @@ With this [node.js](https://nodejs.org/) micro framework using [Venom Bot](https
 you can easily create a WhatsApp Chatbot 🤖 . 
 You will only need to edit your conversation flow in a single file.
 
-Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernandes.com/jfa-whastapp-chatbot/)
+🛟 [Introduction video](https://www.youtube.com/watch?v=5x4drPdTzLA)
 
 
 - [Jfa WhatsApp Chatbot 💬](#jfa-whatsapp-chatbot-)
@@ -66,6 +66,8 @@ Homepage: [https://jordifernandes.com/jfa-whastapp-chatbot/](https://jordifernan
   - [Contributors](#contributors)
 
 ## Getting Started
+
+[](https://www.youtube.com/watch?v=5x4drPdTzLA)
 
 1. Create a new repository from [this template](https://github.com/jfadev/jfa-whatsapp-chatbot/generate)
 1. [Install](#install) in your development environment
