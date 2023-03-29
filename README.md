@@ -294,7 +294,7 @@ You can protect so that only one number or a list of numbers is answered with:
 
 | Property | Type    | Description                  |
 |----------|---------|------------------------------|
-| `from`   | String\|Array   | Only answer this or these numbers  |
+| `from`   | String / Array   | Only answer this or these numbers  |
 
 A reply necessarily needs the following properties:
 
@@ -493,7 +493,7 @@ Example
 | `remoteAudio(url)`     | Object | Return a remote Audio file                                                        |
 | `list(listRows)`       | Array  | Generate list                                                                     |
 | `inp(id, parents)`     | String | Return input string by reply id. Use in beforeReply, afterReply and beforeForward |
-| `med(id, parents)`     | Media\|null | Return Media ({buffer, extension}) by reply id. Use in beforeReply, afterReply and beforeForward |
+| `med(id, parents)`     | Media / null | Return Media ({buffer, extension}) by reply id. Use in beforeReply, afterReply and beforeForward |
 
 ### Hooks
 
