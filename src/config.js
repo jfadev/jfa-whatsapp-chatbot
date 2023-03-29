@@ -29,11 +29,12 @@ export const venomOptions = {
   headless: true, // Headless chrome
   devtools: false, // Open devtools by default
   useChrome: true, // If false will use Chromium instance
-  debug: false, // Opens a debug session
+  debug: true, // Opens a debug session
   logQR: true, // Logs QR automatically in terminal
   browserWS: "", // If u want to use browserWSEndpoint
   browserArgs: [
     "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36",
+    "--no-sandbox", // Will be passed to browser. Use --no-sandbox with Docker
   ], //Original parameters  ---Parameters to be added into the chrome browser instance
   puppeteerOptions: { args: ["--no-sandbox"] }, // Will be passed to puppeteer.launch. Use --no-sandbox with Docker
   disableSpins: true, // Will disable Spinnies animation, useful for containers (docker) for a better log

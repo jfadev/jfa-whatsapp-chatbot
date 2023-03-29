@@ -2,8 +2,6 @@
 
 # Jfa WhatsApp Chatbot 💬 
 
->**Attention:** This version is **NOT STABLE** yet!!! **NOT USE YET**!!!
-
 With this [node.js](https://nodejs.org/) micro framework using [Venom Bot](https://github.com/orkestral/venom) under the hood, 
 you can easily create a WhatsApp Chatbot 🤖 . 
 You will only need to edit your conversation flow in a single file.
@@ -50,6 +48,7 @@ You will only need to edit your conversation flow in a single file.
     - [Example 8](#example-8)
     - [Example 9](#example-9)
     - [Example 10](#example-10)
+    - [Example 11](#example-11)
   - [Advanced](#advanced-1)
     - [Multiple Conversation Flows](#multiple-conversation-flows)
     - [Multiple Accounts](#multiple-accounts)
@@ -151,6 +150,9 @@ export const chatbotOptions = {
 ```javascript
 export const venomOptions = {
   ...
+  browserArgs: [
+    "--no-sandbox", // Will be passed to browser. Use --no-sandbox with Docker
+  ],
   puppeteerOptions: { // Will be passed to puppeteer.launch.
     args: ["--no-sandbox"] // Use --no-sandbox with Docker
   },
@@ -288,6 +290,12 @@ To indicate that a reply is the end of the conversation add the following proper
 |----------|---------|------------------------------|
 | `end`    | Boolean | The end of the conversation  |
 
+You can protect so that only one number or a list of numbers is answered with:
+
+| Property | Type    | Description                  |
+|----------|---------|------------------------------|
+| `from`   | String\|Array   | Only answer this or these numbers  |
+
 A reply necessarily needs the following properties:
 
 ### Replies Types
@@ -315,6 +323,8 @@ Example
 ```
 
 #### Send Buttons
+
+>**Attention:** It is currently not working!.
 
 | Property     | Type    | Description                                                                        |
 |--------------|---------|------------------------------------------------------------------------------------|
@@ -346,7 +356,7 @@ Example
 
 #### Send List
 
->**Attention:** Does not work with Business account.
+>**Attention:** It is currently not working!.
 
 | Property     | Type    | Description                                                                            |
 |--------------|---------|----------------------------------------------------------------------------------------|
@@ -483,6 +493,7 @@ Example
 | `remoteAudio(url)`     | Object | Return a remote Audio file                                                        |
 | `list(listRows)`       | Array  | Generate list                                                                     |
 | `inp(id, parents)`     | String | Return input string by reply id. Use in beforeReply, afterReply and beforeForward |
+| `med(id, parents)`     | Media\|null | Return Media ({buffer, extension}) by reply id. Use in beforeReply, afterReply and beforeForward |
 
 ### Hooks
 
@@ -497,6 +508,8 @@ Example
 | Property                                              | Type     | Description                            |
 |-------------------------------------------------------|----------|----------------------------------------|
 | `goTo(from, input, output, parents, media)`    | Function | Should return the reply id where to jump      |
+| `clearParents`    | Boolean | Clear parents data, use with goTo()      |
+
 ## Http Control Panel
 
 With the control panel you can log in, start, stop or restart the bot and monitor the logs.
@@ -973,6 +986,95 @@ import { promises as fs } from "fs";
   },
 ];
 ```
+
+### Example 11
+
+[doc/examples/conversation11.js](doc/examples/conversation11.js)
+
+```javascript
+import { inp, med } from "../helpers";
+import { promises as fs } from "fs";
+
+const menu = "Menu:\n\n" +
+  "1. Send Text\n" +
+  "2. Send Image\n";
+
+/**
+ * Chatbot conversation flow
+ * Example 11
+ */
+export default [
+  {
+    id: 1,
+    parent: 0,
+    pattern: /\/admin/,
+    from: "5584384738389@c.us", // only respond to this number
+    message: menu
+  },
+  {
+    id: 2,
+    parent: [1, 5],
+    pattern: /.*/,
+    message: "",
+    async beforeReply(from, input, output, parents, media) {
+      switch (input) {
+        case "1":
+          return `Write your text:`;
+        case "2":
+          return `Send your image:`;
+      }
+    },
+  },
+  {
+    id: 3,
+    parent: 2,
+    pattern: /.*/,
+    message: `Write "/save" to save or cancel with "/cancel".`,
+  },
+  {
+    id: 4,
+    parent: 3,
+    pattern: /\/save/,
+    message: "",
+    async beforeReply(from, input, output, parents, media) {
+      let txt = "";
+      let img = null;
+      let filePath = null;
+      const type = inp(2, parents);
+      if (type === "1") {
+        txt = inp(3, parents);
+      } else if (type === "2") {
+        img = med(3, parents); // media from parent replies
+      }
+      if (img) {
+        const uniqId = new Date().getTime();
+        const dirName = ".";
+        const fileName = `${uniqId}.${img.extension}`;
+        filePath = `${dirName}/${fileName}`;
+        await fs.writeFile(filePath, await img.buffer);
+      } else {
+        const uniqId = new Date().getTime();
+        const dirName = ".";
+        const fileName = `${uniqId}.txt`;
+        await fs.writeFile(filePath, txt);
+      }
+      return `Ok, text or image saved. Thank you very much!`;
+    },
+    end: true,
+  },
+  {
+    id: 5,
+    parent: 3,
+    pattern: /\/cancel/,
+    message: menu,
+    goTo(from, input, output, parents, media) {
+      return 2;
+    },
+    clearParents: true, // reset parents
+  },
+];
+```
+
 ## Advanced
 
 ### Multiple Conversation Flows
@@ -1065,8 +1167,6 @@ $ yarn test src/conversations/conversation
 >**Attention:** Do not log in to whatsapp web with the same account that the chatbot uses. This will make the chatbot unable to hear the messages.
 
 >**Attention:** You need a whatsapp account for the chatbot and a different account to be able to talk to it.
-
->**Attention:** Does not work with WhatsApp multi-device (beta). Disable it on your device.
 
 ## Donate
 

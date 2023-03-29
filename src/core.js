@@ -99,7 +99,7 @@ export async function session(name, conversation) {
       .then(async (client) => {
         await start(client, conversation);
         // const hostDevice = await client.getHostDevice();
-        const me = (await client.getAllContacts()).find(o => o.isMe);
+        const me = (await client.getAllContacts())?.find(o => o.isMe);
         const hostDevice = {
           id: { _serialized: me.id._serialized },
           formattedTitle: me.formattedName,
@@ -135,6 +135,27 @@ export async function session(name, conversation) {
             })
           );
         }, 2000);
+
+        let time = 0;
+        client.onStreamChange((state) => {
+          log("Debug", `State: ${state}`);
+          clearTimeout(time);
+          if (state === 'DISCONNECTED' || state === 'SYNCING') {
+            time = setTimeout(() => {
+              log("Reload", `Try reload client (${state})...`);
+              client.close();
+              resolve(session(name, conversation));
+            }, 80000);
+          }
+        });
+
+
+        setTimeout(() => {
+          log("Debug", `Try reload client`);
+          client.close();
+          // resolve(session(name, conversation));
+        }, 90000);
+
         resolve(client);
       })
       .catch((err) => {
@@ -213,8 +234,8 @@ export async function httpCtrl(name, port = 3000) {
     res.json({
       info,
       session: sess,
-      qr: qr,
-      logs: logs,
+      qr,
+      logs,
     });
   });
   app.get("/connection", async (req, res, next) => {
@@ -266,6 +287,7 @@ export async function httpCtrl(name, port = 3000) {
   });
   app.get("/controls/restart", (req, res, next) => {
     authorize(req, res);
+    fs.rmSync(`tokens/${name}`, { recursive: true, force: true });
     exec("yarn restart", (err, stdout, stderr) => {
       if (err) {
         res.json({ status: "ERROR" });
@@ -328,6 +350,15 @@ export async function start(client, conversation) {
       for (const reply of replies) {
         if (reply && message.isGroupMsg === false) {
           if (reply.pattern.test(input)) {
+            if (reply.hasOwnProperty("from")) {
+              // console.log("reply.from", reply.from);
+              if (
+                (Array.isArray(reply.from) && !reply.from.includes(message.from)) ||
+                (typeof reply.from === "string" && reply.from !== message.from)
+              ) {
+                break;
+              }
+            }
             client.startTyping(message.from);
             log(
               "Receive",
@@ -335,7 +366,7 @@ export async function start(client, conversation) {
             );
             sessions
               .find((o) => o.from === message.from)
-              .parents.push({ id: reply.id, input: input });
+              .parents.push({ id: reply.id, input: input, media: media });
             if (reply.hasOwnProperty("beforeReply")) {
               reply.message = await reply.beforeReply(
                 message.from,
@@ -391,6 +422,12 @@ export async function start(client, conversation) {
               parent = parent ? id - 1 : null;
               if (parent) {
                 sessions.find((o) => o.from === message.from).parent = parent;
+              }
+              // console.log("parent", parent);
+            }
+            if (reply.hasOwnProperty("clearParents")) {
+              if (reply.clearParents) {
+                sessions.find((o) => o.from === message.from).parents = [];
               }
             }
             client.stopTyping(message.from);

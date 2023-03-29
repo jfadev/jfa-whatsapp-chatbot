@@ -17,6 +17,16 @@ describe("Conversation Flow", () => {
       expect(reply.pattern).toBeDefined();
       expect(reply.pattern instanceof RegExp).toBeTruthy();
     });
+    it(`Reply ${reply.id}: Check [from] field`, () => {
+      expect(
+        !reply.hasOwnProperty("from") ||
+        (
+          typeof reply.from === "string" ||
+          reply.from instanceof Array ||
+          typeof reply.from === "object"
+        )
+      ).toBeTruthy()
+    });
     it(`Reply ${reply.id}: Check [message] field`, () => {
       expect(
         !reply.hasOwnProperty("message") || 
@@ -83,6 +93,18 @@ describe("Conversation Flow", () => {
           reply.hasOwnProperty("message") &&
           typeof reply.message === "string"
         )
+      ).toBeTruthy();
+    });
+    it(`Reply ${reply.id}: Check [end] field`, () => {
+      expect(
+        !reply.hasOwnProperty("end") ||
+        typeof reply.end === "boolean"
+      ).toBeTruthy();
+    });
+    it(`Reply ${reply.id}: Check [clearParents] field`, () => {
+      expect(
+        !reply.hasOwnProperty("clearParents") ||
+        typeof reply.clearParents === "boolean"
       ).toBeTruthy();
     });
   }

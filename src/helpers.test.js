@@ -6,6 +6,7 @@ import {
   remoteAudio,
   list,
   inp,
+  med,
 } from "./helpers";
 
 const txtUrl = "https://raw.githubusercontent.com/git/git/master/Documentation/git.txt";
@@ -46,10 +47,12 @@ describe("Helpers", () => {
         title: " ",
         rows: [
           {
+            rowId: "1",
             title: "El 1",
             description: " ",
           },
           {
+            rowId: "2",
             title: "El 2",
             description: " ",
           },
@@ -59,5 +62,8 @@ describe("Helpers", () => {
   });
   it("Test inp", () => {
     expect(inp(1, [{ id: 1, input: "Ok" }])).toBe('Ok');
+  });
+  it("Test med", () => {
+    expect(med(1, [{ id: 1, media: "Ok" }])).toBe('Ok');
   });
 });

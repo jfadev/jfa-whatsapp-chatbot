@@ -102,3 +102,13 @@ export function inp(id, parents) {
   const row = parents.find((o) => o.id === id);
   return row ? row.input.replace("\n ", "") : "";
 }
+
+/**
+ * Get media from parents by reply id
+ * @param {Number} id
+ * @param {Array} parents
+ */
+export function med(id, parents) {
+  const row = parents.find((o) => o.id === id);
+  return row ? row.media : null;
+}
